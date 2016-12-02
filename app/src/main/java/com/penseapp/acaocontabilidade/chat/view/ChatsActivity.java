@@ -16,8 +16,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.penseapp.acaocontabilidade.R;
 import com.penseapp.acaocontabilidade.chat.adapters.ChatListAdapter;
 import com.penseapp.acaocontabilidade.chat.model.Chat;
-import com.penseapp.acaocontabilidade.chat.presenter.ChatListPresenter;
-import com.penseapp.acaocontabilidade.chat.presenter.ChatListPresenterImpl;
+import com.penseapp.acaocontabilidade.chat.presenter.ChatsPresenter;
+import com.penseapp.acaocontabilidade.chat.presenter.ChatsPresenterImpl;
 import com.penseapp.acaocontabilidade.domain.FirebaseHelper;
 import com.penseapp.acaocontabilidade.login.view.activities.LoginActivity;
 
@@ -29,7 +29,7 @@ public class ChatsActivity extends AppCompatActivity implements ChatsView {
     public static final String SELECTED_CHAT_KEY = "selected_chat_key";
     public static final String SELECTED_CHAT_NAME = "selected_chat_name";
 
-    private ChatListPresenter chatListPresenter;
+    private ChatsPresenter chatsPresenter;
 
     public static ArrayList<Chat> mChats = new ArrayList<>();
     private ChatListAdapter chatListAdapter;
@@ -120,7 +120,7 @@ public class ChatsActivity extends AppCompatActivity implements ChatsView {
 //    }
 
     private void setOnItemClickListener() {
-        // What happens when an item is clicked
+        // What happens when a chat item is clicked
         chatListAdapter.setOnItemClickListener(new ChatListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int position) {
@@ -173,15 +173,15 @@ public class ChatsActivity extends AppCompatActivity implements ChatsView {
         super.onStart();
 
         // Connect to Presenters
-        chatListPresenter = new ChatListPresenterImpl(this);
+        chatsPresenter = new ChatsPresenterImpl(this);
 
         clearRecyclerView();
-        chatListPresenter.subscribeForChatListUpdates();
+        chatsPresenter.subscribeForChatListUpdates();
     }
 
     @Override
     protected void onStop() {
-        chatListPresenter.unsubscribeForChatListUpdates();
+        chatsPresenter.unsubscribeForChatListUpdates();
         super.onStop();
     }
 
@@ -195,8 +195,10 @@ public class ChatsActivity extends AppCompatActivity implements ChatsView {
                 // The Intent's data Uri identifies which contact was selected.
                 String chatName = data.getExtras().getString(ContactsActivity.SELECTED_CONTACT_NAME);
                 String contactId = data.getExtras().getString(ContactsActivity.SELECTED_CONTACT_KEY);
-                // Do something with the contact here (bigger example below)
-                chatListPresenter.createChat(chatName, contactId);
+
+                // Create new chat only if there isn't already a chat between currentUserId and contactId
+//                chatsPresenter.createChatIfNeeded(chatName, contactId);
+                chatsPresenter.createChat(chatName, contactId);
             }
         }
     }

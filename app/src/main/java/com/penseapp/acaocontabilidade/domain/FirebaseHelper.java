@@ -17,6 +17,8 @@ public class FirebaseHelper {
     private static final String USERS_PATH = "users";
     private static final String CHATS_PATH = "chats";
     private static final String USER_CHATS_PATH = "user-chats";
+    private static final String CHAT_USERS_PATH = "chat-users";
+
 
     // Storage
 //    private FirebaseStorage storage;
@@ -103,6 +105,14 @@ public class FirebaseHelper {
 
     public DatabaseReference getCurrentUserChatsReference(){
         return getUserChatsReference().child(getAuthUserId());
+    }
+
+    public DatabaseReference getChatUsersReference(){
+        return databaseRef.child(CHAT_USERS_PATH);
+    }
+
+    public DatabaseReference getCurrentChatUsersReference(){
+        return getChatUsersReference().child(getAuthUserId());
     }
 
     public DatabaseReference getCurrentUserReference() {

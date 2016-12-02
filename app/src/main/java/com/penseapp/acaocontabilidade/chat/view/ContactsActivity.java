@@ -84,7 +84,7 @@ public class ContactsActivity extends AppCompatActivity implements ContactsView{
     }
 
     private void setOnItemClickListener() {
-        // What happens when an item is clicked
+        // What happens when a contact from the list is clicked
         contactsAdapter.setOnItemClickListener(new ContactsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int position) {
