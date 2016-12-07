@@ -1,7 +1,13 @@
 package com.penseapp.acaocontabilidade.chat.interactor;
 
+import android.util.Log;
+
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
 import com.penseapp.acaocontabilidade.chat.model.Chat;
 import com.penseapp.acaocontabilidade.chat.presenter.ChatsPresenter;
 import com.penseapp.acaocontabilidade.domain.FirebaseHelper;
@@ -23,6 +29,8 @@ public class ChatsInteractorImpl implements ChatsInteractor {
     private DatabaseReference currentUserChatsReference = mFirebaseHelperInstance.getCurrentUserChatsReference();
     private DatabaseReference chatUsersReference = mFirebaseHelperInstance.getChatUsersReference();
     private String currentUserId = mFirebaseHelperInstance.getAuthUserId();
+    private ChildEventListener userChatsChildEventListener;
+
 
     public ChatsInteractorImpl(ChatsPresenter chatsPresenter) {
         this.chatsPresenter = chatsPresenter;
@@ -55,20 +63,55 @@ public class ChatsInteractorImpl implements ChatsInteractor {
     }
 
     @Override
-    public void createChatIfNeeded(String chatName, String contacId) {
-//        // For each chat from currentUserID
-//        currentUserChats
-//        for (Chat currentUserChat : currentUserChats) {
-//            // For each chat from contactId
-//            for (Chat contactChat : contactChats) {
-//                if (currentUserChat.equals(contactChat))
-//                    return;
-//            }
-//        }
-//        chatsPresenter.createChat(chatName, contactId);
+    public void createChatIfNeeded(final String chatName, final String contactId) {
+        if (userChatsChildEventListener == null) {
+            userChatsChildEventListener = new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    String chatKey = dataSnapshot.getKey();
+                    chatUsersReference.child(chatKey).child(contactId).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Log.i(LOG_TAG, dataSnapshot.toString());
+                            if (dataSnapshot.getValue() != null) {
+                                Log.i(LOG_TAG, "chat between current user and " + contactId + " exists");
+                            } else {
+                                Log.i(LOG_TAG, "chat between current user and " + contactId + " does NOT exist");
+                                createChat(chatName, contactId);
+                            }
+                        }
 
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
+                        }
+                    });
+
+                }
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            };
+
+            userChatsReference.child(mFirebaseHelperInstance.getAuthUserId())
+                    .addChildEventListener(userChatsChildEventListener);
+        }
     }
-
-
 }
