@@ -1,7 +1,5 @@
 package com.penseapp.acaocontabilidade.chat.interactor;
 
-import android.util.Log;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,6 +22,7 @@ public class ChatsInteractorImpl implements ChatsInteractor {
     // Firebase
     private FirebaseHelper mFirebaseHelperInstance = FirebaseHelper.getInstance();
     private DatabaseReference userChatsReference = mFirebaseHelperInstance.getUserChatsReference();
+    private DatabaseReference userChatContactsReference = mFirebaseHelperInstance.getUserChatContactsReference();
     private DatabaseReference chatsReference = mFirebaseHelperInstance.getChatsReference();
     private DatabaseReference currentUserChatsReference = mFirebaseHelperInstance.getCurrentUserChatsReference();
     private DatabaseReference chatUsersReference = mFirebaseHelperInstance.getChatUsersReference();
@@ -54,11 +53,19 @@ public class ChatsInteractorImpl implements ChatsInteractor {
         // Add reference to newly created chat to user-chats/$contactId/$chatId
         userChatsReference.child(contactId).child(newChatKey).setValue(ServerValue.TIMESTAMP);
 
-        // Add reference to newly created chat to chat-users/$chatId/$currentUserId
-        chatUsersReference.child(newChatKey).child(currentUserId).setValue(ServerValue.TIMESTAMP);
+        // Add reference to newly created chat to user-chatContacts/$currentUserId/$contactId
+        userChatContactsReference.child(currentUserId).child(contactId).setValue(ServerValue.TIMESTAMP);
 
+        // Add reference to newly created chat to user-chatContacts/$contactId/$currentUserId
+        userChatContactsReference.child(contactId).child(currentUserId).setValue(ServerValue.TIMESTAMP);
+
+        // TODO remove chat-users tree
+        // Add reference to newly created chat to chat-users/$chatId/$currentUserId
+//        chatUsersReference.child(newChatKey).child(currentUserId).setValue(ServerValue.TIMESTAMP);
+
+        // TODO remove chat-users tree
         // Add reference to newly created chat to chat-users/$chatId/$contactId
-        chatUsersReference.child(newChatKey).child(contactId).setValue(ServerValue.TIMESTAMP);
+//        chatUsersReference.child(newChatKey).child(contactId).setValue(ServerValue.TIMESTAMP);
     }
 
     @Override
@@ -67,31 +74,11 @@ public class ChatsInteractorImpl implements ChatsInteractor {
             userChatsChildEventListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    final String chatKey = dataSnapshot.getKey();
-                    Log.i(LOG_TAG, "Current user chats");
-                    Log.i(LOG_TAG, currentUserChatsReference.toString());
-                    Log.i(LOG_TAG, dataSnapshot.toString());
-
-                    chatUsersReference.child(chatKey).child(contactId).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            Log.i(LOG_TAG, "Common chats between current user and clickes user");
-                            Log.i(LOG_TAG, chatUsersReference.child(chatKey).child(contactId).toString());
-                            Log.i(LOG_TAG, dataSnapshot.toString());
-
-                            if (dataSnapshot.getValue() != null) {
-                                Log.i(LOG_TAG, "chat between current user and " + contactId + " exists");
-                            } else {
-                                Log.i(LOG_TAG, "chat between current user and " + contactId + " does NOT exist");
-//                                createChat(chatName, contactId);
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
+//                    Log.i(LOG_TAG, "Current user chats");
+//                    Log.i(LOG_TAG, userChatContactsReference.child(currentUserId).child(contactId).toString());
+//                    Log.i(LOG_TAG, dataSnapshot.toString());
+                    if (dataSnapshot.getValue() == null)
+                        createChat(chatName, contactId);
                 }
 
                 @Override
@@ -99,8 +86,7 @@ public class ChatsInteractorImpl implements ChatsInteractor {
 
                 }
             };
-
-            currentUserChatsReference.addListenerForSingleValueEvent(userChatsChildEventListener);
+            userChatContactsReference.child(currentUserId).child(contactId).addListenerForSingleValueEvent(userChatsChildEventListener);
         }
     }
 }

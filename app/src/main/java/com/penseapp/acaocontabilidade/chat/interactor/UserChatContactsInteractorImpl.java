@@ -15,9 +15,9 @@ import com.penseapp.acaocontabilidade.domain.FirebaseHelper;
  * Created by Cleusa on 27/11/2016.
  */
 
-public class ChatUsersInteractorImpl implements ChatUsersInteractor {
+public class UserChatContactsInteractorImpl implements UserChatContactsInteractor {
 
-    private final static String LOG_TAG = ChatUsersInteractorImpl.class.getSimpleName();
+    private final static String LOG_TAG = UserChatContactsInteractorImpl.class.getSimpleName();
 
     private final ChatsPresenter chatsPresenter;
 
@@ -29,7 +29,7 @@ public class ChatUsersInteractorImpl implements ChatUsersInteractor {
 
     private ChildEventListener chatUsersChildEventListener;
 
-    public ChatUsersInteractorImpl(ChatsPresenter chatsPresenter) {
+    public UserChatContactsInteractorImpl(ChatsPresenter chatsPresenter) {
         this.chatsPresenter = chatsPresenter;
     }
 

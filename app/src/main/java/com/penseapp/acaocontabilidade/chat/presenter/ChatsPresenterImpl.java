@@ -1,6 +1,5 @@
 package com.penseapp.acaocontabilidade.chat.presenter;
 
-import com.penseapp.acaocontabilidade.chat.interactor.ChatUsersInteractorImpl;
 import com.penseapp.acaocontabilidade.chat.interactor.ChatsInteractor;
 import com.penseapp.acaocontabilidade.chat.interactor.ChatsInteractorImpl;
 import com.penseapp.acaocontabilidade.chat.interactor.UserChatsInteractor;
