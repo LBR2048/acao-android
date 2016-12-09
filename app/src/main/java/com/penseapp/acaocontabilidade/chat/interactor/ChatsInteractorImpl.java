@@ -68,16 +68,18 @@ public class ChatsInteractorImpl implements ChatsInteractor {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     final String chatKey = dataSnapshot.getKey();
+                    Log.i(LOG_TAG, "Current user chats");
                     Log.i(LOG_TAG, currentUserChatsReference.toString());
                     Log.i(LOG_TAG, dataSnapshot.toString());
 
                     chatUsersReference.child(chatKey).child(contactId).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
+                            Log.i(LOG_TAG, "Common chats between current user and clickes user");
                             Log.i(LOG_TAG, chatUsersReference.child(chatKey).child(contactId).toString());
                             Log.i(LOG_TAG, dataSnapshot.toString());
 
-                            if (dataSnapshot.getKey() != null) {
+                            if (dataSnapshot.getValue() != null) {
                                 Log.i(LOG_TAG, "chat between current user and " + contactId + " exists");
                             } else {
                                 Log.i(LOG_TAG, "chat between current user and " + contactId + " does NOT exist");
