@@ -28,6 +28,7 @@ public class ChatsInteractorImpl implements ChatsInteractor {
     private DatabaseReference chatUsersReference = mFirebaseHelperInstance.getChatUsersReference();
     private String currentUserId = mFirebaseHelperInstance.getAuthUserId();
     private ValueEventListener userChatsChildEventListener;
+    private String newChatKey;
 
 
     public ChatsInteractorImpl(ChatsPresenter chatsPresenter) {
@@ -37,7 +38,7 @@ public class ChatsInteractorImpl implements ChatsInteractor {
     @Override
     public void createChat(String chatName, String contactId) {
         // Create empty chat and get its key so we can further reference it
-        String newChatKey = chatsReference.push().getKey();
+        newChatKey = chatsReference.push().getKey();
 
         // Create new chat with key received from Firebase
         Chat newChat = new Chat();
@@ -53,11 +54,18 @@ public class ChatsInteractorImpl implements ChatsInteractor {
         // Add reference to newly created chat to user-chats/$contactId/$chatId
         userChatsReference.child(contactId).child(newChatKey).setValue(ServerValue.TIMESTAMP);
 
-        // Add reference to newly created chat to user-chatContacts/$currentUserId/$contactId
+        // Add reference to contactId to user-chatContacts-chat/$currentUserId/$contactId
         userChatContactsReference.child(currentUserId).child(contactId).setValue(ServerValue.TIMESTAMP);
 
-        // Add reference to newly created chat to user-chatContacts/$contactId/$currentUserId
+        // Add reference to contactId to user-chatContacts-chat/$contactId/$currentUserId
         userChatContactsReference.child(contactId).child(currentUserId).setValue(ServerValue.TIMESTAMP);
+
+        // Add reference to newly created chat to user-chatContacts-chat/$currentUserId/$contactId:$newChatId
+        userChatContactsReference.child(currentUserId).child(contactId).setValue(newChatKey);
+
+        // Add reference to newly created chat to user-chatContacts-chat/$contactId/$currentUserId:$newChatId
+        userChatContactsReference.child(contactId).child(currentUserId).setValue(newChatKey);
+
 
         // TODO remove chat-users tree
         // Add reference to newly created chat to chat-users/$chatId/$currentUserId
@@ -66,6 +74,7 @@ public class ChatsInteractorImpl implements ChatsInteractor {
         // TODO remove chat-users tree
         // Add reference to newly created chat to chat-users/$chatId/$contactId
 //        chatUsersReference.child(newChatKey).child(contactId).setValue(ServerValue.TIMESTAMP);
+
     }
 
     @Override
@@ -77,8 +86,13 @@ public class ChatsInteractorImpl implements ChatsInteractor {
 //                    Log.i(LOG_TAG, "Current user chats");
 //                    Log.i(LOG_TAG, userChatContactsReference.child(currentUserId).child(contactId).toString());
 //                    Log.i(LOG_TAG, dataSnapshot.toString());
-                    if (dataSnapshot.getValue() == null)
+                    Object dataSnapshotValue = dataSnapshot.getValue();
+                    if (dataSnapshotValue == null) {
                         createChat(chatName, contactId);
+                        chatsPresenter.onChatCreated(newChatKey, chatName);
+                    } else {
+                        chatsPresenter.onChatCreated(dataSnapshotValue.toString(), chatName);
+                    }
                 }
 
                 @Override

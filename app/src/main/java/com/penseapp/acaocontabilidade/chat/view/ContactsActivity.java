@@ -11,12 +11,16 @@ import android.view.View;
 
 import com.penseapp.acaocontabilidade.R;
 import com.penseapp.acaocontabilidade.chat.adapters.ContactsAdapter;
+import com.penseapp.acaocontabilidade.chat.presenter.ChatsPresenter;
+import com.penseapp.acaocontabilidade.chat.presenter.ChatsPresenterImpl;
 import com.penseapp.acaocontabilidade.chat.presenter.ContactsPresenter;
 import com.penseapp.acaocontabilidade.chat.presenter.ContactsPresenterImpl;
 import com.penseapp.acaocontabilidade.login.model.User;
 
 import java.util.ArrayList;
 
+import static com.penseapp.acaocontabilidade.chat.view.ChatsActivity.SELECTED_CHAT_KEY;
+import static com.penseapp.acaocontabilidade.chat.view.ChatsActivity.SELECTED_CHAT_NAME;
 import static com.penseapp.acaocontabilidade.chat.view.ChatsActivity.mChats;
 
 public class ContactsActivity extends AppCompatActivity implements ContactsView{
@@ -26,6 +30,7 @@ public class ContactsActivity extends AppCompatActivity implements ContactsView{
     public static final String SELECTED_CONTACT_NAME = "selected_contact";
     public static final String SELECTED_CONTACT_KEY = "selected_contact_key";
     private ContactsPresenter contactsPresenter;
+    private ChatsPresenter chatsPresenter;
 
     public static ArrayList<User> mContacts = new ArrayList<>();
     private ContactsAdapter contactsAdapter;
@@ -56,6 +61,7 @@ public class ContactsActivity extends AppCompatActivity implements ContactsView{
 
         // Connect to Presenters
         contactsPresenter = new ContactsPresenterImpl(this);
+        chatsPresenter = new ChatsPresenterImpl(this);
 
         clearRecyclerView();
         contactsPresenter.subscribeForContactsUpdates();
@@ -96,15 +102,24 @@ public class ContactsActivity extends AppCompatActivity implements ContactsView{
 //                data.putExtra("name", etName.getText().toString());
 //                data.putExtra("code", 200); // ints work too
 //                // Activity finished ok, return the data
+                chatsPresenter.createChatIfNeeded(selectedContact.getName(), selectedContact.getKey());
 
-                Intent data = new Intent();
-                data.putExtra(SELECTED_CONTACT_KEY, selectedContact.getKey());
-                data.putExtra(SELECTED_CONTACT_NAME, selectedContact.getName());
-
-                setResult(RESULT_OK, data); // set result code and bundle data for response
-                finish(); // closes the activity, pass data to parent
+//                Intent data = new Intent();
+//                data.putExtra(SELECTED_CONTACT_KEY, selectedContact.getKey());
+//                data.putExtra(SELECTED_CONTACT_NAME, selectedContact.getName());
+//
+//                setResult(RESULT_OK, data); // set result code and bundle data for response
+//                finish(); // closes the activity, pass data to parent
             }
         });
+    }
+
+    @Override
+    public void onChatCreated(String chatId, String chatName) {
+        Intent intent = new Intent(ContactsActivity.this, MessagesActivity.class);
+        intent.putExtra(SELECTED_CHAT_KEY, chatId);
+        intent.putExtra(SELECTED_CHAT_NAME, chatName);
+        startActivity(intent);
     }
 
     private void clearRecyclerView() {

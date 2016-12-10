@@ -8,7 +8,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.penseapp.acaocontabilidade.chat.model.Chat;
-import com.penseapp.acaocontabilidade.chat.presenter.ChatsPresenter;
+import com.penseapp.acaocontabilidade.chat.presenter.UserChatsPresenter;
 import com.penseapp.acaocontabilidade.domain.FirebaseHelper;
 
 /**
@@ -19,7 +19,7 @@ public class UserChatContactsInteractorImpl implements UserChatContactsInteracto
 
     private final static String LOG_TAG = UserChatContactsInteractorImpl.class.getSimpleName();
 
-    private final ChatsPresenter chatsPresenter;
+    private final UserChatsPresenter userChatsPresenter;
 
     // Firebase
     private FirebaseHelper mFirebaseHelperInstance = FirebaseHelper.getInstance();
@@ -29,8 +29,8 @@ public class UserChatContactsInteractorImpl implements UserChatContactsInteracto
 
     private ChildEventListener chatUsersChildEventListener;
 
-    public UserChatContactsInteractorImpl(ChatsPresenter chatsPresenter) {
-        this.chatsPresenter = chatsPresenter;
+    public UserChatContactsInteractorImpl(UserChatsPresenter userChatsPresenter) {
+        this.userChatsPresenter = userChatsPresenter;
     }
 
     @Override
@@ -48,7 +48,7 @@ public class UserChatContactsInteractorImpl implements UserChatContactsInteracto
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             Chat chat = dataSnapshot.getValue(Chat.class);
                             Log.i(LOG_TAG, "Chat " + chat.getName() + " added");
-                            chatsPresenter.onChatAdded(chat);
+                            userChatsPresenter.onChatAdded(chat);
                         }
 
                         @Override
@@ -67,7 +67,7 @@ public class UserChatContactsInteractorImpl implements UserChatContactsInteracto
                             Chat chat = dataSnapshot.getValue(Chat.class);
                             Log.i(LOG_TAG, "Chat " + chat.getName() + " changed");
                             // TODO no futuro retornar chat e key?
-                            chatsPresenter.onChatChanged(chat);
+                            userChatsPresenter.onChatChanged(chat);
                         }
 
                         @Override
@@ -85,7 +85,7 @@ public class UserChatContactsInteractorImpl implements UserChatContactsInteracto
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             String chatId = dataSnapshot.getKey();
                             Log.i(LOG_TAG, "Chat " + chatId + " removed");
-                            chatsPresenter.onChatRemoved(chatId);
+                            userChatsPresenter.onChatRemoved(chatId);
                         }
 
                         @Override

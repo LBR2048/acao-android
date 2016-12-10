@@ -17,7 +17,8 @@ import com.penseapp.acaocontabilidade.R;
 import com.penseapp.acaocontabilidade.chat.adapters.ChatListAdapter;
 import com.penseapp.acaocontabilidade.chat.model.Chat;
 import com.penseapp.acaocontabilidade.chat.presenter.ChatsPresenter;
-import com.penseapp.acaocontabilidade.chat.presenter.ChatsPresenterImpl;
+import com.penseapp.acaocontabilidade.chat.presenter.UserChatsPresenter;
+import com.penseapp.acaocontabilidade.chat.presenter.UserChatsPresenterImpl;
 import com.penseapp.acaocontabilidade.domain.FirebaseHelper;
 import com.penseapp.acaocontabilidade.login.view.activities.LoginActivity;
 
@@ -29,7 +30,9 @@ public class ChatsActivity extends AppCompatActivity implements ChatsView {
     public static final String SELECTED_CHAT_KEY = "selected_chat_key";
     public static final String SELECTED_CHAT_NAME = "selected_chat_name";
 
+    private UserChatsPresenter userChatsPresenter;
     private ChatsPresenter chatsPresenter;
+
 
     public static ArrayList<Chat> mChats = new ArrayList<>();
     private ChatListAdapter chatListAdapter;
@@ -173,15 +176,15 @@ public class ChatsActivity extends AppCompatActivity implements ChatsView {
         super.onStart();
 
         // Connect to Presenters
-        chatsPresenter = new ChatsPresenterImpl(this);
+        userChatsPresenter = new UserChatsPresenterImpl(this);
 
         clearRecyclerView();
-        chatsPresenter.subscribeForChatListUpdates();
+        userChatsPresenter.subscribeForChatListUpdates();
     }
 
     @Override
     protected void onStop() {
-        chatsPresenter.unsubscribeForChatListUpdates();
+        userChatsPresenter.unsubscribeForChatListUpdates();
         super.onStop();
     }
 
@@ -198,7 +201,7 @@ public class ChatsActivity extends AppCompatActivity implements ChatsView {
 
                 // Create new chat only if there isn't already a chat between currentUserId and contactId
                 chatsPresenter.createChatIfNeeded(chatName, contactId);
-//                chatsPresenter.createChat(chatName, contactId);
+//                userChatsPresenter.createChat(chatName, contactId);
             }
         }
     }

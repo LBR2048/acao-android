@@ -10,7 +10,7 @@ import com.google.firebase.database.FirebaseDatabase;
  */
 public class FirebaseHelper {
     public static final String DEFAULT_EXERCISE_IMAGE_PNG = "exercise_image.png";
-    public static final String USER_CHAT_CONTACTS = "user-chatContacts";
+    public static final String USER_CHATCONTACTS_CHAT = "user-chatContacts:chat";
 
     // Realtime database
     private FirebaseDatabase database;
@@ -109,7 +109,7 @@ public class FirebaseHelper {
     }
 
     public DatabaseReference getUserChatContactsReference(){
-        return databaseRef.child(USER_CHAT_CONTACTS);
+        return databaseRef.child(USER_CHATCONTACTS_CHAT);
     }
 
     public DatabaseReference getChatUsersReference(){

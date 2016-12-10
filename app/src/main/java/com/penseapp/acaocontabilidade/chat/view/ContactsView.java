@@ -10,4 +10,5 @@ public interface ContactsView {
     void onContactAdded(User contact);
     void onContactChanged(User contact);
     void onContactRemoved(String contactId);
+    void onChatCreated(String chatId, String chatName);
 }

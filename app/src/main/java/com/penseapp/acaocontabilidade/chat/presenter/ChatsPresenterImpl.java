@@ -2,10 +2,8 @@ package com.penseapp.acaocontabilidade.chat.presenter;
 
 import com.penseapp.acaocontabilidade.chat.interactor.ChatsInteractor;
 import com.penseapp.acaocontabilidade.chat.interactor.ChatsInteractorImpl;
-import com.penseapp.acaocontabilidade.chat.interactor.UserChatsInteractor;
-import com.penseapp.acaocontabilidade.chat.interactor.UserChatsInteractorImpl;
-import com.penseapp.acaocontabilidade.chat.model.Chat;
 import com.penseapp.acaocontabilidade.chat.view.ChatsView;
+import com.penseapp.acaocontabilidade.chat.view.ContactsView;
 
 /**
  * Created by unity on 21/11/16.
@@ -14,23 +12,19 @@ import com.penseapp.acaocontabilidade.chat.view.ChatsView;
 public class ChatsPresenterImpl implements ChatsPresenter {
 
     private final ChatsView chatsView;
-    private final UserChatsInteractor userChatsInteractor;
+    private final ContactsView contactsView;
     private final ChatsInteractor chatsInteractor;
 
     public ChatsPresenterImpl(ChatsView chatsView) {
+        this.contactsView = null;
         this.chatsView = chatsView;
-        this.userChatsInteractor = new UserChatsInteractorImpl(this);
         this.chatsInteractor = new ChatsInteractorImpl(this);
     }
 
-    @Override
-    public void subscribeForChatListUpdates() {
-        userChatsInteractor.subscribeForUserChatsUpdates();
-    }
-
-    @Override
-    public void unsubscribeForChatListUpdates() {
-        userChatsInteractor.unsubscribeForUserChatsUpdates();
+    public ChatsPresenterImpl(ContactsView contactsView) {
+        this.contactsView = contactsView;
+        this.chatsView = null;
+        this.chatsInteractor = new ChatsInteractorImpl(this);
     }
 
     @Override
@@ -44,17 +38,7 @@ public class ChatsPresenterImpl implements ChatsPresenter {
     }
 
     @Override
-    public void onChatAdded(Chat chat) {
-        chatsView.onChatAdded(chat);
-    }
-
-    @Override
-    public void onChatChanged(Chat chat) {
-        chatsView.onChatChanged(chat);
-    }
-
-    @Override
-    public void onChatRemoved(String chatId) {
-        chatsView.onChatRemoved(chatId);
+    public void onChatCreated(String chatId, String chatName) {
+        contactsView.onChatCreated(chatId, chatName);
     }
 }
