@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.penseapp.acaocontabilidade.chat.view.TabbedMainActivity">
+    <item
+        android:id="@+id/action_acao_facebook"
+        android:orderInCategory="100"
+        android:title="@string/action_acao_facebook"
+        app:showAsAction="never" />
+</menu>
