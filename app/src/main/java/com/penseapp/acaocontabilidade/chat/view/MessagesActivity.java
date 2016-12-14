@@ -21,8 +21,6 @@ import com.penseapp.acaocontabilidade.domain.Utilities;
 
 import java.util.ArrayList;
 
-import static com.penseapp.acaocontabilidade.chat.view.ContactsActivity.mContacts;
-
 public class MessagesActivity extends AppCompatActivity implements MessagesView {
     private final static String LOG_TAG = MessagesActivity.class.getSimpleName();
     public static ArrayList<Message> mMessages = new ArrayList<>();
@@ -73,6 +71,8 @@ public class MessagesActivity extends AppCompatActivity implements MessagesView 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar == null) return;
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 //        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
     }
 
@@ -93,7 +93,8 @@ public class MessagesActivity extends AppCompatActivity implements MessagesView 
     public void onMessageAdded(Message message) {
         Log.i(LOG_TAG, "View onMessageAdded called");
         mMessages.add(message);
-        messagesAdapter.notifyItemInserted(mContacts.size() - 1);
+        messagesAdapter.notifyItemInserted(mMessages.size() - 1);
+        mMessagesRecyclerView.smoothScrollToPosition(mMessages.size() - 1);
     }
 
     public void onClickSendMessage(View view) {

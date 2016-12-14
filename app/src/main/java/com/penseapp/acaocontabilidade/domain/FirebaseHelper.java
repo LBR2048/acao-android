@@ -124,6 +124,22 @@ public class FirebaseHelper {
         return getUserReference(getAuthUserId());
     }
 
+//    public String getCurrentUserType() {
+//        String type;
+//        getCurrentUserReference().child("type").addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                type = dataSnapshot.getValue().toString();
+//                System.out.println(type);
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+//        return type;
+//    }
 
     // Storage
 

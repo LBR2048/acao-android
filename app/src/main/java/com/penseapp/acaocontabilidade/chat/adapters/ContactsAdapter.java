@@ -1,6 +1,7 @@
 package com.penseapp.acaocontabilidade.chat.adapters;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,9 +9,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.penseapp.acaocontabilidade.R;
+import com.penseapp.acaocontabilidade.chat.presenter.ContactsPresenter;
+import com.penseapp.acaocontabilidade.chat.presenter.ContactsPresenterImpl;
 import com.penseapp.acaocontabilidade.login.model.User;
 
 import java.util.List;
+
+import static com.penseapp.acaocontabilidade.chat.view.ChatsActivity.mChats;
 
 
 /**
@@ -19,8 +24,10 @@ import java.util.List;
 
 // Create the basic adapter extending from RecyclerView.Adapter
 // Note that we specify the custom ViewHolder which gives us access to our views
-public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHolder> {
-//        implements ItemTouchHelperAdapter {
+public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHolder>
+        implements ContactsAdapterView {//ItemTouchHelperAdapter {
+
+    private ContactsPresenter contactsPresenter;
 
     private static final String LOG_TAG = ContactsAdapter.class.getSimpleName();
 
@@ -40,6 +47,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
 
     public ContactsAdapter(List<User> contacts) {
         mContacts = contacts;
+        contactsPresenter = new ContactsPresenterImpl(this);
     }
 
 
@@ -195,7 +203,62 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
         return mContacts.get(position);
     }
 
-//    @Override
+    @Override
+    public void subscribeForContactsUpdates() {
+        contactsPresenter.subscribeForContactsUpdates();
+    }
+
+    @Override
+    public void unsubscribeForContactsUpdates() {
+        contactsPresenter.unsubscribeForContactsUpdates();
+    }
+
+    @Override
+    public void onContactAdded(User contact) {
+        Log.i(LOG_TAG, "View onContactAdded called");
+        mContacts.add(contact);
+        notifyItemInserted(mContacts.size() - 1);
+//        contactsAdapter.notifyItemInserted(mContacts.size() - 1);
+    }
+
+    @Override
+    public void onContactChanged(User contact) {
+        Log.i(LOG_TAG, "View onContactChanged called");
+        int index = getIndexForKey(contact.getKey());
+        mContacts.set(index, contact);
+//        contactsAdapter.notifyItemChanged(index);
+        notifyItemChanged(index);
+    }
+
+    @Override
+    public void onContactRemoved(String contactId) {
+        Log.i(LOG_TAG, "View onContactRemoved called");
+        try {
+            int index = getIndexForKey(contactId);
+            mChats.remove(index);
+            notifyDataSetChanged();
+//            contactsAdapter.notifyItemRemoved(index);
+            notifyItemRemoved(index);
+        } catch(IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // TODO this method should go somewhere else? Does it belong in the View?
+    // TODO duplicado em ExerciseChooserActivity
+    private int getIndexForKey(String key) {
+        int index = 0;
+        for (User contact : mContacts) {
+            if (contact.getKey().equals(key)) {
+                return index;
+            } else {
+                index++;
+            }
+        }
+        throw new IllegalArgumentException("Key not found");
+    }
+
+    //    @Override
 //    public boolean onItemMove(int fromPosition, int toPosition) {
 //        if (fromPosition < toPosition) {
 //            for (int i = fromPosition; i < toPosition; i++) {

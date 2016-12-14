@@ -21,7 +21,6 @@ import java.util.ArrayList;
 
 import static com.penseapp.acaocontabilidade.chat.view.ChatsActivity.SELECTED_CHAT_KEY;
 import static com.penseapp.acaocontabilidade.chat.view.ChatsActivity.SELECTED_CHAT_NAME;
-import static com.penseapp.acaocontabilidade.chat.view.ChatsActivity.mChats;
 
 public class ContactsActivity extends AppCompatActivity implements ContactsView{
 
@@ -128,44 +127,44 @@ public class ContactsActivity extends AppCompatActivity implements ContactsView{
     }
 
 
-    @Override
-    public void onContactAdded(User contact) {
-        Log.i(LOG_TAG, "View onContactAdded called");
-        mContacts.add(contact);
-        contactsAdapter.notifyItemInserted(mContacts.size() - 1);
-    }
-
-    @Override
-    public void onContactChanged(User contact) {
-        Log.i(LOG_TAG, "View onContactChanged called");
-        int index = getIndexForKey(contact.getKey());
-        mContacts.set(index, contact);
-        contactsAdapter.notifyItemChanged(index);
-    }
-
-    @Override
-    public void onContactRemoved(String contactId) {
-        Log.i(LOG_TAG, "View onContactRemoved called");
-        try {
-            int index = getIndexForKey(contactId);
-            mChats.remove(index);
-            contactsAdapter.notifyItemRemoved(index);
-        } catch(IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-    }
-
-    // TODO this method should go somewhere else? Does it belong in the View?
-    // TODO duplicado em ExerciseChooserActivity
-    private int getIndexForKey(String key) {
-        int index = 0;
-        for (User contact : mContacts) {
-            if (contact.getKey().equals(key)) {
-                return index;
-            } else {
-                index++;
-            }
-        }
-        throw new IllegalArgumentException("Key not found");
-    }
+//    @Override
+//    public void onContactAdded(User contact) {
+//        Log.i(LOG_TAG, "View onContactAdded called");
+//        mContacts.add(contact);
+//        contactsAdapter.notifyItemInserted(mContacts.size() - 1);
+//    }
+//
+//    @Override
+//    public void onContactChanged(User contact) {
+//        Log.i(LOG_TAG, "View onContactChanged called");
+//        int index = getIndexForKey(contact.getKey());
+//        mContacts.set(index, contact);
+//        contactsAdapter.notifyItemChanged(index);
+//    }
+//
+//    @Override
+//    public void onContactRemoved(String contactId) {
+//        Log.i(LOG_TAG, "View onContactRemoved called");
+//        try {
+//            int index = getIndexForKey(contactId);
+//            mChats.remove(index);
+//            contactsAdapter.notifyItemRemoved(index);
+//        } catch(IllegalArgumentException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    // TODO this method should go somewhere else? Does it belong in the View?
+//    // TODO duplicado em ExerciseChooserActivity
+//    private int getIndexForKey(String key) {
+//        int index = 0;
+//        for (User contact : mContacts) {
+//            if (contact.getKey().equals(key)) {
+//                return index;
+//            } else {
+//                index++;
+//            }
+//        }
+//        throw new IllegalArgumentException("Key not found");
+//    }
 }

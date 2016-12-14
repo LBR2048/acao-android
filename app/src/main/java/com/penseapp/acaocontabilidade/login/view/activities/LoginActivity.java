@@ -11,13 +11,12 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
-import com.penseapp.acaocontabilidade.chat.view.ChatsActivity;
+import com.penseapp.acaocontabilidade.R;
+import com.penseapp.acaocontabilidade.chat.view.TabbedMainActivity;
 import com.penseapp.acaocontabilidade.domain.FirebaseHelper;
 import com.penseapp.acaocontabilidade.login.presenter.LoginPresenterImpl;
 import com.penseapp.acaocontabilidade.login.view.fragments.LoginFragment;
 import com.penseapp.acaocontabilidade.login.view.fragments.SignUpFragment;
-
-import com.penseapp.acaocontabilidade.R;
 
 
 /**
@@ -95,8 +94,8 @@ public class LoginActivity extends AppCompatActivity implements
 
     // Navigation
 
-    private void showWorkoutsActivity() {
-        Intent intent = new Intent(LoginActivity.this, ChatsActivity.class);
+    private void showMainActivity() {
+        Intent intent = new Intent(LoginActivity.this, TabbedMainActivity.class);
         // TODO Ao pressionar Logout, a WorkoutsActivity não pode mais ser acessada através do back button
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
@@ -137,7 +136,7 @@ public class LoginActivity extends AppCompatActivity implements
     @Override
     public void onLoginSuccess() {
         Toast.makeText(getApplicationContext(), "Logged in as " + FirebaseHelper.getInstance().getAuthUserEmail(), Toast.LENGTH_SHORT).show();
-        showWorkoutsActivity();
+        showMainActivity();
     }
 
     @Override
@@ -151,7 +150,7 @@ public class LoginActivity extends AppCompatActivity implements
     @Override
     public void onUserLoggedIn() {
         // User is signed in
-        showWorkoutsActivity();
+        showMainActivity();
         Log.d(LOG_TAG, "onAuthStateChanged:signed_in");
     }
 

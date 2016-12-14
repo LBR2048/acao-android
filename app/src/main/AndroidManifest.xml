@@ -11,7 +11,11 @@
         <activity android:name=".login.view.activities.LoginActivity" />
         <activity android:name=".chat.view.ChatsActivity" />
         <activity android:name=".chat.view.ContactsActivity" />
-        <activity android:name=".chat.view.MessagesActivity" />
+        <activity android:name=".chat.view.MessagesActivity">
+            <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.penseapp.acaocontabilidade.chat.view.TabbedMainActivity" />
+        </activity>
         <activity
             android:name=".chat.view.TabbedMainActivity"
             android:label="@string/title_activity_tabbed_main"

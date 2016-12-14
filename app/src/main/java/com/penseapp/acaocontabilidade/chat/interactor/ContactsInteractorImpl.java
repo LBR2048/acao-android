@@ -76,8 +76,12 @@ public class ContactsInteractorImpl implements ContactsInteractor {
 //                        addChildEventListener(contactsChildEventListener);
 //            }
 
+//            mFirebaseHelperInstance.getUsersReference().orderByChild("type").equalTo("customer").
+//                    addChildEventListener(contactsChildEventListener);
             mFirebaseHelperInstance.getUsersReference().orderByChild("type").equalTo("acao").
                     addChildEventListener(contactsChildEventListener);
+//            mFirebaseHelperInstance.getUsersReference().
+//                    addChildEventListener(contactsChildEventListener);
         }
     }
 

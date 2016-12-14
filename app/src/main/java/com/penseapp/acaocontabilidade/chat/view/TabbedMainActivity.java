@@ -2,28 +2,33 @@ package com.penseapp.acaocontabilidade.chat.view;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.penseapp.acaocontabilidade.R;
+import com.penseapp.acaocontabilidade.chat.presenter.ChatsPresenter;
+import com.penseapp.acaocontabilidade.chat.presenter.ChatsPresenterImpl;
+import com.penseapp.acaocontabilidade.domain.FirebaseHelper;
+import com.penseapp.acaocontabilidade.login.view.activities.LoginActivity;
 
-public class TabbedMainActivity extends AppCompatActivity {
+import static com.penseapp.acaocontabilidade.chat.view.ChatsActivity.SELECTED_CHAT_KEY;
+import static com.penseapp.acaocontabilidade.chat.view.ChatsActivity.SELECTED_CHAT_NAME;
+
+public class TabbedMainActivity extends AppCompatActivity
+        implements ContactsView, ContactsFragment.OnContactsFragmentInteractionListener {
 
     private static final String ACAO_FACEBOOK_URL = "https://www.facebook.com/acaocontabilidade/";
 
@@ -41,6 +46,7 @@ public class TabbedMainActivity extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    private ChatsPresenter chatsPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,17 +66,19 @@ public class TabbedMainActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
+        // Set screen title
+        String currentUserEmail = FirebaseHelper.getInstance().getAuthUserEmail();
+        setTitle("Ação [" + currentUserEmail + " ]");
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        // Connect to Presenters
+        chatsPresenter = new ChatsPresenterImpl(this);
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -90,6 +98,10 @@ public class TabbedMainActivity extends AppCompatActivity {
         if (id == R.id.action_acao_facebook) {
             goToAcaoFacebookWebsite();
             return true;
+        }
+        if (id == R.id.action_logout) {
+            logout();
+            showLoginActivity();
         }
 
         return super.onOptionsItemSelected(item);
@@ -143,8 +155,14 @@ public class TabbedMainActivity extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+
+            switch (position) {
+                case 0:
+                    return ContactsFragment.newInstance("t1", "t1");
+                default:
+                    // Return a PlaceholderFragment (defined as a static inner class below).
+                    return PlaceholderFragment.newInstance(position + 1);
+            }
         }
 
         @Override
@@ -171,5 +189,31 @@ public class TabbedMainActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(ACAO_FACEBOOK_URL));
         startActivity(intent);
+    }
+
+    @Override
+    public void onContactSelected(String name, String key)  {
+        chatsPresenter.createChatIfNeeded(name, key);
+//        Toast.makeText(getApplicationContext(), "Contact " + name + " clicked", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onChatCreated(String chatId, String chatName) {
+//        Toast.makeText(getApplicationContext(), "onChatCreated called", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(TabbedMainActivity.this, MessagesActivity.class);
+        intent.putExtra(SELECTED_CHAT_KEY, chatId);
+        intent.putExtra(SELECTED_CHAT_NAME, chatName);
+        startActivity(intent);
+    }
+
+    private void showLoginActivity() {
+        Intent intent = new Intent(TabbedMainActivity.this, LoginActivity.class);
+        startActivity(intent);
+    }
+
+    // TODO isso não deveria pertencer a essa atividade, pois não diz respeito ao View
+    private void logout() {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        auth.signOut();
     }
 }
