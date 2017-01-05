@@ -8,7 +8,13 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".login.view.activities.LoginActivity" />
+        <activity android:name=".login.view.activities.LoginActivity">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
         <activity android:name=".chat.view.ChatsActivity" />
         <activity android:name=".chat.view.ContactsActivity" />
         <activity android:name=".chat.view.MessagesActivity">
@@ -20,11 +26,6 @@
             android:name=".chat.view.TabbedMainActivity"
             android:label="@string/title_activity_tabbed_main"
             android:theme="@style/AppTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 
