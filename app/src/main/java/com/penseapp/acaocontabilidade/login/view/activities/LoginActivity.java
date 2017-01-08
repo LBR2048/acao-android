@@ -122,12 +122,12 @@ public class LoginActivity extends AppCompatActivity implements
 
     @Override
     public void onSignUpSuccess() {
-        Toast.makeText(getApplicationContext(), "Sign Up successful for user " + FirebaseHelper.getInstance().getAuthUserEmail(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), FirebaseHelper.getInstance().getAuthUserEmail() + " registrado com sucesso" , Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onSignUpFailure() {
-        Toast.makeText(LoginActivity.this, "Sign up failure", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Falha ao registrar ", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -135,13 +135,13 @@ public class LoginActivity extends AppCompatActivity implements
 
     @Override
     public void onLoginSuccess() {
-        Toast.makeText(getApplicationContext(), "Logged in as " + FirebaseHelper.getInstance().getAuthUserEmail(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Logado como " + FirebaseHelper.getInstance().getAuthUserEmail(), Toast.LENGTH_SHORT).show();
         showMainActivity();
     }
 
     @Override
     public void onLoginFailure() {
-        Toast.makeText(LoginActivity.this, "Login failure", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Falha ao fazer login", Toast.LENGTH_SHORT).show();
     }
 
 

@@ -38,14 +38,14 @@ public class SignUpFragment extends Fragment {
     private EditText mNameEditText;
     private EditText mEmailEditText;
     private EditText mPasswordEditText;
-    private EditText mPassword2EditText;
+    private EditText mPasswordRepeatEditText;
     private Button mSignUpButton;
     private TextInputLayout mNameWrapper;
-    private TextInputLayout mUsernameWrapper;
+    private TextInputLayout mEmailWrapper;
     private TextInputLayout mPasswordWrapper;
     private Spinner mSpinner;
 
-    private TextInputLayout mPassword2Wrapper;
+    private TextInputLayout mPasswordRepeatWrapper;
     // Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -100,6 +100,55 @@ public class SignUpFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         createUI(view);
+
+        // Clear error when name focus is true and validate name when focus is lost
+        mNameEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    mNameWrapper.setErrorEnabled(false);
+                } else {
+                    validateName();
+                }
+            }
+        });
+
+        // Clear error when email focus is true and validate email when focus is lost
+        mEmailEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    mEmailWrapper.setErrorEnabled(false);
+                } else {
+                    validateEmail();
+                }
+            }
+        });
+
+        // Clear error when password focus is true and validate password when focus is lost
+        mPasswordEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    mPasswordWrapper.setErrorEnabled(false);
+                } else {
+                    validatePassword();
+                }
+            }
+        });
+
+
+        // Clear error when password repeat focus is true and validate password repeat when focus is lost
+        mPasswordRepeatEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    mPasswordRepeatWrapper.setErrorEnabled(false);
+                } else {
+                    validatePasswordRepeat();
+                }
+            }
+        });
     }
 
     @Override
@@ -125,14 +174,14 @@ public class SignUpFragment extends Fragment {
     private void createUI(View view) {
         mProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
         mNameWrapper = (TextInputLayout) view.findViewById(R.id.signup_nameWrapper);
-        mUsernameWrapper = (TextInputLayout) view.findViewById(R.id.signup_usernameWrapper);
+        mEmailWrapper = (TextInputLayout) view.findViewById(R.id.signup_usernameWrapper);
         mPasswordWrapper = (TextInputLayout) view.findViewById(R.id.signup_passwordWrapper);
-        mPassword2Wrapper = (TextInputLayout) view.findViewById(R.id.signup_password2Wrapper);
+        mPasswordRepeatWrapper = (TextInputLayout) view.findViewById(R.id.signup_password2Wrapper);
         mNameEditText = (EditText) view.findViewById(R.id.signup_name_edit_text);
         mEmailEditText = (EditText) view.findViewById(R.id.signup_email_edit_text);
         mSpinner = (Spinner)view.findViewById(R.id.user_type_spinner);
         mPasswordEditText = (EditText) view.findViewById(R.id.signup_password_edit_text);
-        mPassword2EditText = (EditText) view.findViewById(R.id.signup_password2_edit_text);
+        mPasswordRepeatEditText = (EditText) view.findViewById(R.id.signup_password2_edit_text);
         mSignUpButton = (Button) view.findViewById(R.id.signup_button);
 
         // Setup user type spinner
@@ -150,7 +199,7 @@ public class SignUpFragment extends Fragment {
                         mNameEditText.getText().toString(),
                         mEmailEditText.getText().toString(),
                         mSpinner.getSelectedItem().toString(),
-                        mPasswordEditText.getText().toString(), mPassword2EditText.getText().toString());
+                        mPasswordEditText.getText().toString(), mPasswordRepeatEditText.getText().toString());
             }
         });
     }
@@ -158,27 +207,12 @@ public class SignUpFragment extends Fragment {
     public void onSignUpClicked(String name, String email, String type, String password, String password2) {
 
         mNameWrapper.setErrorEnabled(false);
-        mUsernameWrapper.setErrorEnabled(false);
+        mEmailWrapper.setErrorEnabled(false);
         mPasswordWrapper.setErrorEnabled(false);
-        mPassword2Wrapper.setErrorEnabled(false);
+        mPasswordRepeatWrapper.setErrorEnabled(false);
 
         // TODO too many nested ifs?
-        if (name.trim().isEmpty())
-            mNameWrapper.setError("Name cannot be empty");
-        else if (!Utilities.validateEmail(email))
-            mUsernameWrapper.setError("Not a valid email address");
-        else if (!Utilities.validatePassword(password))
-            mPasswordWrapper.setError("Not a valid password");
-        else if (!Utilities.validatePassword(password2))
-            mPassword2Wrapper.setError("Not a valid password");
-        else if (!password.equals(password2)) {
-            mPasswordWrapper.setError("Passwords must match");
-            mPassword2Wrapper.setError("Passwords must match");
-        }
-        else {
-//            hideKeyboard();
-//            presenter.login(email, password);
-//        }
+        if (validateName() && validateEmail() && validatePassword() && checkPasswordsMatch()) {
             if (mListener != null) {
                 mListener.onSignUpFragmentSignUpClicked(name, email, type, password);
             }
@@ -209,4 +243,75 @@ public class SignUpFragment extends Fragment {
         void onSignUpFragmentSignUpClicked(String name, String email, String type, String password);
     }
 
+    /**
+     * Validate name and return error message if needed
+     * @return email validity
+     */
+    private boolean validateName() {
+        String name = mNameEditText.getText().toString();
+        if (name.trim().isEmpty()) {
+            mNameWrapper.setError("Nome não pode ser vazio");
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * Validate email and return error message if needed
+     * @return email validity
+     */
+    private boolean validateEmail() {
+        String email = mEmailEditText.getText().toString();
+        if (!Utilities.validateEmail(email)) {
+            mEmailWrapper.setError("Endereço de email inválido");
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * Validate password and return error message if needed
+     * @return password validity
+     */
+    private boolean validatePassword() {
+        String password = mPasswordEditText.getText().toString();
+        if (!Utilities.validatePassword(password)) {
+            mPasswordWrapper.setError("Senha deve ter no mínimo 6 caracteres");
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * Validate repeated password and return error message if needed
+     * @return password validity
+     */
+    private boolean validatePasswordRepeat() {
+        String password = mPasswordRepeatEditText.getText().toString();
+        if (!Utilities.validatePassword(password)) {
+            mPasswordRepeatWrapper.setError("Senha deve ter no mínimo 6 caracteres");
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * Check is password entered on both fields match
+     * @return password validity
+     */
+    private boolean checkPasswordsMatch() {
+        String password = mPasswordEditText.getText().toString();
+        String passwordRepeat = mPasswordRepeatEditText.getText().toString();
+        if (!password.equals(passwordRepeat)) {
+            mPasswordWrapper.setError("Senhas devem ser iguais");
+            mPasswordRepeatWrapper.setError("Senhas devem ser iguais");
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

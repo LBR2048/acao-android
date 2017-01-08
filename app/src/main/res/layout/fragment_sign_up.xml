@@ -18,11 +18,11 @@
 
         <ImageView
             android:id="@+id/logo_image_view"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="300dp"
+            android:layout_height="200dp"
             android:layout_gravity="center"
             android:layout_margin="8dp"
-            android:src="@mipmap/ic_launcher"
+            android:src="@drawable/acao_logo"
             tools:ignore="ContentDescription" />
     </LinearLayout>
 
@@ -95,7 +95,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Registrar" />
+            android:text="Registrar"
+            style="@style/Base.Widget.AppCompat.Button.Colored"/>
 
     </LinearLayout>
 

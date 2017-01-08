@@ -13,9 +13,8 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.penseapp.acaocontabilidade.login.Utilities;
-
 import com.penseapp.acaocontabilidade.R;
+import com.penseapp.acaocontabilidade.login.Utilities;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,7 +35,7 @@ public class LoginFragment extends Fragment {
     private EditText mPasswordEditText;
     private Button mLoginButton;
     private TextView mSignUpText;
-    private TextInputLayout mUsernameWrapper;
+    private TextInputLayout mEmailWrapper;
     private TextInputLayout mPasswordWrapper;
 
     // Rename and change types of parameters
@@ -93,6 +92,30 @@ public class LoginFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         createUI(view);
+
+        // Clear error when email focus is true and validate email when focus is lost
+        mEmailEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    mEmailWrapper.setErrorEnabled(false);
+                } else {
+                    validateEmail();
+                }
+            }
+        });
+
+        // Clear error when password focus is true and validate password when focus is lost
+        mPasswordEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    mPasswordWrapper.setErrorEnabled(false);
+                } else {
+                    validatePassword();
+                }
+            }
+        });
     }
 
     @Override
@@ -117,7 +140,7 @@ public class LoginFragment extends Fragment {
 
     private void createUI(View view) {
         mProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
-        mUsernameWrapper = (TextInputLayout) view.findViewById(R.id.usernameWrapper);
+        mEmailWrapper = (TextInputLayout) view.findViewById(R.id.usernameWrapper);
         mPasswordWrapper = (TextInputLayout) view.findViewById(R.id.passwordWrapper);
         mEmailEditText = (EditText) view.findViewById(R.id.login_email_edit_text);
         mPasswordEditText = (EditText) view.findViewById(R.id.login_password_edit_text);
@@ -139,17 +162,10 @@ public class LoginFragment extends Fragment {
 
     public void onLoginClicked(String email, String password) {
 
-        mUsernameWrapper.setErrorEnabled(false);
+        mEmailWrapper.setErrorEnabled(false);
         mPasswordWrapper.setErrorEnabled(false);
 
-        if (!Utilities.validateEmail(email))
-            mUsernameWrapper.setError("Not a valid email address!");
-        else if (!Utilities.validatePassword(password))
-            mPasswordWrapper.setError("Not a valid password!");
-        else {
-//            hideKeyboard();
-//            presenter.login(email, password);
-//        }
+        if (validateEmail() && validatePassword()) {
             if (mListener != null) {
                 mListener.onLoginFragmentLoginClicked(email, password);
             }
@@ -186,5 +202,34 @@ public class LoginFragment extends Fragment {
         void onLoginFragmentLoginClicked(String email, String password);
 
         void onLoginFragmentSignUpClicked();
+    }
+
+
+    /**
+     * Validate email and return error message if needed
+     * @return email validity
+     */
+    private boolean validateEmail() {
+        String email = mEmailEditText.getText().toString();
+        if (!Utilities.validateEmail(email)) {
+            mEmailWrapper.setError("Endereço de email inválido");
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * Validate password and return error message if needed
+     * @return password validity
+     */
+    private boolean validatePassword() {
+        String password = mPasswordEditText.getText().toString();
+        if (!Utilities.validatePassword(password)) {
+            mPasswordWrapper.setError("Senha deve ter no mínimo 6 caracteres");
+            return false;
+        } else {
+            return true;
+        }
     }
 }
