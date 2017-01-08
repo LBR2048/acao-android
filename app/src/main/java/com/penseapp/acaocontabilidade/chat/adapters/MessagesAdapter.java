@@ -1,16 +1,27 @@
 package com.penseapp.acaocontabilidade.chat.adapters;
 
+import android.graphics.PorterDuff;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.RotateDrawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.penseapp.acaocontabilidade.R;
 import com.penseapp.acaocontabilidade.chat.model.Message;
+import com.penseapp.acaocontabilidade.domain.FirebaseHelper;
 
 import java.util.List;
+
+import static com.penseapp.acaocontabilidade.R.id.left_arrow;
+import static com.penseapp.acaocontabilidade.R.id.right_arrow;
 
 
 /**
@@ -91,10 +102,10 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
         TextView text;
-//        TextView exerciseCount;
-        ImageView handleView;
-        ImageView shareView;
-        ImageView renameView;
+        FrameLayout leftArrow;
+        FrameLayout rightArrow;
+        RelativeLayout messageContainer;
+        LinearLayout message;
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
@@ -103,10 +114,10 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
             // to access the context from any ViewHolder instance.
             super(itemView);
             text = (TextView) itemView.findViewById(R.id.list_item_chat_name_textview);
-//            exerciseCount = (TextView) itemView.findViewById(R.id.list_item_workout_exercise_count_textview);
-//            handleView = (ImageView) itemView.findViewById(R.id.list_item_workout_handle);
-//            shareView = (ImageView) itemView.findViewById(R.id.list_item_workout_share_imageview);
-//            renameView = (ImageView) itemView.findViewById(R.id.list_item_workout_rename_imageview);
+            leftArrow = (FrameLayout) itemView.findViewById(left_arrow);
+            rightArrow = (FrameLayout) itemView.findViewById(right_arrow);
+            messageContainer = (RelativeLayout) itemView.findViewById(R.id.message_container);
+            message = (LinearLayout) itemView.findViewById(R.id.message);
 
             // Setup the click onItemClickListener
             // itemView.setOnClickListener(this);
@@ -118,23 +129,6 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
                         onItemClickListener.onItemClick(itemView, getLayoutPosition());
                 }
             });
-
-//            shareView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    if (onWorkoutShareClickListener != null)
-//                        onWorkoutShareClickListener.onWorkoutShareClick(itemView, getLayoutPosition());
-//                }
-//            });
-//
-//            renameView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    if (onWorkoutRenameClickListener != null)
-//                        onWorkoutRenameClickListener.onWorkoutRenameClick(itemView, getLayoutPosition());
-//                }
-//            });
-
         }
 
 //        @Override
@@ -171,7 +165,27 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
 
         // Set item views based on your views and data model
         holder.text.setText(message.getText());
-//        holder.exerciseCount.setText(String.format("%d", message.getExerciseCount()) + " exercícios");
+
+        int color;
+        if (message.getSenderId().equals(FirebaseHelper.getInstance().getAuthUserId())) {
+//            // Sent message
+            holder.leftArrow.setVisibility(View.GONE);
+            holder.rightArrow.setVisibility(View.VISIBLE);
+            holder.messageContainer.setGravity(Gravity.END);
+            color = ContextCompat.getColor(holder.messageContainer.getContext(), R.color.sentMessage);
+        } else {
+//            // Received message
+            holder.leftArrow.setVisibility(View.VISIBLE);
+            holder.rightArrow.setVisibility(View.GONE);
+            holder.messageContainer.setGravity(Gravity.START);
+            color = ContextCompat.getColor(holder.messageContainer.getContext(), R.color.receivedMessage);
+        }
+        ((GradientDrawable) holder.message.getBackground()).setColor(color);
+        ((RotateDrawable) holder.leftArrow.getBackground()).getDrawable()
+                .setColorFilter(color, PorterDuff.Mode.SRC);
+        ((RotateDrawable) holder.rightArrow.getBackground()).getDrawable()
+                .setColorFilter(color, PorterDuff.Mode.SRC);
+
 
         // Start a drag whenever the handle view it touched
 //        holder.handleView.setOnTouchListener(new View.OnTouchListener() {

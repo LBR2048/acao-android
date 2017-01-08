@@ -157,7 +157,8 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // Inflate the custom layout
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_chat, parent, false);
+//        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_chat, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_1, parent, false);
 
         // Return a new holder instance
         return new ViewHolder(view);
