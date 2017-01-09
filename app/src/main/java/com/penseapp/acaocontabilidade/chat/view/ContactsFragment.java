@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -95,6 +96,7 @@ public class ContactsFragment extends Fragment {//implements ContactsView {
 
         mContactsRecyclerView = (RecyclerView) getActivity().findViewById(R.id.list_contacts);
         setupRecyclerView();
+        setupRecyclerViewDecorator();
 
         // Connect to Presenters
 //        contactsPresenter = new ContactsPresenterImpl(this);
@@ -167,6 +169,13 @@ public class ContactsFragment extends Fragment {//implements ContactsView {
         contactsAdapter.subscribeForContactsUpdates();
         mContactsRecyclerView.setAdapter(contactsAdapter);
         mContactsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+    }
+
+    private void setupRecyclerViewDecorator() {
+        // Display dividers between each item of the RecyclerView
+        RecyclerView.ItemDecoration itemDecoration = new
+                DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
+        mContactsRecyclerView.addItemDecoration(itemDecoration);
     }
 
     private void clearRecyclerView() {
