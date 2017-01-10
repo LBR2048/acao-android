@@ -9,8 +9,11 @@ import com.google.firebase.database.FirebaseDatabase;
  * Created by unity.
  */
 public class FirebaseHelper {
+    private static final String LOG_TAG = FirebaseHelper.class.getSimpleName();
+
     public static final String DEFAULT_EXERCISE_IMAGE_PNG = "exercise_image.png";
     public static final String USER_CHATCONTACTS_CHAT = "user-chatContacts:chat";
+    public static final String NEWS = "news";
 
     // Realtime database
     private FirebaseDatabase database;
@@ -40,8 +43,8 @@ public class FirebaseHelper {
     private FirebaseHelper(){
         if (database == null) {
             database = FirebaseDatabase.getInstance();
+            database.setPersistenceEnabled(true);
             // TODO ativar data persistence sem rede (não sei se deve ser colocado aqui)
-//            database.setPersistenceEnabled(true);
             databaseRef = database.getReference();
         }
 //        if (storage == null) {
@@ -118,6 +121,10 @@ public class FirebaseHelper {
 
     public DatabaseReference getCurrentChatUsersReference(){
         return getChatUsersReference().child(getAuthUserId());
+    }
+
+    public DatabaseReference getNewsReference(){
+        return databaseRef.child(NEWS);
     }
 
     public DatabaseReference getCurrentUserReference() {

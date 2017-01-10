@@ -23,12 +23,16 @@ import com.penseapp.acaocontabilidade.chat.presenter.ChatsPresenter;
 import com.penseapp.acaocontabilidade.chat.presenter.ChatsPresenterImpl;
 import com.penseapp.acaocontabilidade.domain.FirebaseHelper;
 import com.penseapp.acaocontabilidade.login.view.activities.LoginActivity;
+import com.penseapp.acaocontabilidade.news.view.NewsFragment;
+import com.penseapp.acaocontabilidade.news.view.NewsItemActivity;
 
 import static com.penseapp.acaocontabilidade.chat.view.ChatsActivity.SELECTED_CHAT_KEY;
 import static com.penseapp.acaocontabilidade.chat.view.ChatsActivity.SELECTED_CHAT_NAME;
 
-public class TabbedMainActivity extends AppCompatActivity
-        implements ContactsView, ContactsFragment.OnContactsFragmentInteractionListener {
+public class TabbedMainActivity extends AppCompatActivity implements
+        ContactsView,
+        ContactsFragment.OnContactsFragmentInteractionListener,
+        NewsFragment.OnNewsFragmentInteractionListener {
 
     private static final String ACAO_FACEBOOK_URL = "https://www.facebook.com/acaocontabilidade/";
 
@@ -159,6 +163,8 @@ public class TabbedMainActivity extends AppCompatActivity
             switch (position) {
                 case 0:
                     return ContactsFragment.newInstance("t1", "t1");
+                case 1:
+                    return NewsFragment.newInstance("t1", "t2");
                 default:
                     // Return a PlaceholderFragment (defined as a static inner class below).
                     return PlaceholderFragment.newInstance(position + 1);
@@ -195,6 +201,15 @@ public class TabbedMainActivity extends AppCompatActivity
     public void onContactSelected(String name, String key)  {
         chatsPresenter.createChatIfNeeded(name, key);
 //        Toast.makeText(getApplicationContext(), "Contact " + name + " clicked", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onNewsSelected(String title, String key) {
+//        Toast.makeText(getApplicationContext(), "News item " + title + " clicked", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, NewsItemActivity.class);
+        intent.putExtra(NewsItemActivity.SELECTED_NEWS_TITLE, title);
+        intent.putExtra(NewsItemActivity.SELECTED_NEWS_KEY, key);
+        startActivity(intent);
     }
 
     @Override
