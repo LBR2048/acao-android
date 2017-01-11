@@ -10,6 +10,9 @@ public interface LoginView {
     void onLoginSuccess();
     void onLoginFailure();
 
+    void onPasswordResetSuccess();
+    void onPasswordResetFailure();
+
     void onUserLoggedIn();
     void onUserLoggedOut();
 }

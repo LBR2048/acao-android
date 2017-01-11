@@ -6,6 +6,7 @@ package com.penseapp.acaocontabilidade.login.interactor;
 public interface LoginInteractor {
     void signUp(String name, String user, String type, String password);
     void login(String email, String password);
+    void resetPassword(String email);
 
     void getCurrentUser();
     void addAuthStateListener();

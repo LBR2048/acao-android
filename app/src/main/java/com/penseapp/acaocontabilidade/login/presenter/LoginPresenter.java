@@ -12,6 +12,10 @@ public interface LoginPresenter {
     void onLoginFailure();
     void onLoginSuccess(String user, String uid);
 
+    void resetPassword(String email);
+    void onPasswordResetSuccess();
+    void onPasswordResetFailure();
+
     void getCurrentUser();
     void onUserLoggedIn();
     void onUserLoggedOut();

@@ -16,6 +16,7 @@ import com.penseapp.acaocontabilidade.chat.view.TabbedMainActivity;
 import com.penseapp.acaocontabilidade.domain.FirebaseHelper;
 import com.penseapp.acaocontabilidade.login.presenter.LoginPresenterImpl;
 import com.penseapp.acaocontabilidade.login.view.fragments.LoginFragment;
+import com.penseapp.acaocontabilidade.login.view.fragments.ResetPasswordFragment;
 import com.penseapp.acaocontabilidade.login.view.fragments.SignUpFragment;
 
 
@@ -25,6 +26,7 @@ import com.penseapp.acaocontabilidade.login.view.fragments.SignUpFragment;
 public class LoginActivity extends AppCompatActivity implements
         LoginView,
         LoginFragment.OnFragmentInteractionListener,
+        ResetPasswordFragment.OnFragmentInteractionListener,
         SignUpFragment.OnFragmentInteractionListener {
 
     private static String LOG_TAG = LoginActivity.class.getSimpleName();
@@ -32,6 +34,7 @@ public class LoginActivity extends AppCompatActivity implements
     private LoginPresenterImpl presenter;
 
     public static final String LOGIN_FRAGMENT_TAG = "login";
+    public static final String RESET_PASSWORD_FRAGMENT_TAG = "reset";
     public static final String SIGNUP_FRAGMENT_TAG = "signup";
 
 
@@ -72,14 +75,25 @@ public class LoginActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void onLoginFragmentForgotPasswordClicked() {
+        showResetPasswordFragment();
+    }
+
+    @Override
     public void onLoginFragmentSignUpClicked() {
-        Toast.makeText(getApplicationContext(), "Sign Up", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(), "Sign Up", Toast.LENGTH_SHORT).show();
         showSignUpFragment();
     }
 
     @Override
+    public void onResetPasswordFragmentResetClicked(String email) {
+//        Toast.makeText(getApplicationContext(), "Reset Password", Toast.LENGTH_SHORT).show();
+        presenter.resetPassword(email);
+    }
+
+    @Override
     public void onSignUpFragmentSignUpClicked(String name, String email, String type, String password) {
-        Toast.makeText(getApplicationContext(), "SignUp clicked", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(), "SignUp clicked", Toast.LENGTH_SHORT).show();
         presenter.signUp(name, email, type, password);
     }
 
@@ -106,6 +120,14 @@ public class LoginActivity extends AppCompatActivity implements
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.replace_frame, LoginFragment.newInstance(), LOGIN_FRAGMENT_TAG)
+                .commit();
+    }
+
+    private void showResetPasswordFragment() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.replace_frame, ResetPasswordFragment.newInstance(), RESET_PASSWORD_FRAGMENT_TAG)
+                .addToBackStack(RESET_PASSWORD_FRAGMENT_TAG)
                 .commit();
     }
 
@@ -142,6 +164,19 @@ public class LoginActivity extends AppCompatActivity implements
     @Override
     public void onLoginFailure() {
         Toast.makeText(getApplicationContext(), "Falha ao fazer login", Toast.LENGTH_SHORT).show();
+    }
+
+
+    // Password reset callbacks
+
+    @Override
+    public void onPasswordResetSuccess() {
+        Toast.makeText(getApplicationContext(), "Verifique seu email para criar uma nova senha", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onPasswordResetFailure() {
+        Toast.makeText(getApplicationContext(), "Não há nenhuma conta registrada com o email informado", Toast.LENGTH_SHORT).show();
     }
 
 

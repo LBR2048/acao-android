@@ -19,12 +19,12 @@ import com.penseapp.acaocontabilidade.login.Utilities;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link LoginFragment.OnFragmentInteractionListener} interface
+ * {@link ResetPasswordFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link LoginFragment#newInstance} factory method to
+ * Use the {@link ResetPasswordFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class LoginFragment extends Fragment {
+public class ResetPasswordFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -32,9 +32,7 @@ public class LoginFragment extends Fragment {
     // GUI
     private ProgressBar mProgressBar;
     private EditText mEmailEditText;
-    private EditText mPasswordEditText;
     private Button mLoginButton;
-    private TextView mResetPasswordText;
     private TextView mSignUpText;
     private TextInputLayout mEmailWrapper;
     private TextInputLayout mPasswordWrapper;
@@ -45,12 +43,12 @@ public class LoginFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public LoginFragment() {
+    public ResetPasswordFragment() {
         // Required empty public constructor
     }
 
-    public static LoginFragment newInstance() {
-        LoginFragment fragment = new LoginFragment();
+    public static ResetPasswordFragment newInstance() {
+        ResetPasswordFragment fragment = new ResetPasswordFragment();
         return fragment;
     }
 
@@ -62,8 +60,8 @@ public class LoginFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment LoginFragment.
      */
-    public static LoginFragment newInstance(String param1, String param2) {
-        LoginFragment fragment = new LoginFragment();
+    public static ResetPasswordFragment newInstance(String param1, String param2) {
+        ResetPasswordFragment fragment = new ResetPasswordFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -87,7 +85,7 @@ public class LoginFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login, container, false);
+        return inflater.inflate(R.layout.fragment_reset_password, container, false);
     }
 
     @Override
@@ -102,18 +100,6 @@ public class LoginFragment extends Fragment {
                     mEmailWrapper.setErrorEnabled(false);
                 } else {
                     validateEmail();
-                }
-            }
-        });
-
-        // Clear error when password focus is true and validate password when focus is lost
-        mPasswordEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    mPasswordWrapper.setErrorEnabled(false);
-                } else {
-                    validatePassword();
                 }
             }
         });
@@ -144,52 +130,26 @@ public class LoginFragment extends Fragment {
         mEmailWrapper = (TextInputLayout) view.findViewById(R.id.usernameWrapper);
         mPasswordWrapper = (TextInputLayout) view.findViewById(R.id.passwordWrapper);
         mEmailEditText = (EditText) view.findViewById(R.id.login_email_edit_text);
-        mPasswordEditText = (EditText) view.findViewById(R.id.login_password_edit_text);
         mLoginButton = (Button) view.findViewById(R.id.login_button);
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onLoginClicked(mEmailEditText.getText().toString(), mPasswordEditText.getText().toString());
-            }
-        });
-        mResetPasswordText = (TextView) view.findViewById(R.id.forgot_password_text);
-        mResetPasswordText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onForgotPasswordClicked();
-            }
-        });
-        mSignUpText = (TextView) view.findViewById(R.id.signup_text);
-        mSignUpText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onSignUpClicked();
+                onResetClicked(mEmailEditText.getText().toString());
             }
         });
     }
 
-    public void onLoginClicked(String email, String password) {
+    public void onResetClicked(String email) {
+
         mEmailWrapper.setErrorEnabled(false);
-        mPasswordWrapper.setErrorEnabled(false);
 
-        if (validateEmail() && validatePassword()) {
+        if (validateEmail()) {
             if (mListener != null) {
-                mListener.onLoginFragmentLoginClicked(email, password);
+                mListener.onResetPasswordFragmentResetClicked(email);
             }
         }
     }
 
-    public void onForgotPasswordClicked() {
-        if (mListener != null) {
-                mListener.onLoginFragmentForgotPasswordClicked();
-            }
-    }
-
-    public void onSignUpClicked() {
-        if (mListener != null) {
-            mListener.onLoginFragmentSignUpClicked();
-        }
-    }
 
     public void spinProgressBar() {
         mProgressBar.setVisibility(View.VISIBLE);
@@ -212,11 +172,7 @@ public class LoginFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        void onLoginFragmentLoginClicked(String email, String password);
-
-        void onLoginFragmentForgotPasswordClicked();
-
-        void onLoginFragmentSignUpClicked();
+        void onResetPasswordFragmentResetClicked(String email);
     }
 
 
@@ -228,20 +184,6 @@ public class LoginFragment extends Fragment {
         String email = mEmailEditText.getText().toString();
         if (!Utilities.validateEmail(email)) {
             mEmailWrapper.setError("Endereço de email inválido");
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    /**
-     * Validate password and return error message if needed
-     * @return password validity
-     */
-    private boolean validatePassword() {
-        String password = mPasswordEditText.getText().toString();
-        if (!Utilities.validatePassword(password)) {
-            mPasswordWrapper.setError("Senha deve ter no mínimo 6 caracteres");
             return false;
         } else {
             return true;

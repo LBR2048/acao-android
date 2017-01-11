@@ -2,8 +2,10 @@ package com.penseapp.acaocontabilidade.login.interactor;
 
 import android.support.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -84,6 +86,21 @@ public class LoginInteractorImpl implements LoginInteractor {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         presenter.onLoginFailure();
+                    }
+                });
+    }
+
+    @Override
+    public void resetPassword(String email) {
+        mAuth.sendPasswordResetEmail(email)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            presenter.onPasswordResetSuccess();
+                        } else {
+                            presenter.onPasswordResetFailure();
+                        }
                     }
                 });
     }

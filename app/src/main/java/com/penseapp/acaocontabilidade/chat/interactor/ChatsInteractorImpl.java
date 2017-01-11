@@ -55,9 +55,11 @@ public class ChatsInteractorImpl implements ChatsInteractor {
         userChatsReference.child(contactId).child(newChatKey).setValue(ServerValue.TIMESTAMP);
 
         // Add reference to contactId to user-chatContacts-chat/$currentUserId/$contactId
+        // TODO acho que não é necessário
         userChatContactsReference.child(currentUserId).child(contactId).setValue(ServerValue.TIMESTAMP);
 
         // Add reference to contactId to user-chatContacts-chat/$contactId/$currentUserId
+        // TODO acho que não é necessário
         userChatContactsReference.child(contactId).child(currentUserId).setValue(ServerValue.TIMESTAMP);
 
         // Add reference to newly created chat to user-chatContacts-chat/$currentUserId/$contactId:$newChatId

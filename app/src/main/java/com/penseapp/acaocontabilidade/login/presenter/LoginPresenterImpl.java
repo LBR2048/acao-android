@@ -59,6 +59,23 @@ public class LoginPresenterImpl implements LoginPresenter {
         loginView.onLoginSuccess();
     }
 
+    // Reset password
+
+    @Override
+    public void resetPassword(String email) {
+        interactor.resetPassword(email);
+    }
+
+    @Override
+    public void onPasswordResetSuccess() {
+        loginView.onPasswordResetSuccess();
+    }
+
+    @Override
+    public void onPasswordResetFailure() {
+        loginView.onPasswordResetFailure();
+    }
+
 
     // Authorization state
 
