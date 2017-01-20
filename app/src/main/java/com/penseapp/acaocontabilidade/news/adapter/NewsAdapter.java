@@ -32,6 +32,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>
     private static OnItemClickListener onItemClickListener;
 
     private final List<News> mNews;
+//     TODO retirar getkey
+    private List<String> mNewsKeys;
 
     public NewsAdapter(List<News> news) {
         mNews = news;
@@ -93,7 +95,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>
         final News selectedNews = mNews.get(position);
 
         // Set item views based on your views and data model
-        holder.name.setText(selectedNews.getTitle());
+        holder.name.setText(selectedNews.getDate() + "\n\n" + selectedNews.getTitle());
     }
 
     // Returns the total count of items in the list
@@ -126,6 +128,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>
     @Override
     public void onNewsChanged(News news) {
         Log.i(LOG_TAG, "View onNewsChanged called");
+        // TODO
         int index = getIndexForKey(news.getKey());
         mNews.set(index, news);
         notifyItemChanged(index);
@@ -136,6 +139,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>
         Log.i(LOG_TAG, "View onNewsRemoved called");
         try {
             int index = getIndexForKey(newsId);
+            // TODO retirar getkey
+            mNewsKeys.remove(index);
             mNews.remove(index);
             notifyItemRemoved(index);
         } catch(IllegalArgumentException e) {
@@ -146,6 +151,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>
     // TODO this method should go somewhere else? Does it belong in the View?
     // TODO duplicado em ExerciseChooserActivity
     private int getIndexForKey(String key) {
+        // TODO retirar getkey
+//        return mNewsKeys.indexOf(key);
         int index = 0;
         for (News news : mNews) {
             if (news.getKey().equals(key)) {

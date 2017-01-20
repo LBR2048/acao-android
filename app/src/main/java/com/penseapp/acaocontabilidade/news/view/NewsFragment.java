@@ -18,6 +18,7 @@ import com.penseapp.acaocontabilidade.news.adapter.NewsAdapter;
 import com.penseapp.acaocontabilidade.news.model.News;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,6 +33,8 @@ public class NewsFragment extends Fragment {//implements ContactsView {
     private final static String LOG_TAG = ContactsActivity.class.getSimpleName();
 
     public static ArrayList<News> mNews = new ArrayList<>();
+    // TODO retirar getkey
+    private List<String> mNewsKeys;
     private NewsAdapter newsAdapter;
     private RecyclerView mContactsRecyclerView;
 
@@ -98,8 +101,12 @@ public class NewsFragment extends Fragment {//implements ContactsView {
             @Override
             public void onItemClick(View itemView, int position) {
                 News selectedNews = mNews.get(position);
+                // TODO
+//                String newsKey = mNewsKeys.get(position);
                 Log.i(LOG_TAG, selectedNews.getTitle() + " clicked");
                 onNewsClicked(selectedNews.getTitle(), selectedNews.getKey());
+                // TODO
+//                onNewsClicked(selectedNews.getTitle(), newsKey);
             }
         });
     }
@@ -161,6 +168,8 @@ public class NewsFragment extends Fragment {//implements ContactsView {
 
     private void clearRecyclerView() {
         mNews.clear();
+        // TODO
+//        mNewsKeys.clear();
         newsAdapter.notifyDataSetChanged(); // TODO not efficient
     }
 }
