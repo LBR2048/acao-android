@@ -39,6 +39,7 @@ public class NewsInteractorImpl implements NewsInteractor {
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     Log.i(LOG_TAG, dataSnapshot.toString() + " added");
                     News news = dataSnapshot.getValue(News.class);
+                    news.setKey(dataSnapshot.getKey());
                     newsPresenter.onNewsAdded(news);
                 }
 
@@ -46,6 +47,7 @@ public class NewsInteractorImpl implements NewsInteractor {
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                     Log.i(LOG_TAG, dataSnapshot.toString() + " changed");
                     News news = dataSnapshot.getValue(News.class);
+                    news.setKey(dataSnapshot.getKey());
                     newsPresenter.onNewsChanged(news);
                 }
 
