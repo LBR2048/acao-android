@@ -6,9 +6,13 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ServerValue;
 import com.penseapp.acaocontabilidade.chat.model.Message;
 import com.penseapp.acaocontabilidade.chat.presenter.MessagesPresenter;
 import com.penseapp.acaocontabilidade.domain.FirebaseHelper;
+
+import java.sql.Timestamp;
+
 
 /**
  * Created by unity on 21/11/16.
@@ -89,6 +93,7 @@ public class MessagesInteractorImpl implements MessagesInteractor {
         newMessage.setText(messageText);
         newMessage.setSenderId(senderId);
         newMessage.setSenderName(senderName);
+        newMessage.setTimestamp(Long.toString(System.currentTimeMillis()));
 
         // Add newly created message to Firebase chats/$chatId/$messageId
         currentChatReference.child(newMessageKey).setValue(newMessage);

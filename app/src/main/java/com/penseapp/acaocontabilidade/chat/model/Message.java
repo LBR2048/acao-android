@@ -10,6 +10,7 @@ public class Message {
     private String senderId;
     private String senderName;
     private String key;
+    private String timestamp;
 
     public String getText() {
         return text;
@@ -41,5 +42,13 @@ public class Message {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
     }
 }
