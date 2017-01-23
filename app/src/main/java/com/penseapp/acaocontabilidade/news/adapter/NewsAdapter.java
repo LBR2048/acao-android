@@ -32,8 +32,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>
     private static OnItemClickListener onItemClickListener;
 
     private final List<News> mNews;
-//     TODO retirar getkey
-    private List<String> mNewsKeys;
 
     public NewsAdapter(List<News> news) {
         mNews = news;
@@ -139,8 +137,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>
         Log.i(LOG_TAG, "View onNewsRemoved called");
         try {
             int index = getIndexForKey(newsId);
-            // TODO retirar getkey
-            mNewsKeys.remove(index);
             mNews.remove(index);
             notifyItemRemoved(index);
         } catch(IllegalArgumentException e) {
