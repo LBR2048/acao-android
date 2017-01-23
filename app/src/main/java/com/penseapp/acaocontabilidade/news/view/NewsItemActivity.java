@@ -35,7 +35,8 @@ public class NewsItemActivity extends AppCompatActivity implements NewsItemView{
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         // GUI
-        toolbarTitleView = (TextView) findViewById(R.id.toolbar_news_title);
+//        toolbarTitleView = (TextView) findViewById(R.id.toolbar_news_title);
+        titleView = (TextView) findViewById(R.id.news_title);
         dateView = (TextView) findViewById(R.id.news_date);
         textView = (TextView) findViewById(R.id.news_text);
 
@@ -54,7 +55,8 @@ public class NewsItemActivity extends AppCompatActivity implements NewsItemView{
     // TODO trava se a notícia for apagada
     @Override
     public void onNewsItemChanged(News newsItem) {
-        toolbarTitleView.setText(newsItem.getTitle());
+//        toolbarTitleView.setText(newsItem.getTitle());
+        titleView.setText(newsItem.getTitle());
         dateView.setText(newsItem.getDate());
         textView.setText(newsItem.getText());
     }

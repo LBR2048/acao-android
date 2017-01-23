@@ -44,6 +44,10 @@ dependencies {
 
     // Testing dependencies
     testCompile 'junit:junit:4.12'
+
+    // JustifiedTextView
+    compile 'com.codesgood:justifiedtextview:1.0.2'
+
 }
 
 

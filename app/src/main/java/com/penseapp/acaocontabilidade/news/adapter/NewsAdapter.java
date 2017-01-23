@@ -53,7 +53,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
-        TextView name;
+        TextView title;
+        TextView date;
+        TextView text;
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
@@ -61,7 +63,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>
             // Stores the itemView in a public final member variable that can be used
             // to access the context from any ViewHolder instance.
             super(itemView);
-            name = (TextView) itemView.findViewById(R.id.list_item_chat_name_textview);
+            title = (TextView) itemView.findViewById(R.id.list_item_news_title);
+            date = (TextView) itemView.findViewById(R.id.list_item_news_date);
+            text = (TextView) itemView.findViewById(R.id.list_item_news_text);
 
             // Setup the click onItemClickListener
             // itemView.setOnClickListener(this);
@@ -80,7 +84,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // Inflate the custom layout
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_contact, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_news, parent, false);
 
         // Return a new holder instance
         return new ViewHolder(view);
@@ -93,7 +97,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>
         final News selectedNews = mNews.get(position);
 
         // Set item views based on your views and data model
-        holder.name.setText(selectedNews.getDate() + "\n\n" + selectedNews.getTitle());
+        holder.title.setText(selectedNews.getTitle());
+        holder.date.setText(selectedNews.getDate());
+        holder.text.setText(selectedNews.getText());
     }
 
     // Returns the total count of items in the list

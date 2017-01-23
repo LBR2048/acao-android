@@ -8,39 +8,48 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:id="@+id/content_news_item"
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?selectableItemBackground"
+            android:orientation="vertical"
             android:paddingBottom="@dimen/activity_vertical_margin"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingTop="@dimen/activity_vertical_margin"
-            android:orientation="vertical"
             tools:context="com.penseapp.acaocontabilidade.news.view.NewsItemActivityFragment"
             tools:showIn="@layout/activity_news_item">
 
             <TextView
-                android:text="15/dezembro"
-                android:layout_width="wrap_content"
+                android:id="@+id/news_title"
+                style="@style/TextAppearance.AppCompat.Large"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/Base.TextAppearance.AppCompat.Medium"
-                android:paddingBottom="@dimen/activity_vertical_margin"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:id="@+id/news_date"
-                android:textStyle="normal|bold" />
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:padding="8dp"
+                android:text="Título" />
 
             <TextView
-                android:text="Notícia notícia notícia notícia notícia"
-                android:layout_width="wrap_content"
+                android:id="@+id/news_date"
+                style="@style/TextAppearance.AppCompat.Small"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/Base.TextAppearance.AppCompat.Medium"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:id="@+id/news_text" />
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:padding="8dp"
+                android:text="Data" />
+
+            <com.uncopt.android.widget.text.justify.JustifiedTextView
+                android:id="@+id/news_text"
+                style="@style/TextAppearance.AppCompat.Medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:padding="8dp"
+                android:text="Texto" />
+
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

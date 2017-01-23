@@ -20,14 +20,14 @@
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
-            <TextView
-                android:id="@+id/toolbar_news_title"
-                style="@android:style/TextAppearance.Holo.Widget.ActionBar.Title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:maxLines="2"
-                android:text="TextView" />
+            <!--<TextView-->
+                <!--android:id="@+id/toolbar_news_title"-->
+                <!--style="@android:style/TextAppearance.Holo.Widget.ActionBar.Title"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:maxLines="2"-->
+                <!--android:text="TextView" />-->
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
