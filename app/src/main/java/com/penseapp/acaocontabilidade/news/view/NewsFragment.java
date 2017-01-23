@@ -9,13 +9,19 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.penseapp.acaocontabilidade.R;
 import com.penseapp.acaocontabilidade.chat.view.ContactsActivity;
 import com.penseapp.acaocontabilidade.news.adapter.NewsAdapter;
 import com.penseapp.acaocontabilidade.news.model.News;
+import com.penseapp.acaocontabilidade.news.presenter.NewsNotificationsPresenter;
+import com.penseapp.acaocontabilidade.news.presenter.NewsNotificationsPresenterImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,9 +34,11 @@ import java.util.List;
  * Use the {@link NewsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NewsFragment extends Fragment {//implements ContactsView {
+public class NewsFragment extends Fragment implements NewsView {
 
     private final static String LOG_TAG = ContactsActivity.class.getSimpleName();
+
+    private NewsNotificationsPresenter newsNotificationsPresenter;
 
     public static ArrayList<News> mNews = new ArrayList<>();
     // TODO retirar getkey
@@ -51,6 +59,7 @@ public class NewsFragment extends Fragment {//implements ContactsView {
 
     public NewsFragment() {
         // Required empty public constructor
+        newsNotificationsPresenter = new NewsNotificationsPresenterImpl(this);
     }
 
     /**
@@ -74,10 +83,36 @@ public class NewsFragment extends Fragment {//implements ContactsView {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_news, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_subscribe_news) {
+            if(item.isChecked()){
+                // If item already checked then unchecked it
+                item.setChecked(false);
+                unsubscribeFromNewsNotifications();
+            }else{
+                // If item is unchecked then checked it
+                item.setChecked(true);
+                subscribeToNewsNotifications();
+            }
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -171,5 +206,26 @@ public class NewsFragment extends Fragment {//implements ContactsView {
         // TODO
 //        mNewsKeys.clear();
         newsAdapter.notifyDataSetChanged(); // TODO not efficient
+    }
+
+
+    @Override
+    public void subscribeToNewsNotifications() {
+        newsNotificationsPresenter.subscribeToNewsNotifications();
+//        Toast.makeText(getActivity(), "subscribing", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void unsubscribeFromNewsNotifications() {
+        newsNotificationsPresenter.unsubscribeFromNewsNotifications();
+//        Toast.makeText(getActivity(), "unsubscribing", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onReceiveNewsNotificationsSubscriptionStatus(boolean isSubscribed) {
+        if (isSubscribed)
+            Toast.makeText(getActivity(), "subscribing", Toast.LENGTH_SHORT).show();
+        else
+            Toast.makeText(getActivity(), "unsubscribing", Toast.LENGTH_SHORT).show();
     }
 }

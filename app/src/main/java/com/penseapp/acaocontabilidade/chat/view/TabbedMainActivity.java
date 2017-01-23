@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.penseapp.acaocontabilidade.R;
 import com.penseapp.acaocontabilidade.chat.presenter.ChatsPresenter;
 import com.penseapp.acaocontabilidade.chat.presenter.ChatsPresenterImpl;
@@ -102,14 +101,6 @@ public class TabbedMainActivity extends AppCompatActivity implements
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_acao_facebook) {
             goToAcaoFacebookWebsite();
-            return true;
-        }
-        if (id == R.id.action_subscribe_news) {
-            subscribeToNewsNotifications();
-            return true;
-        }
-        if (id == R.id.action_subscribe_news) {
-            unsubscribeToNewsNotifications();
             return true;
         }
         if (id == R.id.action_logout) {
@@ -241,11 +232,4 @@ public class TabbedMainActivity extends AppCompatActivity implements
         auth.signOut();
     }
 
-    private void subscribeToNewsNotifications() {
-        FirebaseMessaging.getInstance().subscribeToTopic("news");
-    }
-
-    private void unsubscribeToNewsNotifications() {
-        FirebaseMessaging.getInstance().unsubscribeFromTopic("news");
-    }
 }
