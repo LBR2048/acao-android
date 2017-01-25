@@ -47,6 +47,7 @@ public class UserChatContactsInteractorImpl implements UserChatContactsInteracto
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             Chat chat = dataSnapshot.getValue(Chat.class);
+                            chat.setKey(dataSnapshot.getKey());
                             Log.i(LOG_TAG, "Chat " + chat.getName() + " added");
                             userChatsPresenter.onChatAdded(chat);
                         }
@@ -66,7 +67,7 @@ public class UserChatContactsInteractorImpl implements UserChatContactsInteracto
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             Chat chat = dataSnapshot.getValue(Chat.class);
                             Log.i(LOG_TAG, "Chat " + chat.getName() + " changed");
-                            // TODO no futuro retornar chat e key?
+                            chat.setKey(dataSnapshot.getKey());
                             userChatsPresenter.onChatChanged(chat);
                         }
 

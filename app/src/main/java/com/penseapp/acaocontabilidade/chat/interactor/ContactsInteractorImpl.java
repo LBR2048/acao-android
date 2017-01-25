@@ -37,6 +37,7 @@ public class ContactsInteractorImpl implements ContactsInteractor {
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     Log.i(LOG_TAG, dataSnapshot.toString() + " added");
                     User contact = dataSnapshot.getValue(User.class);
+                    contact.setKey(dataSnapshot.getKey());
                     contactsPresenter.onContactAdded(contact);
                 }
 
@@ -44,6 +45,7 @@ public class ContactsInteractorImpl implements ContactsInteractor {
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                     Log.i(LOG_TAG, dataSnapshot.toString() + " changed");
                     User contact = dataSnapshot.getValue(User.class);
+                    contact.setKey(dataSnapshot.getKey());
                     contactsPresenter.onContactChanged(contact);
                 }
 

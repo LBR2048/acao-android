@@ -3,7 +3,6 @@ package com.penseapp.acaocontabilidade.chat.interactor;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.penseapp.acaocontabilidade.chat.model.Chat;
 import com.penseapp.acaocontabilidade.chat.presenter.ChatsPresenter;
@@ -42,25 +41,23 @@ public class ChatsInteractorImpl implements ChatsInteractor {
 
         // Create new chat with key received from Firebase
         Chat newChat = new Chat();
-        newChat.setKey(newChatKey);
+//        newChat.setKey(newChatKey);
         newChat.setName("Chat com " + chatName);
 
         // Add newly created chat to Firebase chats/$chatId
         chatsReference.child(newChatKey).setValue(newChat);
 
         // Add reference to newly created chat to user-chats/$currentUserId/$chatId
-        currentUserChatsReference.child(newChatKey).setValue(ServerValue.TIMESTAMP);
+//        currentUserChatsReference.child(newChatKey).setValue(ServerValue.TIMESTAMP);
 
         // Add reference to newly created chat to user-chats/$contactId/$chatId
-        userChatsReference.child(contactId).child(newChatKey).setValue(ServerValue.TIMESTAMP);
+//        userChatsReference.child(contactId).child(newChatKey).setValue(ServerValue.TIMESTAMP);
 
         // Add reference to contactId to user-chatContacts-chat/$currentUserId/$contactId
-        // TODO acho que não é necessário
-        userChatContactsReference.child(currentUserId).child(contactId).setValue(ServerValue.TIMESTAMP);
+//        userChatContactsReference.child(currentUserId).child(contactId).setValue(ServerValue.TIMESTAMP);
 
         // Add reference to contactId to user-chatContacts-chat/$contactId/$currentUserId
-        // TODO acho que não é necessário
-        userChatContactsReference.child(contactId).child(currentUserId).setValue(ServerValue.TIMESTAMP);
+//        userChatContactsReference.child(contactId).child(currentUserId).setValue(ServerValue.TIMESTAMP);
 
         // Add reference to newly created chat to user-chatContacts-chat/$currentUserId/$contactId:$newChatId
         userChatContactsReference.child(currentUserId).child(contactId).setValue(newChatKey);

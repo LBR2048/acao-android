@@ -21,8 +21,6 @@ public class MessagesInteractorImpl implements MessagesInteractor {
 
     private final MessagesPresenter messagesPresenter;
 
-    private String chatId;
-
     // Firebase
     private FirebaseHelper mFirebaseHelperInstance = FirebaseHelper.getInstance();
     private DatabaseReference currentChatReference;
@@ -43,6 +41,7 @@ public class MessagesInteractorImpl implements MessagesInteractor {
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     Log.i(LOG_TAG, dataSnapshot.toString() + " added");
                     Message message = dataSnapshot.getValue(Message.class);
+                    message.setKey(dataSnapshot.getKey());
                     messagesPresenter.onMessageAdded(message);
                 }
 
@@ -86,7 +85,7 @@ public class MessagesInteractorImpl implements MessagesInteractor {
 
         // Create new messageText with key received from Firebase
         Message newMessage = new Message();
-        newMessage.setKey(newMessageKey);
+//        newMessage.setKey(newMessageKey);
         newMessage.setText(messageText);
         newMessage.setSenderId(senderId);
         newMessage.setSenderName(senderName);
