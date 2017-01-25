@@ -53,14 +53,15 @@ public class NewsItemActivity extends AppCompatActivity implements NewsItemView{
         newsPresenter.subscribeForSingleNewsItemUpdates(key);
     }
 
-    // TODO trava se a notícia for apagada
     @Override
     public void onNewsItemChanged(News newsItem) {
+        if (newsItem != null) {
 //        toolbarTitleView.setText(newsItem.getTitle());
-        titleView.setText(newsItem.getTitle());
-        dateView.setText(newsItem.getDate());
-        String text = newsItem.getText();
-        Log.d("LOG", text);
-        textView.setText(text);
+            titleView.setText(newsItem.getTitle());
+            dateView.setText(newsItem.getDate());
+            String text = newsItem.getText();
+            Log.d("LOG", text);
+            textView.setText(text);
+        }
     }
 }
