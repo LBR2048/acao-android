@@ -3,6 +3,7 @@ package com.penseapp.acaocontabilidade.news.view;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.penseapp.acaocontabilidade.R;
@@ -58,6 +59,8 @@ public class NewsItemActivity extends AppCompatActivity implements NewsItemView{
 //        toolbarTitleView.setText(newsItem.getTitle());
         titleView.setText(newsItem.getTitle());
         dateView.setText(newsItem.getDate());
-        textView.setText(newsItem.getText());
+        String text = newsItem.getText();
+        Log.d("LOG", text);
+        textView.setText(text);
     }
 }

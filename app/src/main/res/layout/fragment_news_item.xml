@@ -40,6 +40,8 @@
                 android:padding="8dp"
                 android:text="Data" />
 
+            <!--com.codesgood.views.JustifiedTextView text
+            is not updated when inside a RecyclerView-->
             <com.uncopt.android.widget.text.justify.JustifiedTextView
                 android:id="@+id/news_text"
                 style="@style/TextAppearance.AppCompat.Medium"
