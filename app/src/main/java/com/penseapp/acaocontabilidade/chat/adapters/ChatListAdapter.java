@@ -102,7 +102,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
             // Stores the itemView in a public final member variable that can be used
             // to access the context from any ViewHolder instance.
             super(itemView);
-            name = (TextView) itemView.findViewById(R.id.list_item_chat_name_textview);
+            name = (TextView) itemView.findViewById(R.id.list_item_contact_name_textview);
 //            exerciseCount = (TextView) itemView.findViewById(R.id.list_item_workout_exercise_count_textview);
 //            handleView = (ImageView) itemView.findViewById(R.id.list_item_workout_handle);
 //            shareView = (ImageView) itemView.findViewById(R.id.list_item_workout_share_imageview);

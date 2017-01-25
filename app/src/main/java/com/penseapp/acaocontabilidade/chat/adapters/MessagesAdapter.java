@@ -113,7 +113,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
             // Stores the itemView in a public final member variable that can be used
             // to access the context from any ViewHolder instance.
             super(itemView);
-            text = (TextView) itemView.findViewById(R.id.list_item_chat_name_textview);
+            text = (TextView) itemView.findViewById(R.id.list_item_contact_name_textview);
             leftArrow = (FrameLayout) itemView.findViewById(left_arrow);
             rightArrow = (FrameLayout) itemView.findViewById(right_arrow);
             messageContainer = (RelativeLayout) itemView.findViewById(R.id.message_container);

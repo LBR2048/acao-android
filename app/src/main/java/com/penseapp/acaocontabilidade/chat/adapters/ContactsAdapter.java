@@ -100,9 +100,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
         // for any view that will be set as you render a row
         TextView name;
 //        TextView exerciseCount;
-        ImageView handleView;
-        ImageView shareView;
-        ImageView renameView;
+        ImageView icon;
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
@@ -110,9 +108,9 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
             // Stores the itemView in a public final member variable that can be used
             // to access the context from any ViewHolder instance.
             super(itemView);
-            name = (TextView) itemView.findViewById(R.id.list_item_chat_name_textview);
+            name = (TextView) itemView.findViewById(R.id.list_item_contact_name_textview);
 //            exerciseCount = (TextView) itemView.findViewById(R.id.list_item_workout_exercise_count_textview);
-//            handleView = (ImageView) itemView.findViewById(R.id.list_item_workout_handle);
+            icon = (ImageView) itemView.findViewById(R.id.list_item_contact_icon);
 //            shareView = (ImageView) itemView.findViewById(R.id.list_item_workout_share_imageview);
 //            renameView = (ImageView) itemView.findViewById(R.id.list_item_workout_rename_imageview);
 
@@ -179,6 +177,28 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
 
         // Set item views based on your views and data model
         holder.name.setText(selectedContact.getName());
+        
+        String email = selectedContact.getEmail();
+        String emailUser = email.substring(0, email.indexOf("@"));
+        switch (emailUser) {
+            case "contabil":
+                holder.icon.setImageResource(R.drawable.ic_contabil);
+                break;
+            case "fiscal":
+                holder.icon.setImageResource(R.drawable.ic_fiscal);
+                break;
+            case "pessoal":
+                holder.icon.setImageResource(R.drawable.ic_pessoal);
+                break;
+            case "societario":
+                holder.icon.setImageResource(R.drawable.ic_societario);
+                break;
+            default:
+                holder.icon.setImageResource(R.mipmap.ic_launcher);
+                break;
+        }
+
+
 //        holder.exerciseCount.setText(String.format("%d", selectedContact.getExerciseCount()) + " exercícios");
 
         // Start a drag whenever the handle view it touched
