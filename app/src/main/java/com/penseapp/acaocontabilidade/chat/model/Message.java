@@ -10,7 +10,7 @@ public class Message {
     private String senderId;
     private String senderName;
     private String key;
-    private String timestamp;
+    private long timestamp;
 
     public String getText() {
         return text;
@@ -44,11 +44,11 @@ public class Message {
         this.key = key;
     }
 
-    public String getTimestamp() {
+    public long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
     }
 }
