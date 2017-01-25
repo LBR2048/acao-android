@@ -18,8 +18,8 @@
 
         <ImageView
             android:id="@+id/logo_image_view"
-            android:layout_width="300dp"
-            android:layout_height="200dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_margin="8dp"
             android:src="@drawable/acao_logo"
@@ -61,21 +61,23 @@
 
         <Button
             android:id="@+id/login_button"
+            style="@style/Base.Widget.AppCompat.Button.Colored"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Login"
-            style="@style/Base.Widget.AppCompat.Button.Colored"/>
+            android:text="Login"/>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/activity_horizontal_margin">
 
             <TextView
                 android:id="@+id/forgot_password_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:padding="4dp"
                 android:text="Esqueci minha senha"/>
 
@@ -86,7 +88,8 @@
                 android:layout_weight="1"
                 android:gravity="right"
                 android:padding="4dp"
-                android:text="Não tenho conta ainda"/>
+                android:text="Não tenho conta ainda"
+                android:visibility="gone"/>
         </LinearLayout>
 
     </LinearLayout>
