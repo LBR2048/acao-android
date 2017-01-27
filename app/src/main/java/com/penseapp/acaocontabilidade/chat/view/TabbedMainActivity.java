@@ -162,9 +162,9 @@ public class TabbedMainActivity extends AppCompatActivity implements
 
             switch (position) {
                 case 0:
-                    return ContactsFragment.newInstance("t1", "t1");
+                    return ContactsFragment.newInstance();
                 case 1:
-                    return NewsFragment.newInstance("t1", "t2");
+                    return NewsFragment.newInstance();
                 default:
                     // Return a PlaceholderFragment (defined as a static inner class below).
                     return PlaceholderFragment.newInstance(position + 1);
