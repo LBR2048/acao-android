@@ -200,12 +200,10 @@ public class TabbedMainActivity extends AppCompatActivity implements
     @Override
     public void onContactSelected(String name, String key)  {
         chatsPresenter.createChatIfNeeded(name, key);
-//        Toast.makeText(getApplicationContext(), "Contact " + name + " clicked", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onNewsSelected(String title, String key) {
-//        Toast.makeText(getApplicationContext(), "News item " + title + " clicked", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, NewsItemActivity.class);
         intent.putExtra(NewsItemActivity.SELECTED_NEWS_TITLE, title);
         intent.putExtra(NewsItemActivity.SELECTED_NEWS_KEY, key);
@@ -214,7 +212,6 @@ public class TabbedMainActivity extends AppCompatActivity implements
 
     @Override
     public void onChatCreated(String chatId, String chatName) {
-//        Toast.makeText(getApplicationContext(), "onChatCreated called", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(TabbedMainActivity.this, MessagesActivity.class);
         intent.putExtra(SELECTED_CHAT_KEY, chatId);
         intent.putExtra(SELECTED_CHAT_NAME, chatName);

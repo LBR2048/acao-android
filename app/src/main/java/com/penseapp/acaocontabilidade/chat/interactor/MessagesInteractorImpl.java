@@ -85,11 +85,9 @@ public class MessagesInteractorImpl implements MessagesInteractor {
 
         // Create new messageText with key received from Firebase
         Message newMessage = new Message();
-//        newMessage.setKey(newMessageKey);
         newMessage.setText(messageText);
         newMessage.setSenderId(senderId);
         newMessage.setSenderName(senderName);
-//        newMessage.setTimestamp(Long.toString(System.currentTimeMillis()));
         newMessage.setTimestamp(System.currentTimeMillis());
 
         // Add newly created message to Firebase chats/$chatId/$messageId

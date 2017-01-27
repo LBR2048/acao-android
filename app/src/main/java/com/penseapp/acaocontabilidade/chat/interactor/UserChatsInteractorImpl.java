@@ -98,14 +98,12 @@ public class UserChatsInteractorImpl implements UserChatsInteractor {
 
                 @Override
                 public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                    Log.i(LOG_TAG, dataSnapshot.toString() + " moved");
-//            Workout movedWorkout = dataSnapshot.getValue(Workout.class);
-//            Log.i(LOG_TAG, movedWorkout.getName() + " moved");
+
                 }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    Log.i(LOG_TAG, "onCancelled called");
+
                 }
             };
 

@@ -64,14 +64,8 @@ public class LoginActivity extends AppCompatActivity implements
 
     @Override
     public void onLoginFragmentLoginClicked(String email, String password) {
-//        if (!validateEmail(email))
-//            mUsernameWrapper.setError("Not a valid email address!");
-//        else if (!validatePassword(password))
-//            mPasswordWrapper.setError("Not a valid password!");
-//        else {
-            hideKeyboard();
-            presenter.login(email, password);
-//        }
+        hideKeyboard();
+        presenter.login(email, password);
     }
 
     @Override
@@ -81,19 +75,16 @@ public class LoginActivity extends AppCompatActivity implements
 
     @Override
     public void onLoginFragmentSignUpClicked() {
-//        Toast.makeText(getApplicationContext(), "Sign Up", Toast.LENGTH_SHORT).show();
         showSignUpFragment();
     }
 
     @Override
     public void onResetPasswordFragmentResetClicked(String email) {
-//        Toast.makeText(getApplicationContext(), "Reset Password", Toast.LENGTH_SHORT).show();
         presenter.resetPassword(email);
     }
 
     @Override
     public void onSignUpFragmentSignUpClicked(String name, String email, String type, String password) {
-//        Toast.makeText(getApplicationContext(), "SignUp clicked", Toast.LENGTH_SHORT).show();
         presenter.signUp(name, email, type, password);
     }
 
@@ -110,7 +101,7 @@ public class LoginActivity extends AppCompatActivity implements
 
     private void showMainActivity() {
         Intent intent = new Intent(LoginActivity.this, TabbedMainActivity.class);
-        // TODO Ao pressionar Logout, a WorkoutsActivity não pode mais ser acessada através do back button
+        // Ao pressionar Logout, a WorkoutsActivity não pode mais ser acessada através do back button
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();

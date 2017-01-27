@@ -42,19 +42,16 @@ public class NewsPresenterImpl implements NewsPresenter {
     @Override
     public void onNewsAdded(News news) {
         newsAdapterView.onNewsAdded(news);
-//        contactsView.onNewsAdded(contact);
     }
 
     @Override
     public void onNewsChanged(News news) {
         newsAdapterView.onNewsChanged(news);
-//        contactsView.onNewsChanged(contact);
     }
 
     @Override
     public void onNewsRemoved(String newsId) {
         newsAdapterView.onNewsRemoved(newsId);
-//        contactsView.onNewsRemoved(contactId);
     }
 
     @Override

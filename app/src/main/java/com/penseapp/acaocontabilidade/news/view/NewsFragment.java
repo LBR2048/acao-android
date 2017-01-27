@@ -24,7 +24,6 @@ import com.penseapp.acaocontabilidade.news.presenter.NewsNotificationsPresenter;
 import com.penseapp.acaocontabilidade.news.presenter.NewsNotificationsPresenterImpl;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,8 +40,6 @@ public class NewsFragment extends Fragment implements NewsView {
     private NewsNotificationsPresenter newsNotificationsPresenter;
 
     public static ArrayList<News> mNews = new ArrayList<>();
-    // TODO retirar getkey
-    private List<String> mNewsKeys;
     private NewsAdapter newsAdapter;
     private RecyclerView mContactsRecyclerView;
 

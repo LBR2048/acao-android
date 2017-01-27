@@ -14,8 +14,6 @@ import android.view.ViewGroup;
 
 import com.penseapp.acaocontabilidade.R;
 import com.penseapp.acaocontabilidade.chat.adapters.ContactsAdapter;
-import com.penseapp.acaocontabilidade.chat.presenter.ChatsPresenter;
-import com.penseapp.acaocontabilidade.chat.presenter.ContactsPresenter;
 import com.penseapp.acaocontabilidade.login.model.User;
 
 import java.util.ArrayList;
@@ -31,11 +29,6 @@ import java.util.ArrayList;
 public class ContactsFragment extends Fragment {//implements ContactsView {
 
     private final static String LOG_TAG = ContactsActivity.class.getSimpleName();
-    public static final int CONTACT_REQUEST = 0;
-    public static final String SELECTED_CONTACT_NAME = "selected_contact";
-    public static final String SELECTED_CONTACT_KEY = "selected_contact_key";
-    private ContactsPresenter contactsPresenter;
-    private ChatsPresenter chatsPresenter;
 
     public static ArrayList<User> mContacts = new ArrayList<>();
     private ContactsAdapter contactsAdapter;
@@ -97,13 +90,7 @@ public class ContactsFragment extends Fragment {//implements ContactsView {
         mContactsRecyclerView = (RecyclerView) getActivity().findViewById(R.id.list_contacts);
         setupRecyclerView();
         setupRecyclerViewDecorator();
-
-        // Connect to Presenters
-//        contactsPresenter = new ContactsPresenterImpl(this);
-//        chatsPresenter = new ChatsPresenterImpl(this);
-
         clearRecyclerView();
-//        contactsPresenter.subscribeForContactsUpdates();
 
         // What happens when a contact from the list is clicked
         contactsAdapter.setOnItemClickListener(new ContactsAdapter.OnItemClickListener() {
@@ -112,13 +99,6 @@ public class ContactsFragment extends Fragment {//implements ContactsView {
                 User selectedContact = mContacts.get(position);
                 Log.i(LOG_TAG, selectedContact.getName() + " clicked");
                 onContactClicked(selectedContact.getName(), selectedContact.getKey());
-
-//                Intent data = new Intent();
-//                // Pass relevant data back as a result
-//                data.putExtra("name", etName.getText().toString());
-//                data.putExtra("code", 200); // ints work too
-//                // Activity finished ok, return the data
-//                chatsPresenter.createChatIfNeeded(selectedContact.getName(), selectedContact.getKey());
             }
         });
     }
@@ -182,53 +162,4 @@ public class ContactsFragment extends Fragment {//implements ContactsView {
         mContacts.clear();
         contactsAdapter.notifyDataSetChanged(); // TODO not efficient
     }
-
-//    @Override
-//    public void onContactAdded(User contact) {
-//        Log.i(LOG_TAG, "View onContactAdded called");
-//        mContacts.add(contact);
-//        contactsAdapter.notifyItemInserted(mContacts.size() - 1);
-//    }
-//
-//    @Override
-//    public void onContactChanged(User contact) {
-//        Log.i(LOG_TAG, "View onContactChanged called");
-//        int index = getIndexForKey(contact.getKey());
-//        mContacts.set(index, contact);
-//        contactsAdapter.notifyItemChanged(index);
-//    }
-//
-//    @Override
-//    public void onContactRemoved(String contactId) {
-//        Log.i(LOG_TAG, "View onContactRemoved called");
-//        try {
-//            int index = getIndexForKey(contactId);
-//            mChats.remove(index);
-//            contactsAdapter.notifyItemRemoved(index);
-//        } catch(IllegalArgumentException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    @Override
-//    public void onChatCreated(String chatId, String chatName) {
-//        Intent intent = new Intent(getActivity(), MessagesActivity.class);
-//        intent.putExtra(SELECTED_CHAT_KEY, chatId);
-//        intent.putExtra(SELECTED_CHAT_NAME, chatName);
-//        startActivity(intent);
-//    }
-//
-//    // TODO this method should go somewhere else? Does it belong in the View?
-//    // TODO duplicado em ExerciseChooserActivity
-//    private int getIndexForKey(String key) {
-//        int index = 0;
-//        for (User contact : mContacts) {
-//            if (contact.getKey().equals(key)) {
-//                return index;
-//            } else {
-//                index++;
-//            }
-//        }
-//        throw new IllegalArgumentException("Key not found");
-//    }
 }

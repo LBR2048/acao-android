@@ -11,25 +11,16 @@ import com.google.firebase.database.FirebaseDatabase;
 public class FirebaseHelper {
     private static final String LOG_TAG = FirebaseHelper.class.getSimpleName();
 
-    public static final String DEFAULT_EXERCISE_IMAGE_PNG = "exercise_image.png";
-    public static final String USER_CHATCONTACTS_CHAT = "user-chatContacts:chat";
-    public static final String NEWS = "news";
-
-    // Realtime database
+    // Firebase database
     private FirebaseDatabase database;
     private DatabaseReference databaseRef;
     private static final String USERS_PATH = "users";
     private static final String CHATS_PATH = "chats";
     private static final String USER_CHATS_PATH = "user-chats";
     private static final String CHAT_USERS_PATH = "chat-users";
-
-
-    // Storage
-//    private FirebaseStorage storage;
-//    private StorageReference storageRef;
-//    private StorageReference defaultExercisesImagesRef;
-//    private static final String STORAGE_REFERENCE_URL = "gs://gogym-c807f.appspot.com";
-//    private static final String DEFAULT_EXERCISES_IMAGES = "default_exercises_images";
+    private static final String USER_CHATCONTACTS_CHAT = "user-chatContacts:chat";
+    private static final String MESSAGES_PATH = "messages";
+    private static final String NEWS_PATH = "news";
 
     private static class SingletonHolder {
         private static final FirebaseHelper INSTANCE = new FirebaseHelper();
@@ -44,18 +35,8 @@ public class FirebaseHelper {
         if (database == null) {
             database = FirebaseDatabase.getInstance();
             database.setPersistenceEnabled(true);
-            // TODO ativar data persistence sem rede (não sei se deve ser colocado aqui)
             databaseRef = database.getReference();
         }
-//        if (storage == null) {
-//            storage = FirebaseStorage.getInstance();
-//            storageRef = storage.getReferenceFromUrl(STORAGE_REFERENCE_URL);
-//            defaultExercisesImagesRef = storageRef.child(DEFAULT_EXERCISES_IMAGES);
-//        }
-    }
-
-    public DatabaseReference getDatabaseRef() {
-        return databaseRef;
     }
 
 
@@ -79,15 +60,6 @@ public class FirebaseHelper {
         return userId;
     }
 
-    public DatabaseReference getUserReference(String email){
-        DatabaseReference userReference = null;
-        if (email != null) {
-            String emailKey = email.replace(".", "_");
-            userReference = databaseRef.getRoot().child(USERS_PATH).child(emailKey);
-        }
-        return userReference;
-    }
-
 
     // Realtime database
 
@@ -100,7 +72,7 @@ public class FirebaseHelper {
     }
 
     public DatabaseReference getCurrentChatReference(String chatId){
-        return getChatsReference().child(chatId).child("messages");
+        return getChatsReference().child(chatId).child(MESSAGES_PATH);
     }
 
     public DatabaseReference getUserChatsReference(){
@@ -124,12 +96,9 @@ public class FirebaseHelper {
     }
 
     public DatabaseReference getNewsReference(){
-        return databaseRef.child(NEWS);
+        return databaseRef.child(NEWS_PATH);
     }
 
-    public DatabaseReference getCurrentUserReference() {
-        return getUserReference(getAuthUserId());
-    }
 
 //    public String getCurrentUserType() {
 //        String type;
@@ -146,55 +115,5 @@ public class FirebaseHelper {
 //            }
 //        });
 //        return type;
-//    }
-
-    // Storage
-
-//    public StorageReference getDefaultExercisesImagesRef() {
-//        return defaultExercisesImagesRef;
-//    }
-
-//    public StorageReference getImageRef() {
-//        return defaultExercisesImagesRef.child(DEFAULT_EXERCISE_IMAGE_PNG);
-//    }
-
-//
-//    public void changeUserConnectionStatus(boolean online) {
-//        if (getMyUserReference() != null) {
-//            Map<String, Object> updates = new HashMap<String, Object>();
-//            updates.put("online", online);
-//            getMyUserReference().updateChildren(updates);
-//
-//            notifyContactsOfConnectionChange(online);
-//        }
-//    }
-//
-//    public void notifyContactsOfConnectionChange(final boolean online, final boolean signoff) {
-//        final String myEmail = getAuthUserEmail();
-//        getMyContactsReference().addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot snapshot) {
-//                for (DataSnapshot child : snapshot.getChildren()) {
-//                    String email = child.getKey();
-//                    DatabaseReference reference = getOneContactReference(email, myEmail);
-//                    reference.setValue(online);
-//                }
-//                if (signoff){
-//                    FirebaseAuth.getInstance().signOut();
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError firebaseError) {
-//            }
-//        });
-//    }
-//
-//    public void notifyContactsOfConnectionChange(boolean online) {
-//        notifyContactsOfConnectionChange(online, false);
-//    }
-
-//    public void signOff(){
-//        notifyContactsOfConnectionChange(User.OFFLINE, true);
 //    }
 }

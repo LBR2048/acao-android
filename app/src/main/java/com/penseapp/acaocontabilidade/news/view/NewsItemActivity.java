@@ -3,7 +3,6 @@ package com.penseapp.acaocontabilidade.news.view;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.penseapp.acaocontabilidade.R;
@@ -18,7 +17,6 @@ public class NewsItemActivity extends AppCompatActivity implements NewsItemView{
 
     private TextView dateView;
     private TextView titleView;
-    private TextView toolbarTitleView;
     private TextView textView;
 
     private NewsPresenter newsPresenter;
@@ -36,7 +34,6 @@ public class NewsItemActivity extends AppCompatActivity implements NewsItemView{
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         // GUI
-//        toolbarTitleView = (TextView) findViewById(R.id.toolbar_news_title);
         titleView = (TextView) findViewById(R.id.news_title);
         dateView = (TextView) findViewById(R.id.news_date);
         textView = (TextView) findViewById(R.id.news_text);
@@ -56,12 +53,9 @@ public class NewsItemActivity extends AppCompatActivity implements NewsItemView{
     @Override
     public void onNewsItemChanged(News newsItem) {
         if (newsItem != null) {
-//        toolbarTitleView.setText(newsItem.getTitle());
             titleView.setText(newsItem.getTitle());
             dateView.setText(newsItem.getDate());
-            String text = newsItem.getText();
-            Log.d("LOG", text);
-            textView.setText(text);
+            textView.setText(newsItem.getText());
         }
     }
 }

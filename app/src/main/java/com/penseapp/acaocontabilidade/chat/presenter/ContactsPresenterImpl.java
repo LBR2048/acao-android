@@ -42,18 +42,15 @@ public class ContactsPresenterImpl implements ContactsPresenter {
     @Override
     public void onContactAdded(User contact) {
         contactsAdapterView.onContactAdded(contact);
-//        contactsView.onContactAdded(contact);
     }
 
     @Override
     public void onContactChanged(User contact) {
         contactsAdapterView.onContactChanged(contact);
-//        contactsView.onContactChanged(contact);
     }
 
     @Override
     public void onContactRemoved(String contactId) {
         contactsAdapterView.onContactRemoved(contactId);
-//        contactsView.onContactRemoved(contactId);
     }
 }

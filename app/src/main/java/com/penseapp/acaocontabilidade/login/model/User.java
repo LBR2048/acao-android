@@ -9,23 +9,12 @@ public class User {
     private String key;
     private String type;
 
-//    boolean online;
-//    Map<String, Boolean> contacts;
-//    public final static boolean ONLINE = true;
-//    public final static boolean OFFLINE = false;
-
     public User(){ }
 
     public User(String name, String email) {
         this.name = name;
         this.email = email;
     }
-
-//    public User(String email, boolean online, Map<String, Boolean> contacts){
-//        this.email = email;
-//        this.online = online;
-//        this.contacts = contacts;
-//    }
 
     public String getName() {
         return name;
@@ -59,19 +48,4 @@ public class User {
         this.type = type;
     }
 
-    //    public boolean isOnline() {
-//        return online;
-//    }
-
-//    public void setOnline(boolean online) {
-//        this.online = online;
-//    }
-
-//    public Map<String, Boolean> getContacts() {
-//        return contacts;
-//    }
-
-//    public void setContacts(Map<String, Boolean> contacts) {
-//        this.contacts = contacts;
-//    }
 }

@@ -1,12 +1,8 @@
 package com.penseapp.acaocontabilidade.chat.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Chat {
     private String key;
     private String name;
-    private List<Message> messages = new ArrayList<>();
 
     public Chat() {
 
@@ -16,7 +12,6 @@ public class Chat {
         this.name = name;
     }
 
-
     public String getKey() {
         return key;
     }
@@ -25,7 +20,6 @@ public class Chat {
         this.key = key;
     }
 
-
     public String getName(){
         return name;
     }
@@ -33,7 +27,6 @@ public class Chat {
     public void setName(String name){
         this.name = name;
     }
-
 
     @Override
     public String toString() {
