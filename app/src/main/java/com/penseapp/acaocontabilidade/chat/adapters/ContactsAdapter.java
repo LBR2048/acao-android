@@ -194,7 +194,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
                 holder.icon.setImageResource(R.drawable.ic_societario);
                 break;
             default:
-                holder.icon.setImageResource(R.mipmap.ic_launcher);
+                holder.icon.setImageResource(R.drawable.ic_default);
                 break;
         }
 
