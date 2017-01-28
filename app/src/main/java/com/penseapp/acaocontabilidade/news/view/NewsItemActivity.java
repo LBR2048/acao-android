@@ -51,6 +51,12 @@ public class NewsItemActivity extends AppCompatActivity implements NewsItemView{
     }
 
     @Override
+    protected void onStop() {
+        newsPresenter.unsubscribeForSingleNewsItemUpdates(key);
+        super.onStop();
+    }
+
+    @Override
     public void onNewsItemChanged(News newsItem) {
         if (newsItem != null) {
             titleView.setText(newsItem.getTitle());
