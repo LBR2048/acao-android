@@ -41,8 +41,10 @@
                 android:text="Data" />
 
             <!--com.codesgood.views.JustifiedTextView text
-            is not updated when inside a RecyclerView-->
-            <com.uncopt.android.widget.text.justify.JustifiedTextView
+            is not updated when inside a RecyclerView -->
+            <!--<com.uncopt.android.widget.text.justify.JustifiedTextView
+            is very slow on older devices -->
+            <TextView
                 android:id="@+id/news_text"
                 style="@style/TextAppearance.AppCompat.Medium"
                 android:layout_width="match_parent"
