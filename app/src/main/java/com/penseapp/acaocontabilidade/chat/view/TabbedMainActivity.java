@@ -72,7 +72,7 @@ public class TabbedMainActivity extends AppCompatActivity implements
 
         // Set screen title
         String currentUserEmail = FirebaseHelper.getInstance().getAuthUserEmail();
-        setTitle("Ação [" + currentUserEmail + " ]");
+//        setTitle("Ação [" + currentUserEmail + " ]");
     }
 
     @Override
