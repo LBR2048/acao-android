@@ -26,12 +26,14 @@
         </android.support.v7.widget.Toolbar>
 
         <android.support.design.widget.TabLayout
-            app:tabGravity="fill"
             android:id="@+id/tabs"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabGravity="fill"
             app:tabIndicatorColor="@android:color/white"
             app:tabIndicatorHeight="3dp"
-            android:layout_height="wrap_content" />
+            app:tabMaxWidth="0dp"
+            app:tabMode="fixed" />
 
     </android.support.design.widget.AppBarLayout>
 
