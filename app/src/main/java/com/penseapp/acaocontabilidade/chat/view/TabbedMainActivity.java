@@ -181,7 +181,7 @@ public class TabbedMainActivity extends AppCompatActivity implements
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "Chat";
+                    return "Conversas";
                 case 1:
                     return "Notícias";
 //                case 2:
