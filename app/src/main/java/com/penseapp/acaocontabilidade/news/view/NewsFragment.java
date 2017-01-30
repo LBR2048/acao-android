@@ -65,7 +65,7 @@ public class NewsFragment extends Fragment implements NewsView {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
+//        super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_news, menu);
     }
 
@@ -91,6 +91,7 @@ public class NewsFragment extends Fragment implements NewsView {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_news, container, false);
     }
