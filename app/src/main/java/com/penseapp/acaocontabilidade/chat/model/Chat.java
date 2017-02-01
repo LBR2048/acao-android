@@ -2,7 +2,7 @@ package com.penseapp.acaocontabilidade.chat.model;
 
 public class Chat {
     private String key;
-    private String name;
+    private String name = "name";
 
     public Chat() {
 

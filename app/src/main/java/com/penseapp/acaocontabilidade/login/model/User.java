@@ -4,10 +4,10 @@ package com.penseapp.acaocontabilidade.login.model;
  * Created by unity on 08/08/16.
  */
 public class User {
-    private String name;
-    private String email;
+    private String name = "name";
+    private String email = "email@email.com";
     private String key;
-    private String type;
+    private String type = "type";
 
     public User(){ }
 

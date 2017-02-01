@@ -6,11 +6,11 @@ package com.penseapp.acaocontabilidade.chat.model;
 
 public class Message {
 
-    private String text;
-    private String senderId;
-    private String senderName;
+    private String text = "text";
+    private String senderId = "senderId";
+    private String senderName = "senderName";
     private String key;
-    private long timestamp;
+    private long timestamp = 0L;
 
     public String getText() {
         return text;

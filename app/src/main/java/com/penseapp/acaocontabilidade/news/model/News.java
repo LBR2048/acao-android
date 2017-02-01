@@ -6,9 +6,9 @@ package com.penseapp.acaocontabilidade.news.model;
 
 public class News {
 
-    private String date;
-    private String text;
-    private String title;
+    private String date = "date";
+    private String text = "text";
+    private String title = "title";
     private String key;
 
     public News() {
