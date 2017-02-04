@@ -3,6 +3,7 @@ package com.penseapp.acaocontabilidade.chat.interactor;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.penseapp.acaocontabilidade.chat.model.Chat;
 import com.penseapp.acaocontabilidade.chat.presenter.ChatsPresenter;
@@ -22,6 +23,9 @@ public class ChatsInteractorImpl implements ChatsInteractor {
     private FirebaseHelper mFirebaseHelperInstance = FirebaseHelper.getInstance();
     private DatabaseReference userChatContactsReference = mFirebaseHelperInstance.getUserChatContactsReference();
     private DatabaseReference chatsReference = mFirebaseHelperInstance.getChatsReference();
+    private DatabaseReference currentUserChatsReference = mFirebaseHelperInstance.getCurrentUserChatsReference();
+    private DatabaseReference userChatsReference = mFirebaseHelperInstance.getUserChatsReference();
+
     private String currentUserId = mFirebaseHelperInstance.getAuthUserId();
     private ValueEventListener userChatsChildEventListener;
     private String newChatKey;
@@ -44,10 +48,10 @@ public class ChatsInteractorImpl implements ChatsInteractor {
         chatsReference.child(newChatKey).setValue(newChat);
 
         // Add reference to newly created chat to user-chats/$currentUserId/$chatId
-//        currentUserChatsReference.child(newChatKey).setValue(ServerValue.TIMESTAMP);
+        currentUserChatsReference.child(newChatKey).setValue(ServerValue.TIMESTAMP);
 
         // Add reference to newly created chat to user-chats/$contactId/$chatId
-//        userChatsReference.child(contactId).child(newChatKey).setValue(ServerValue.TIMESTAMP);
+        userChatsReference.child(contactId).child(newChatKey).setValue(ServerValue.TIMESTAMP);
 
         // Add reference to newly created chat to user-chatContacts-chat/$currentUserId/$contactId:$newChatId
         userChatContactsReference.child(currentUserId).child(contactId).setValue(newChatKey);

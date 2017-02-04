@@ -5,17 +5,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.penseapp.acaocontabilidade.R;
-import com.penseapp.acaocontabilidade.chat.presenter.ContactsPresenter;
-import com.penseapp.acaocontabilidade.chat.presenter.ContactsPresenterImpl;
-import com.penseapp.acaocontabilidade.login.model.User;
+import com.penseapp.acaocontabilidade.chat.model.Chat;
+import com.penseapp.acaocontabilidade.chat.presenter.UserChatsPresenter;
+import com.penseapp.acaocontabilidade.chat.presenter.UserChatsPresenterImpl;
 
 import java.util.List;
-
-import static com.penseapp.acaocontabilidade.chat.view.ChatsActivity.mChats;
 
 
 /**
@@ -24,20 +21,20 @@ import static com.penseapp.acaocontabilidade.chat.view.ChatsActivity.mChats;
 
 // Create the basic adapter extending from RecyclerView.Adapter
 // Note that we specify the custom ViewHolder which gives us access to our views
-public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHolder>
-        implements ContactsAdapterView {//ItemTouchHelperAdapter {
+public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder>
+        implements ChatsAdapterView { //ItemTouchHelperAdapter {
 
-    private static final String LOG_TAG = ContactsAdapter.class.getSimpleName();
+    private static final String LOG_TAG = ChatsAdapter.class.getSimpleName();
 
     // Define onItemClickListener member variable
     private static OnItemClickListener onItemClickListener;
 
-    private final List<User> mContacts;
-    private ContactsPresenter contactsPresenter;
+    private final List<Chat> mChats;
+    private final UserChatsPresenter userChatsPresenter;
 
-    public ContactsAdapter(List<User> contacts) {
-        mContacts = contacts;
-        contactsPresenter = new ContactsPresenterImpl(this);
+    public ChatsAdapter(List<Chat> chats) {
+        mChats = chats;
+        userChatsPresenter = new UserChatsPresenterImpl(this);
     }
 
 
@@ -46,7 +43,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
         void onItemClick(View itemView, int position);
     }
 
-      // Allows the parent activity or fragment to define the onItemClickListener
+    // Allows the parent activity or fragment to define the onItemClickListener
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.onItemClickListener = listener;
     }
@@ -57,7 +54,6 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
         TextView name;
-        ImageView icon;
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
@@ -65,8 +61,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
             // Stores the itemView in a public final member variable that can be used
             // to access the context from any ViewHolder instance.
             super(itemView);
-            name = (TextView) itemView.findViewById(R.id.list_item_contact_name_textview);
-            icon = (ImageView) itemView.findViewById(R.id.list_item_contact_icon);
+            name = (TextView) itemView.findViewById(R.id.list_item_chat_name_textview);
 
             // Setup the click onItemClickListener
             // itemView.setOnClickListener(this);
@@ -85,7 +80,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // Inflate the custom layout
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_contact, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_chat, parent, false);
 
         // Return a new holder instance
         return new ViewHolder(view);
@@ -95,77 +90,53 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         // Get the data model based on position
-        final User selectedContact = mContacts.get(position);
+        final Chat selectedChat = mChats.get(position);
 
         // Set item views based on your views and data model
-        holder.name.setText(selectedContact.getName());
-        
-        String email = selectedContact.getEmail();
-        String emailUser = email.substring(0, email.indexOf("@"));
-        switch (emailUser) {
-            case "contabil":
-                holder.icon.setImageResource(R.drawable.ic_contabil);
-                break;
-            case "fiscal":
-                holder.icon.setImageResource(R.drawable.ic_fiscal);
-                break;
-            case "pessoal":
-                holder.icon.setImageResource(R.drawable.ic_pessoal);
-                break;
-            case "societario":
-                holder.icon.setImageResource(R.drawable.ic_societario);
-                break;
-            default:
-                holder.icon.setImageResource(R.drawable.ic_default);
-                break;
-        }
+        holder.name.setText(selectedChat.getName());
     }
 
     // Returns the total count of items in the list
     @Override
     public int getItemCount() {
-        return mContacts.size();
+        return mChats.size();
     }
 
-    public User getItem(int position) {
-        return mContacts.get(position);
-    }
-
-    @Override
-    public void subscribeForContactsUpdates() {
-        contactsPresenter.subscribeForContactsUpdates();
+    public Chat getItem(int position) {
+        return mChats.get(position);
     }
 
     @Override
-    public void unsubscribeForContactsUpdates() {
-        contactsPresenter.unsubscribeForContactsUpdates();
+    public void subscribeForChatsUpdates() {
+        userChatsPresenter.subscribeForChatListUpdates();
     }
 
     @Override
-    public void onContactAdded(User contact) {
-        Log.i(LOG_TAG, "View onContactAdded called");
-        mContacts.add(contact);
-        notifyItemInserted(mContacts.size() - 1);
-//        contactsAdapter.notifyItemInserted(mContacts.size() - 1);
+    public void unsubscribeForChatListUpdates() {
+        userChatsPresenter.unsubscribeForChatListUpdates();
     }
 
     @Override
-    public void onContactChanged(User contact) {
-        Log.i(LOG_TAG, "View onContactChanged called");
-        int index = getIndexForKey(contact.getKey());
-        mContacts.set(index, contact);
-//        contactsAdapter.notifyItemChanged(index);
+    public void onChatAdded(Chat chat) {
+        Log.i(LOG_TAG, "View onChatAdded called");
+        mChats.add(chat);
+        notifyItemInserted(mChats.size() - 1);
+    }
+
+    @Override
+    public void onChatChanged(Chat chat) {
+        Log.i(LOG_TAG, "View onChatChanged called");
+        int index = getIndexForKey(chat.getKey());
+        mChats.set(index, chat);
         notifyItemChanged(index);
     }
 
     @Override
-    public void onContactRemoved(String contactId) {
-        Log.i(LOG_TAG, "View onContactRemoved called");
+    public void onChatRemoved(String chatId) {
+        Log.i(LOG_TAG, "View onChatRemoved called");
         try {
-            int index = getIndexForKey(contactId);
+            int index = getIndexForKey(chatId);
             mChats.remove(index);
-            notifyDataSetChanged();
-//            contactsAdapter.notifyItemRemoved(index);
             notifyItemRemoved(index);
         } catch(IllegalArgumentException e) {
             e.printStackTrace();
@@ -176,8 +147,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
     // TODO duplicado em ExerciseChooserActivity
     private int getIndexForKey(String key) {
         int index = 0;
-        for (User contact : mContacts) {
-            if (contact.getKey().equals(key)) {
+        for (Chat chat : mChats) {
+            if (chat.getKey().equals(key)) {
                 return index;
             } else {
                 index++;

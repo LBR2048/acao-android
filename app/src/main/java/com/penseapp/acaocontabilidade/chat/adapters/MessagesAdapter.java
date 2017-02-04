@@ -151,7 +151,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // Inflate the custom layout
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_chat, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_message, parent, false);
 
         // Return a new holder instance
         return new ViewHolder(view);

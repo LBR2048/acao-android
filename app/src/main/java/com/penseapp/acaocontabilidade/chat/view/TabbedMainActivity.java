@@ -32,6 +32,7 @@ import static com.penseapp.acaocontabilidade.chat.view.ChatsActivity.SELECTED_CH
 public class TabbedMainActivity extends AppCompatActivity implements
         ContactsView,
         ContactsFragment.OnContactsFragmentInteractionListener,
+        ChatsFragment.OnChatsFragmentInteractionListener,
         NewsFragment.OnNewsFragmentInteractionListener {
 
     private static final String ACAO_FACEBOOK_URL = "https://www.facebook.com/acaocontabilidade/";
@@ -164,6 +165,8 @@ public class TabbedMainActivity extends AppCompatActivity implements
                 case 0:
                     return ContactsFragment.newInstance();
                 case 1:
+                    return ChatsFragment.newInstance();
+                case 2:
                     return NewsFragment.newInstance();
                 default:
                     // Return a PlaceholderFragment (defined as a static inner class below).
@@ -173,16 +176,17 @@ public class TabbedMainActivity extends AppCompatActivity implements
 
         @Override
         public int getCount() {
-            // Show 2 total pages.
-            return 2;
+            return 3;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "Conversas";
+                    return "Contatos";
                 case 1:
+                    return "Chats";
+                case 2:
                     return "Notícias";
 //                case 2:
 //                    return "Lembretes";
@@ -203,6 +207,12 @@ public class TabbedMainActivity extends AppCompatActivity implements
     }
 
     @Override
+    // TODO inverter essa função com onChatCreated. Assim está confuso
+    public void onChatSelected(String name, String key) {
+        onChatCreated(key, name);
+    }
+
+    @Override
     public void onNewsSelected(String title, String key) {
         Intent intent = new Intent(this, NewsItemActivity.class);
         intent.putExtra(NewsItemActivity.SELECTED_NEWS_TITLE, title);
@@ -211,6 +221,8 @@ public class TabbedMainActivity extends AppCompatActivity implements
     }
 
     @Override
+    // TODO talvez mudar o nome para onChatSelected ou onContactSelected
+    // TODO será que intents e navegação devem fazer parte do Presenter?
     public void onChatCreated(String chatId, String chatName) {
         Intent intent = new Intent(TabbedMainActivity.this, MessagesActivity.class);
         intent.putExtra(SELECTED_CHAT_KEY, chatId);

@@ -1,9 +1,9 @@
 package com.penseapp.acaocontabilidade.chat.presenter;
 
+import com.penseapp.acaocontabilidade.chat.adapters.ChatsAdapterView;
 import com.penseapp.acaocontabilidade.chat.interactor.UserChatsInteractor;
 import com.penseapp.acaocontabilidade.chat.interactor.UserChatsInteractorImpl;
 import com.penseapp.acaocontabilidade.chat.model.Chat;
-import com.penseapp.acaocontabilidade.chat.view.ChatsView;
 
 /**
  * Created by unity on 10/12/16.
@@ -11,11 +11,11 @@ import com.penseapp.acaocontabilidade.chat.view.ChatsView;
 
 public class UserChatsPresenterImpl implements UserChatsPresenter {
 
-    private final ChatsView chatsView;
+    private final ChatsAdapterView chatsView;
     private final UserChatsInteractor userChatsInteractor;
 
-    public UserChatsPresenterImpl(ChatsView chatsView) {
-        this.chatsView = chatsView;
+    public UserChatsPresenterImpl(ChatsAdapterView chatsAdapterView) {
+        this.chatsView = chatsAdapterView;
         this.userChatsInteractor = new UserChatsInteractorImpl(this);
     }
 

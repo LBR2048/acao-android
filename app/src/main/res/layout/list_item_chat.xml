@@ -1,51 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/message_container"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="5dp"
-    android:paddingTop="5dp">
+    android:background="?selectableItemBackground"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin">
 
-    <FrameLayout
-        android:id="@+id/left_arrow"
+    <ImageView
+        android:id="@+id/list_item_contact_icon"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginLeft="2dp"
-        android:background="@drawable/chat_message_arrow"
-        android:rotation="180"/>
+        android:src="@drawable/ic_default"/>
 
-    <LinearLayout
-        android:id="@+id/message"
+    <TextView
+        android:id="@+id/list_item_chat_name_textview"
+        style="@style/TextAppearance.AppCompat.Medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="26dp"
-        android:layout_marginRight="26dp"
-        android:background="@drawable/chat_message_background"
-        android:orientation="vertical"
-        android:padding="10dp">
-
-        <TextView
-            android:id="@+id/list_item_contact_name_textview"
-            style="@style/TextAppearance.AppCompat.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="Isto é uma mensagem" />
-
-    </LinearLayout>
-
-    <FrameLayout
-        android:id="@+id/right_arrow"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignEnd="@+id/message"
-        android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/message"
-        android:layout_marginRight="-25dp"
-        android:background="@drawable/chat_message_arrow"
-        android:rotation="180"/>
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:padding="8dp"
+        android:text="Contato" />
 
 
-</RelativeLayout>
-
-    <!--</android.support.v7.widget.CardView>-->
+</LinearLayout>

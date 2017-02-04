@@ -14,11 +14,10 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.penseapp.acaocontabilidade.R;
-import com.penseapp.acaocontabilidade.chat.adapters.ChatListAdapter;
+import com.penseapp.acaocontabilidade.chat.adapters.ChatsAdapter;
 import com.penseapp.acaocontabilidade.chat.model.Chat;
 import com.penseapp.acaocontabilidade.chat.presenter.ChatsPresenter;
 import com.penseapp.acaocontabilidade.chat.presenter.UserChatsPresenter;
-import com.penseapp.acaocontabilidade.chat.presenter.UserChatsPresenterImpl;
 import com.penseapp.acaocontabilidade.domain.FirebaseHelper;
 import com.penseapp.acaocontabilidade.login.view.activities.LoginActivity;
 
@@ -35,7 +34,7 @@ public class ChatsActivity extends AppCompatActivity implements ChatsView {
 
 
     public static ArrayList<Chat> mChats = new ArrayList<>();
-    private ChatListAdapter chatListAdapter;
+    private ChatsAdapter chatsAdapter;
     private RecyclerView mChatsRecyclerView;
 
     @Override
@@ -48,25 +47,11 @@ public class ChatsActivity extends AppCompatActivity implements ChatsView {
         String currentUserEmail = FirebaseHelper.getInstance().getAuthUserEmail();
         setTitle("Chats [" + currentUserEmail + " ]");
 
-        // TODO
-//        // Change button text depending on who you are
-//        Button createChatButton = (Button) findViewById(R.id.button_create_chat);
-//        // If current user is a customer
-//        if (userType == "customer")
-//            createChatButton.setText("Fazer novo chamado");
-//        // If current user works at Ação
-//        if (userType == "acao")
-//            createChatButton.setText("Entrar em contato com cliente");
-
         // Chats list RecyclerView
         mChatsRecyclerView = (RecyclerView) findViewById(R.id.list_chats);
         setupRecyclerView();
-//        setupRecyclerViewDecorator();
-//        setOnItemDragDropSwipe();
         setOnItemClickListener();
-//        setOnItemDismissListener();
-//        setOnWorkoutShareClickListener();
-//        setOnWorkoutRenameClickListener();
+
     }
 
     // Toolbar
@@ -98,33 +83,18 @@ public class ChatsActivity extends AppCompatActivity implements ChatsView {
             showLoginActivity();
         }
 
-//        if (id == R.id.action_feedback) {
-//            // Create an instance of the dialog fragment and show it
-//            DialogFragment surveyDialogFragment = new SurveyDialogFragment();
-//            surveyDialogFragment.show(getSupportFragmentManager(), "SurveyDialogFragment");
-//        }
-
         return super.onOptionsItemSelected(item);
     }
 
-    // Workouts list
-
     private void setupRecyclerView() {
-        chatListAdapter = new ChatListAdapter(mChats);
-        mChatsRecyclerView.setAdapter(chatListAdapter);
+        chatsAdapter = new ChatsAdapter(mChats);
+        mChatsRecyclerView.setAdapter(chatsAdapter);
         mChatsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-//    private void setupRecyclerViewDecorator() {
-//        // Display dividers between each item of the RecyclerView
-//        RecyclerView.ItemDecoration itemDecoration = new
-//                DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST);
-//        mChatsRecyclerView.addItemDecoration(itemDecoration);
-//    }
-
     private void setOnItemClickListener() {
         // What happens when a chat item is clicked
-        chatListAdapter.setOnItemClickListener(new ChatListAdapter.OnItemClickListener() {
+        chatsAdapter.setOnItemClickListener(new ChatsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int position) {
                 Chat selectedChat = mChats.get(position);
@@ -136,39 +106,13 @@ public class ChatsActivity extends AppCompatActivity implements ChatsView {
                 intent.putExtra(SELECTED_CHAT_NAME, selectedChat.getName());
                 startActivity(intent);
 
-                // Send the selected chat position to the ChatMessagesActivity
-//                Intent intent = new Intent(ChatListActivity.this, ExercisesActivity.class);
-//                intent.putExtra(SELECTED_WORKOUT_ID, position);
-
-                // Firebase key
-//                intent.putExtra(SELECTED_WORKOUT_KEY, selectedChat.getKey());
-//                startActivityForResult(intent, ExercisesActivity.REQUEST_VIEW_EXERCISES);
             }
         });
     }
 
-//    private void setOnItemDismissListener() {
-//        // What happens when an item is dismissed
-//        chatListAdapter.setOnItemDismissListener(new WorkoutsAdapter.OnItemDismissListener() {
-//            @Override
-//            public void onItemDismiss(int position) {
-//                String key = chatListAdapter.getItem(position).getKey();
-//                Log.i(LOG_TAG, "Removing item " + key + " from position " + Integer.toString(position));
-//                workoutsPresenter.removeWorkout(key);
-//            }
-//        });
-//    }
-
-//    private void setOnItemDragDropSwipe() {
-//        // Add drag & drop and swipe capabilities to the RecyclerView items
-//        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(chatListAdapter);
-//        mItemTouchHelper = new ItemTouchHelper(callback);
-//        mItemTouchHelper.attachToRecyclerView(mWorkoutsRecyclerView);
-//    }
-
     private void clearRecyclerView() {
         mChats.clear();
-        chatListAdapter.notifyDataSetChanged(); // TODO not efficient
+        chatsAdapter.notifyDataSetChanged(); // TODO not efficient
     }
 
     @Override
@@ -176,10 +120,8 @@ public class ChatsActivity extends AppCompatActivity implements ChatsView {
         super.onStart();
 
         // Connect to Presenters
-        userChatsPresenter = new UserChatsPresenterImpl(this);
 
         clearRecyclerView();
-        userChatsPresenter.subscribeForChatListUpdates();
     }
 
     @Override
@@ -206,32 +148,7 @@ public class ChatsActivity extends AppCompatActivity implements ChatsView {
         }
     }
 
-    @Override
-    public void onChatAdded(Chat chat) {
-        Log.i(LOG_TAG, "View onChatAdded called");
-        mChats.add(chat);
-        chatListAdapter.notifyItemInserted(mChats.size() - 1);
-    }
 
-    @Override
-    public void onChatChanged(Chat chat) {
-        Log.i(LOG_TAG, "View onChatChanged called");
-        int index = getIndexForKey(chat.getKey());
-        mChats.set(index, chat);
-        chatListAdapter.notifyItemChanged(index);
-    }
-
-    @Override
-    public void onChatRemoved(String chatId) {
-        Log.i(LOG_TAG, "View onChatRemoved called");
-        try {
-            int index = getIndexForKey(chatId);
-            mChats.remove(index);
-            chatListAdapter.notifyItemRemoved(index);
-        } catch(IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-    }
 
     public void onClickCreateChat(View v) {
         Toast.makeText(getApplicationContext(), "Fazer novo chamado", Toast.LENGTH_SHORT).show();
