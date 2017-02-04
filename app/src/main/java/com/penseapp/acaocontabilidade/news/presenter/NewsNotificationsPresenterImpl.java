@@ -29,6 +29,11 @@ public class NewsNotificationsPresenterImpl implements NewsNotificationsPresente
     }
 
     @Override
+    public void isSubscribedToNewsNotifications() {
+        newsNotificationsInteractor.isSubscribedToNewsNotifications();
+    }
+
+    @Override
     public void onReceiveNewsNotificationsSubscriptionStatus(boolean isSubscribed) {
         newsView.onReceiveNewsNotificationsSubscriptionStatus(isSubscribed);
     }

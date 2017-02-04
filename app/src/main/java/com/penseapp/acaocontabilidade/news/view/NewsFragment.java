@@ -14,7 +14,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.penseapp.acaocontabilidade.R;
 import com.penseapp.acaocontabilidade.chat.view.ContactsActivity;
@@ -43,6 +42,7 @@ public class NewsFragment extends Fragment implements NewsView {
     private NewsAdapter newsAdapter;
     private RecyclerView mContactsRecyclerView;
         private OnNewsFragmentInteractionListener mListener;
+    private MenuItem receiveNotificationsItem;
 
     public NewsFragment() {
         // Required empty public constructor
@@ -67,6 +67,8 @@ public class NewsFragment extends Fragment implements NewsView {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 //        super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_news, menu);
+        receiveNotificationsItem = menu.findItem(R.id.action_subscribe_news);
+        isSubscribedToNewsNotifications();
     }
 
     @Override
@@ -74,12 +76,12 @@ public class NewsFragment extends Fragment implements NewsView {
         int id = item.getItemId();
 
         if (id == R.id.action_subscribe_news) {
-            if(item.isChecked()){
+            if (item.isChecked()) {
                 // If item already checked then unchecked it
                 item.setChecked(false);
                 unsubscribeFromNewsNotifications();
-            }else{
-                // If item is unchecked then checked it
+            } else {
+                // If item is unchecked then check it
                 item.setChecked(true);
                 subscribeToNewsNotifications();
             }
@@ -188,10 +190,18 @@ public class NewsFragment extends Fragment implements NewsView {
     }
 
     @Override
+    public void isSubscribedToNewsNotifications() {
+        newsNotificationsPresenter.isSubscribedToNewsNotifications();
+    }
+
+    @Override
     public void onReceiveNewsNotificationsSubscriptionStatus(boolean isSubscribed) {
-        if (isSubscribed)
-            Toast.makeText(getActivity(), "subscribing", Toast.LENGTH_SHORT).show();
-        else
-            Toast.makeText(getActivity(), "unsubscribing", Toast.LENGTH_SHORT).show();
+        if (isSubscribed) {
+            receiveNotificationsItem.setChecked(true);
+//            subscribeToNewsNotifications();
+        } else { // If false or null
+            receiveNotificationsItem.setChecked(false);
+//            unsubscribeFromNewsNotifications();
+        }
     }
 }

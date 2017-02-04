@@ -7,5 +7,6 @@ package com.penseapp.acaocontabilidade.news.presenter;
 public interface NewsNotificationsPresenter {
     void subscribeToNewsNotifications();
     void unsubscribeFromNewsNotifications();
+    void isSubscribedToNewsNotifications();
     void onReceiveNewsNotificationsSubscriptionStatus(boolean isSubscribed);
 }

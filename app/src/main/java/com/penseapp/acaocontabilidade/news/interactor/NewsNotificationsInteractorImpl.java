@@ -41,12 +41,16 @@ public class NewsNotificationsInteractorImpl implements NewsNotificationsInterac
 
     @Override
     public void isSubscribedToNewsNotifications() {
-        if (newsNotificationSubscriptionStatusListener == null) {
+//        if (newsNotificationSubscriptionStatusListener == null) {
             newsNotificationSubscriptionStatusListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    newsNotificationsPresenter.onReceiveNewsNotificationsSubscriptionStatus(
+                    if (dataSnapshot.getValue() != null) {
+                        newsNotificationsPresenter.onReceiveNewsNotificationsSubscriptionStatus(
                             dataSnapshot.getValue(boolean.class));
+                    } else {
+                        newsNotificationsPresenter.onReceiveNewsNotificationsSubscriptionStatus(true);
+                    }
                 }
 
                 @Override
@@ -54,7 +58,8 @@ public class NewsNotificationsInteractorImpl implements NewsNotificationsInterac
 
                 }
             };
+            // TODO Por que mesmo com single value ele não para de monitorar?
             isSubscribedToNewsNotificationsRef.addListenerForSingleValueEvent(newsNotificationSubscriptionStatusListener);
-        }
+//        }
     }
 }
