@@ -39,10 +39,17 @@ public class MessagesInteractorImpl implements MessagesInteractor {
             messagesChildEventListener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    Log.i(LOG_TAG, dataSnapshot.toString() + " added");
-                    Message message = dataSnapshot.getValue(Message.class);
-                    message.setKey(dataSnapshot.getKey());
-                    messagesPresenter.onMessageAdded(message);
+                    String messageKey = dataSnapshot.getKey();
+                    try {
+                        Message message = dataSnapshot.getValue(Message.class);
+                        message.setKey(messageKey);
+                        Log.i(LOG_TAG, dataSnapshot.toString() + " added");
+                        messagesPresenter.onMessageAdded(message);
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "Error while reading message " + messageKey);
+                        Message message = new Message();
+                        messagesPresenter.onMessageAdded(message);
+                    }
                 }
 
                 @Override
