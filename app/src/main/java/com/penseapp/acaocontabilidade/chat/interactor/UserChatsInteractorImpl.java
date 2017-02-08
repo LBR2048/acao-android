@@ -42,14 +42,18 @@ public class UserChatsInteractorImpl implements UserChatsInteractor {
             chatsChildEventListener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    String chatKey = dataSnapshot.getKey();
+                    final String chatKey = dataSnapshot.getKey();
                     chatsReference.child(chatKey).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            Chat chat = dataSnapshot.getValue(Chat.class);
-                            chat.setKey(dataSnapshot.getKey());
-                            Log.i(LOG_TAG, "Chat " + chat.getName() + " added");
-                            userChatsPresenter.onChatAdded(chat);
+                            try {
+                                Chat chat = dataSnapshot.getValue(Chat.class);
+                                chat.setKey(dataSnapshot.getKey());
+                                Log.i(LOG_TAG, "Chat " + chat.getName() + " added");
+                                userChatsPresenter.onChatAdded(chat);
+                            } catch (Exception e) {
+                                Log.e(LOG_TAG, "Error while reading chat " + chatKey);
+                            }
                         }
 
                         @Override
@@ -61,14 +65,18 @@ public class UserChatsInteractorImpl implements UserChatsInteractor {
 
                 @Override
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                    String chatKey = dataSnapshot.getKey();
+                    final String chatKey = dataSnapshot.getKey();
                     chatsReference.child(chatKey).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            Chat chat = dataSnapshot.getValue(Chat.class);
-                            Log.i(LOG_TAG, "Chat " + chat.getName() + " changed");
-                            chat.setKey(dataSnapshot.getKey());
-                            userChatsPresenter.onChatChanged(chat);
+                            try {
+                                Chat chat = dataSnapshot.getValue(Chat.class);
+                                Log.i(LOG_TAG, "Chat " + chat.getName() + " changed");
+                                chat.setKey(dataSnapshot.getKey());
+                                userChatsPresenter.onChatChanged(chat);
+                            } catch (Exception e) {
+                                Log.e(LOG_TAG, "Error while reading chat " + chatKey);
+                            }
                         }
 
                         @Override
@@ -80,13 +88,17 @@ public class UserChatsInteractorImpl implements UserChatsInteractor {
 
                 @Override
                 public void onChildRemoved(DataSnapshot dataSnapshot) {
-                    String chatKey = dataSnapshot.getKey();
+                    final String chatKey = dataSnapshot.getKey();
                     chatsReference.child(chatKey).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            String chatId = dataSnapshot.getKey();
-                            Log.i(LOG_TAG, "Chat " + chatId + " removed");
-                            userChatsPresenter.onChatRemoved(chatId);
+                            try {
+                                String chatId = dataSnapshot.getKey();
+                                Log.i(LOG_TAG, "Chat " + chatId + " removed");
+                                userChatsPresenter.onChatRemoved(chatId);
+                            } catch (Exception e) {
+                                Log.e(LOG_TAG, "Error while reading chat " + chatKey);
+                            }
                         }
 
                         @Override
