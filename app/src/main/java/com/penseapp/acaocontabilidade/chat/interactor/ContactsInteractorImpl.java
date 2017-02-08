@@ -35,25 +35,39 @@ public class ContactsInteractorImpl implements ContactsInteractor {
             contactsChildEventListener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    Log.i(LOG_TAG, dataSnapshot.toString() + " added");
-                    User contact = dataSnapshot.getValue(User.class);
-                    contact.setKey(dataSnapshot.getKey());
-                    contactsPresenter.onContactAdded(contact);
+                    String contactKey = dataSnapshot.getKey();
+                    try {
+                        User contact = dataSnapshot.getValue(User.class);
+                        contact.setKey(contactKey);
+                        Log.i(LOG_TAG, dataSnapshot.toString() + " added");
+                        contactsPresenter.onContactAdded(contact);
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "Error while reading chat " + contactKey);
+                    }
                 }
 
                 @Override
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                    Log.i(LOG_TAG, dataSnapshot.toString() + " changed");
-                    User contact = dataSnapshot.getValue(User.class);
-                    contact.setKey(dataSnapshot.getKey());
-                    contactsPresenter.onContactChanged(contact);
+                    String contactKey = dataSnapshot.getKey();
+                    try {
+                        User contact = dataSnapshot.getValue(User.class);
+                        contact.setKey(contactKey);
+                        Log.i(LOG_TAG, dataSnapshot.toString() + " changed");
+                        contactsPresenter.onContactChanged(contact);
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "Error while reading chat " + contactKey);
+                    }
                 }
 
                 @Override
                 public void onChildRemoved(DataSnapshot dataSnapshot) {
-                    Log.i(LOG_TAG, dataSnapshot.toString() + " removed");
                     String contactKey = dataSnapshot.getKey();
-                    contactsPresenter.onContactRemoved(contactKey);
+                    try {
+                        Log.i(LOG_TAG, dataSnapshot.toString() + " removed");
+                        contactsPresenter.onContactRemoved(contactKey);
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "Error while reading chat " + contactKey);
+                    }
                 }
 
                 @Override
