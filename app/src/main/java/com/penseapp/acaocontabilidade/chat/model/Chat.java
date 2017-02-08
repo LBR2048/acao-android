@@ -3,6 +3,8 @@ package com.penseapp.acaocontabilidade.chat.model;
 public class Chat {
     private String key;
     private String name = "name";
+    private int unreadMessageCount = 0;
+    private long latestMessageTimestamp = 0;
 
     public Chat() {
 
@@ -26,6 +28,22 @@ public class Chat {
 
     public void setName(String name){
         this.name = name;
+    }
+
+    public int getUnreadMessageCount() {
+        return unreadMessageCount;
+    }
+
+    public void setUnreadMessageCount(int unreadMessageCount) {
+        this.unreadMessageCount = unreadMessageCount;
+    }
+
+    public long getLatestMessageTimestamp() {
+        return latestMessageTimestamp;
+    }
+
+    public void setLatestMessageTimestamp(long latestMessageTimestamp) {
+        this.latestMessageTimestamp = latestMessageTimestamp;
     }
 
     @Override

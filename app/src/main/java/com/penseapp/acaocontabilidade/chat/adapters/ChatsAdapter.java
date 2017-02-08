@@ -54,6 +54,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder>
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
         TextView name;
+        TextView unreadMessageCount;
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
@@ -62,6 +63,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder>
             // to access the context from any ViewHolder instance.
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.list_item_chat_name_textview);
+            unreadMessageCount = (TextView) itemView.findViewById(R.id.list_item_chat_unread_messages_textview);
 
             // Setup the click onItemClickListener
             // itemView.setOnClickListener(this);
@@ -94,6 +96,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder>
 
         // Set item views based on your views and data model
         holder.name.setText(selectedChat.getName());
+        holder.unreadMessageCount.setText(Integer.toString(selectedChat.getUnreadMessageCount()));
     }
 
     // Returns the total count of items in the list

@@ -6,6 +6,8 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
 import com.penseapp.acaocontabilidade.chat.model.Message;
 import com.penseapp.acaocontabilidade.chat.presenter.MessagesPresenter;
 import com.penseapp.acaocontabilidade.domain.FirebaseHelper;
@@ -24,11 +26,15 @@ public class MessagesInteractorImpl implements MessagesInteractor {
     // Firebase
     private FirebaseHelper mFirebaseHelperInstance = FirebaseHelper.getInstance();
     private DatabaseReference currentChatReference;
+    private DatabaseReference currentChatMessagesReference;
+    private DatabaseReference currentChatUserChatsReference;
     private ChildEventListener messagesChildEventListener;
 
     public MessagesInteractorImpl(MessagesPresenter messagesPresenter, String chatId) {
         this.messagesPresenter = messagesPresenter;
         currentChatReference = mFirebaseHelperInstance.getCurrentChatReference(chatId);
+        currentChatMessagesReference = mFirebaseHelperInstance.getCurrentChatMessagesReference(chatId);
+        currentChatUserChatsReference = mFirebaseHelperInstance.getCurrentUserChatsReference().child(chatId);
     }
 
     @Override
@@ -74,21 +80,21 @@ public class MessagesInteractorImpl implements MessagesInteractor {
             };
 
             // TODO colocar dentro do FirebaseHelper
-            currentChatReference.addChildEventListener(messagesChildEventListener);
+            currentChatMessagesReference.addChildEventListener(messagesChildEventListener);
         }
     }
 
     @Override
     public void unsubscribeForMessagesUpdates() {
         if (messagesChildEventListener != null) {
-            currentChatReference.removeEventListener(messagesChildEventListener);
+            currentChatMessagesReference.removeEventListener(messagesChildEventListener);
         }
     }
 
     @Override
     public void sendMessage(String messageText, String senderId, String senderName) {
         // Create empty messageText and get its key so we can further reference it
-        String newMessageKey = currentChatReference.push().getKey();
+        String newMessageKey = currentChatMessagesReference.push().getKey();
 
         // Create new messageText with key received from Firebase
         Message newMessage = new Message();
@@ -98,6 +104,30 @@ public class MessagesInteractorImpl implements MessagesInteractor {
         newMessage.setTimestamp(System.currentTimeMillis());
 
         // Add newly created message to Firebase chats/$chatId/$messageId
-        currentChatReference.child(newMessageKey).setValue(newMessage);
+        currentChatMessagesReference.child(newMessageKey).setValue(newMessage);
+
+        // Update current chat's latestMessageTimestamp and unreadMessageCount
+        currentChatReference.child("latestMessageTimestamp").setValue(ServerValue.TIMESTAMP);
+        currentChatReference.child("unreadMessageCount").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try {
+                    long timestamp = dataSnapshot.getValue(long.class);
+                    currentChatReference.child("unreadMessageCount").setValue(timestamp + 1);
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "Could not read unreadMessageCount");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+        // Update timestamp at user-chats/$userId/$chatId:timestamp
+        currentChatUserChatsReference.setValue(ServerValue.TIMESTAMP);
     }
 }
