@@ -6,6 +6,6 @@ package com.penseapp.acaocontabilidade.chat.presenter;
 
 public interface ChatsPresenter {
     void createChat(String chatName, String contactId);
-    void createChatIfNeeded(String chatName, String contactId);
+    void createChatIfNeeded(String recipientName, String recipientId);
     void onChatCreated(String chatId, String chatName);
 }

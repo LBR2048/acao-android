@@ -36,13 +36,13 @@ public class ChatsInteractorImpl implements ChatsInteractor {
     }
 
     @Override
-    public void createChat(String chatName, String contactId) {
+    public void createChat(String recipientName, String recipientId) {
         // Create empty chat and get its key so we can further reference it
         newChatKey = chatsReference.push().getKey();
 
         // Create new chat with key received from Firebase
         Chat newChat = new Chat();
-        newChat.setName("Chat com " + chatName);
+        newChat.setName("Chat com " + recipientName);
 
         // Add newly created chat to Firebase chats/$chatId
         chatsReference.child(newChatKey).setValue(newChat);
@@ -51,27 +51,27 @@ public class ChatsInteractorImpl implements ChatsInteractor {
         userChatsReference.child(currentUserId).child(newChatKey).setValue(ServerValue.TIMESTAMP);
 
         // Add reference to newly created chat to user-chats/$contactId/$chatId
-        userChatsReference.child(contactId).child(newChatKey).setValue(ServerValue.TIMESTAMP);
+        userChatsReference.child(recipientId).child(newChatKey).setValue(ServerValue.TIMESTAMP);
 
         // Add reference to newly created chat to user-chatContacts-chat/$currentUserId/$contactId:$newChatId
-        userChatContactsReference.child(currentUserId).child(contactId).setValue(newChatKey);
+        userChatContactsReference.child(currentUserId).child(recipientId).setValue(newChatKey);
 
         // Add reference to newly created chat to user-chatContacts-chat/$contactId/$currentUserId:$newChatId
-        userChatContactsReference.child(contactId).child(currentUserId).setValue(newChatKey);
+        userChatContactsReference.child(recipientId).child(currentUserId).setValue(newChatKey);
     }
 
     @Override
-    public void createChatIfNeeded(final String chatName, final String contactId) {
+    public void createChatIfNeeded(final String recipientName, final String recipientId) {
         if (userChatsChildEventListener == null) {
             userChatsChildEventListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Object dataSnapshotValue = dataSnapshot.getValue();
                     if (dataSnapshotValue == null) {
-                        createChat(chatName, contactId);
-                        chatsPresenter.onChatCreated(newChatKey, chatName);
+                        createChat(recipientName, recipientId);
+                        chatsPresenter.onChatCreated(newChatKey, recipientName);
                     } else {
-                        chatsPresenter.onChatCreated(dataSnapshotValue.toString(), chatName);
+                        chatsPresenter.onChatCreated(dataSnapshotValue.toString(), recipientName);
                     }
                 }
 
@@ -80,7 +80,7 @@ public class ChatsInteractorImpl implements ChatsInteractor {
 
                 }
             };
-            userChatContactsReference.child(currentUserId).child(contactId).addListenerForSingleValueEvent(userChatsChildEventListener);
+            userChatContactsReference.child(currentUserId).child(recipientId).addListenerForSingleValueEvent(userChatsChildEventListener);
         }
     }
 }
