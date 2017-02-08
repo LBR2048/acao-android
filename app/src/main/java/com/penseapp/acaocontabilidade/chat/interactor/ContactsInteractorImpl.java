@@ -5,6 +5,7 @@ import android.util.Log;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.penseapp.acaocontabilidade.chat.presenter.ContactsPresenter;
 import com.penseapp.acaocontabilidade.domain.FirebaseHelper;
 import com.penseapp.acaocontabilidade.login.model.User;
@@ -80,24 +81,27 @@ public class ContactsInteractorImpl implements ContactsInteractor {
 
                 }
             };
+            // TODO funciona, mas parece lento e a atividade tem que ser reiniciada para que a lista de contatos seja atualizada
+            mFirebaseHelperInstance.getUsersReference().child(mFirebaseHelperInstance.getAuthUserId()).child("type").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    String userType = dataSnapshot.getValue().toString();
+                    if (userType.equals("customer")) {
+                        // Show Ação list if you are a customer
+                        mFirebaseHelperInstance.getUsersReference().orderByChild("type").equalTo("acao").
+                                addChildEventListener(contactsChildEventListener);
+                    } else if (userType.equals("acao")) {
+                        // Show customers list if you are an Ação employee
+                        mFirebaseHelperInstance.getUsersReference().orderByChild("type").equalTo("customer").
+                                addChildEventListener(contactsChildEventListener);
+                    }
+                }
 
-            // TODO
-//            if (userType == "customer") {
-//                // Show Ação sectors list if you are a customer
-//                mFirebaseHelperInstance.getUsersReference().orderByChild("type").equalTo("acao").
-//                        addChildEventListener(contactsChildEventListener);
-//            } else if (userType == "acao") {
-//                // Show customers list if you are an Ação employee
-//                mFirebaseHelperInstance.getUsersReference().orderByChild("type").equalTo("customer").
-//                        addChildEventListener(contactsChildEventListener);
-//            }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-//            mFirebaseHelperInstance.getUsersReference().orderByChild("type").equalTo("customer").
-//                    addChildEventListener(contactsChildEventListener);
-            mFirebaseHelperInstance.getUsersReference().orderByChild("type").equalTo("acao").
-                    addChildEventListener(contactsChildEventListener);
-//            mFirebaseHelperInstance.getUsersReference().
-//                    addChildEventListener(contactsChildEventListener);
+                }
+            });
         }
     }
 
