@@ -31,13 +31,15 @@ public class NewsInteractorImpl implements NewsInteractor {
 
     @Override
     public void subscribeForNewsUpdates() {
-        Log.i(LOG_TAG, "Interactor " + LOG_TAG + " called");
+        Log.i(LOG_TAG, LOG_TAG + " subscribe to news updates called, but listener already exists");
 
         if (newsChildEventListener == null) {
+            Log.i(LOG_TAG, LOG_TAG + " subscribing to news updates");
+
             newsChildEventListener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    Log.i(LOG_TAG, dataSnapshot.toString() + " added");
+                    Log.i(LOG_TAG, dataSnapshot.getKey() + " added");
                     News news = dataSnapshot.getValue(News.class);
                     news.setKey(dataSnapshot.getKey());
                     newsPresenter.onNewsAdded(news);
@@ -45,7 +47,7 @@ public class NewsInteractorImpl implements NewsInteractor {
 
                 @Override
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                    Log.i(LOG_TAG, dataSnapshot.toString() + " changed");
+                    Log.i(LOG_TAG, dataSnapshot.getKey() + " changed");
                     News news = dataSnapshot.getValue(News.class);
                     news.setKey(dataSnapshot.getKey());
                     newsPresenter.onNewsChanged(news);
@@ -53,7 +55,7 @@ public class NewsInteractorImpl implements NewsInteractor {
 
                 @Override
                 public void onChildRemoved(DataSnapshot dataSnapshot) {
-                    Log.i(LOG_TAG, dataSnapshot.toString() + " removed");
+                    Log.i(LOG_TAG, dataSnapshot.getKey() + " removed");
                     String newsId = dataSnapshot.getKey();
                     newsPresenter.onNewsRemoved(newsId);
                 }
@@ -76,14 +78,22 @@ public class NewsInteractorImpl implements NewsInteractor {
 
     @Override
     public void unsubscribeForNewsUpdates() {
+        Log.i(LOG_TAG, LOG_TAG + " unsubscribeForNewsUpdates called, but listener already exists");
+
         if (newsChildEventListener != null) {
+            Log.i(LOG_TAG, LOG_TAG + " unsubscribing from news updates");
+
             mFirebaseHelperInstance.getNewsReference().removeEventListener(newsChildEventListener);
         }
     }
 
     @Override
     public void subscribeForSingleNewsItemUpdates(String newsId) {
+        Log.i(LOG_TAG, LOG_TAG + " subscribeForSingleNewsItemUpdates called, but listener already exists");
+
         if (newsItemEventListener == null) {
+            Log.i(LOG_TAG, LOG_TAG + " subscribing to single news item updates");
+
             newsItemEventListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -102,7 +112,11 @@ public class NewsInteractorImpl implements NewsInteractor {
 
     @Override
     public void unsubscribeForSingleNewsItemUpdates(String newsId) {
+        Log.i(LOG_TAG, LOG_TAG + " unsubscribeForSingleNewsItemUpdates called, but listener already exists");
+
         if (newsItemEventListener != null) {
+            Log.i(LOG_TAG, LOG_TAG + " unsubscribing from single item news updates");
+
             mFirebaseHelperInstance.getNewsReference().child(newsId).removeEventListener(newsItemEventListener);
         }
     }

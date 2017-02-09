@@ -30,9 +30,11 @@ public class ContactsInteractorImpl implements ContactsInteractor {
 
     @Override
     public void subscribeForContactsUpdates() {
-        Log.i(LOG_TAG, "Interactor " + LOG_TAG + " called");
+        Log.i(LOG_TAG, "subscribeForContactsUpdates called, but listener already exists");
 
         if (contactsChildEventListener == null) {
+            Log.i(LOG_TAG, "subscribeForContactsUpdates called");
+
             contactsChildEventListener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -40,7 +42,7 @@ public class ContactsInteractorImpl implements ContactsInteractor {
                     try {
                         User contact = dataSnapshot.getValue(User.class);
                         contact.setKey(contactKey);
-                        Log.i(LOG_TAG, dataSnapshot.toString() + " added");
+                        Log.i(LOG_TAG, dataSnapshot.getKey() + " added");
                         contactsPresenter.onContactAdded(contact);
                     } catch (Exception e) {
                         Log.e(LOG_TAG, "Error while reading chat " + contactKey);
@@ -53,7 +55,7 @@ public class ContactsInteractorImpl implements ContactsInteractor {
                     try {
                         User contact = dataSnapshot.getValue(User.class);
                         contact.setKey(contactKey);
-                        Log.i(LOG_TAG, dataSnapshot.toString() + " changed");
+                        Log.i(LOG_TAG, dataSnapshot.getKey() + " changed");
                         contactsPresenter.onContactChanged(contact);
                     } catch (Exception e) {
                         Log.e(LOG_TAG, "Error while reading chat " + contactKey);
@@ -64,7 +66,7 @@ public class ContactsInteractorImpl implements ContactsInteractor {
                 public void onChildRemoved(DataSnapshot dataSnapshot) {
                     String contactKey = dataSnapshot.getKey();
                     try {
-                        Log.i(LOG_TAG, dataSnapshot.toString() + " removed");
+                        Log.i(LOG_TAG, dataSnapshot.getKey() + " removed");
                         contactsPresenter.onContactRemoved(contactKey);
                     } catch (Exception e) {
                         Log.e(LOG_TAG, "Error while reading chat " + contactKey);
@@ -107,7 +109,11 @@ public class ContactsInteractorImpl implements ContactsInteractor {
 
     @Override
     public void unsubscribeForContactsUpdates() {
+        Log.i(LOG_TAG, "unsubscribeForContactsUpdates called, but listener already exists");
+
         if (contactsChildEventListener != null) {
+            Log.i(LOG_TAG, "unsubscribeForContactsUpdates called");
+
             mFirebaseHelperInstance.getUsersReference().
                     removeEventListener(contactsChildEventListener);
         }

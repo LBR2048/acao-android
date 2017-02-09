@@ -36,9 +36,11 @@ public class UserChatsInteractorImpl implements UserChatsInteractor {
     @Override
     public void subscribeForUserChatsUpdates() {
 
-        Log.i(LOG_TAG, "Interactor " + LOG_TAG + " called");
+        Log.i(LOG_TAG, "subscribeForUserChatsUpdates called, but listener already exists");
 
         if (chatsChildEventListener == null) {
+            Log.i(LOG_TAG, "subscribeForUserChatsUpdates called");
+
             chatsChildEventListener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -126,7 +128,11 @@ public class UserChatsInteractorImpl implements UserChatsInteractor {
 
     @Override
     public void unsubscribeForUserChatsUpdates() {
+        Log.i(LOG_TAG, "unsubscribeForUserChatsUpdates called, but listener already exists");
+
         if (chatsChildEventListener != null) {
+            Log.i(LOG_TAG, "unsubscribeForUserChatsUpdates called");
+
             currentUserChatsReference.removeEventListener(chatsChildEventListener);
         }
     }
