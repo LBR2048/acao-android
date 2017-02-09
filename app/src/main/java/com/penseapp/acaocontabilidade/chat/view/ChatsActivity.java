@@ -87,7 +87,7 @@ public class ChatsActivity extends AppCompatActivity implements ChatsView {
     }
 
     private void setupRecyclerView() {
-        chatsAdapter = new ChatsAdapter(mChats);
+        chatsAdapter = new ChatsAdapter(mChats, getApplicationContext());
         mChatsRecyclerView.setAdapter(chatsAdapter);
         mChatsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }

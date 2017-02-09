@@ -123,7 +123,7 @@ public class ChatsFragment extends Fragment {
 
 
     private void setupRecyclerView() {
-        chatsAdapter = new ChatsAdapter(mChats);
+        chatsAdapter = new ChatsAdapter(mChats, getContext());
         chatsAdapter.subscribeForChatsUpdates();
         mChatsRecyclerView.setAdapter(chatsAdapter);
         mChatsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

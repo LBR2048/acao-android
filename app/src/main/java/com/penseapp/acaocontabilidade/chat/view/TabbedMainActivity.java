@@ -1,6 +1,8 @@
 package com.penseapp.acaocontabilidade.chat.view;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -21,7 +23,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.penseapp.acaocontabilidade.R;
 import com.penseapp.acaocontabilidade.chat.presenter.ChatsPresenter;
 import com.penseapp.acaocontabilidade.chat.presenter.ChatsPresenterImpl;
+import com.penseapp.acaocontabilidade.chat.presenter.UsersPresenter;
+import com.penseapp.acaocontabilidade.chat.presenter.UsersPresenterImpl;
 import com.penseapp.acaocontabilidade.domain.FirebaseHelper;
+import com.penseapp.acaocontabilidade.login.model.User;
 import com.penseapp.acaocontabilidade.login.view.activities.LoginActivity;
 import com.penseapp.acaocontabilidade.news.view.NewsFragment;
 import com.penseapp.acaocontabilidade.news.view.NewsItemActivity;
@@ -31,6 +36,7 @@ import static com.penseapp.acaocontabilidade.chat.view.ChatsActivity.SELECTED_CH
 
 public class TabbedMainActivity extends AppCompatActivity implements
         ContactsView,
+        UsersView,
         ContactsFragment.OnContactsFragmentInteractionListener,
         ChatsFragment.OnChatsFragmentInteractionListener,
         NewsFragment.OnNewsFragmentInteractionListener {
@@ -52,6 +58,7 @@ public class TabbedMainActivity extends AppCompatActivity implements
      */
     private ViewPager mViewPager;
     private ChatsPresenter chatsPresenter;
+    private UsersPresenter usersPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +89,10 @@ public class TabbedMainActivity extends AppCompatActivity implements
 
         // Connect to Presenters
         chatsPresenter = new ChatsPresenterImpl(this);
+        usersPresenter = new UsersPresenterImpl(this);
 
+        // Get current user details
+        usersPresenter.getCurrentUserDetails();
     }
 
     @Override
@@ -199,6 +209,16 @@ public class TabbedMainActivity extends AppCompatActivity implements
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(ACAO_FACEBOOK_URL));
         startActivity(intent);
+    }
+
+    @Override
+    public void onReceiveCurrentUserDetails(User user) {
+        SharedPreferences settings = getApplicationContext().getSharedPreferences("Settings", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString("userName", user.getName());
+        editor.putString("userEmail", user.getEmail());
+        editor.putString("userType", user.getType());
+        editor.apply();
     }
 
     @Override

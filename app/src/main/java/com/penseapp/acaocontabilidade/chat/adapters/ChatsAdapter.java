@@ -1,5 +1,7 @@
 package com.penseapp.acaocontabilidade.chat.adapters;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,10 +32,12 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder>
     private static OnItemClickListener onItemClickListener;
 
     private final List<Chat> mChats;
+    private final Context mContext;
     private final UserChatsPresenter userChatsPresenter;
 
-    public ChatsAdapter(List<Chat> chats) {
+    public ChatsAdapter(List<Chat> chats, Context context) {
         mChats = chats;
+        mContext = context;
         userChatsPresenter = new UserChatsPresenterImpl(this);
     }
 
@@ -95,7 +99,17 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder>
         final Chat selectedChat = mChats.get(position);
 
         // Set item views based on your views and data model
-        holder.name.setText(selectedChat.getName());
+        String recipientName = selectedChat.getSecondUserName();
+        String senderName = selectedChat.getFirstUserName();
+
+        SharedPreferences mSettings = mContext.getSharedPreferences("Settings", Context.MODE_PRIVATE);
+        String currentUserName = mSettings.getString("userName", "");
+        if (senderName.equals(currentUserName)) {
+            holder.name.setText(recipientName);
+        } else {
+            holder.name.setText(senderName);
+        }
+
         holder.unreadMessageCount.setText(Integer.toString(selectedChat.getUnreadMessageCount()));
     }
 
