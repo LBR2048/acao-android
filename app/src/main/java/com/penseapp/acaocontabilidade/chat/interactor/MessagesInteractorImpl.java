@@ -8,6 +8,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
+import com.penseapp.acaocontabilidade.chat.model.Chat;
 import com.penseapp.acaocontabilidade.chat.model.Message;
 import com.penseapp.acaocontabilidade.chat.presenter.MessagesPresenter;
 import com.penseapp.acaocontabilidade.domain.FirebaseHelper;
@@ -29,12 +30,14 @@ public class MessagesInteractorImpl implements MessagesInteractor {
     private DatabaseReference currentChatMessagesReference;
     private DatabaseReference currentChatUserChatsReference;
     private ChildEventListener messagesChildEventListener;
+    private String chatId;
 
     public MessagesInteractorImpl(MessagesPresenter messagesPresenter, String chatId) {
         this.messagesPresenter = messagesPresenter;
         currentChatReference = mFirebaseHelperInstance.getCurrentChatReference(chatId);
         currentChatMessagesReference = mFirebaseHelperInstance.getCurrentChatMessagesReference(chatId);
         currentChatUserChatsReference = mFirebaseHelperInstance.getCurrentUserChatsReference().child(chatId);
+        this.chatId = chatId;
     }
 
     @Override
@@ -92,7 +95,7 @@ public class MessagesInteractorImpl implements MessagesInteractor {
     }
 
     @Override
-    public void sendMessage(String messageText, String senderId, String senderName) {
+    public void sendMessage(String messageText, final String senderId, String senderName) {
         // Create empty messageText and get its key so we can further reference it
         String newMessageKey = currentChatMessagesReference.push().getKey();
 
@@ -125,9 +128,30 @@ public class MessagesInteractorImpl implements MessagesInteractor {
             }
         });
 
-
-
-        // Update timestamp at user-chats/$userId/$chatId:timestamp
+        // Update timestamp at user-chats/$currentUserId/$chatId:timestamp
         currentChatUserChatsReference.setValue(ServerValue.TIMESTAMP);
+
+        currentChatReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String recipientId;
+                Chat chat = dataSnapshot.getValue(Chat.class);
+                String firstUserId = chat.getFirstUserId();
+                String secondUserId = chat.getSecondUserId();
+                if (senderId.equals(firstUserId)) {
+                    recipientId = secondUserId;
+                } else {
+                    recipientId = firstUserId;
+                }
+                // Update timestamp at user-chats/$contactId/$chatId:timestamp
+                // TODO preciso do recipientID
+                mFirebaseHelperInstance.getUserChatsReference().child(recipientId).child(chatId).setValue(ServerValue.TIMESTAMP);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }

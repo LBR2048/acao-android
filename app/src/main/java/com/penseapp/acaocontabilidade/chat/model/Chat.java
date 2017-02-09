@@ -3,6 +3,10 @@ package com.penseapp.acaocontabilidade.chat.model;
 public class Chat {
     private String key;
     private String name = "name";
+    private String firstUserId;
+    private String firstUserName;
+    private String secondUserId;
+    private String secondUserName;
     private int unreadMessageCount = 0;
     private long latestMessageTimestamp = 0;
 
@@ -28,6 +32,38 @@ public class Chat {
 
     public void setName(String name){
         this.name = name;
+    }
+
+    public String getFirstUserId() {
+        return firstUserId;
+    }
+
+    public String getFirstUserName() {
+        return firstUserName;
+    }
+
+    public void setFirstUserName(String firstUserName) {
+        this.firstUserName = firstUserName;
+    }
+
+    public void setFirstUserId(String firstUserId) {
+        this.firstUserId = firstUserId;
+    }
+
+    public String getSecondUserId() {
+        return secondUserId;
+    }
+
+    public void setSecondUserId(String secondUserId) {
+        this.secondUserId = secondUserId;
+    }
+
+    public String getSecondUserName() {
+        return secondUserName;
+    }
+
+    public void setSecondUserName(String secondUserName) {
+        this.secondUserName = secondUserName;
     }
 
     public int getUnreadMessageCount() {

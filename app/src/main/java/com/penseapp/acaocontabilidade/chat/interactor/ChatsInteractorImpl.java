@@ -36,16 +36,32 @@ public class ChatsInteractorImpl implements ChatsInteractor {
     }
 
     @Override
-    public void createChat(String recipientName, String recipientId) {
+    public void createChat(final String recipientName, String recipientId) {
         // Create empty chat and get its key so we can further reference it
         newChatKey = chatsReference.push().getKey();
 
         // Create new chat with key received from Firebase
-        Chat newChat = new Chat();
-        newChat.setName("Chat com " + recipientName);
+        final Chat newChat = new Chat();
+        newChat.setFirstUserId(mFirebaseHelperInstance.getAuthUserId());
+        newChat.setSecondUserId(recipientId);
+        newChat.setSecondUserName(recipientName);
 
-        // Add newly created chat to Firebase chats/$chatId
-        chatsReference.child(newChatKey).setValue(newChat);
+        mFirebaseHelperInstance.getUsersReference().child(mFirebaseHelperInstance.getAuthUserId()).child("name").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String senderName = dataSnapshot.getValue(String.class);
+                newChat.setName("Chat entre " + senderName + " e " + recipientName);
+                newChat.setFirstUserName(senderName);
+
+                // Add newly created chat to Firebase chats/$chatId
+                chatsReference.child(newChatKey).setValue(newChat);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         // Add reference to newly created chat to user-chats/$currentUserId/$chatId
         userChatsReference.child(currentUserId).child(newChatKey).setValue(ServerValue.TIMESTAMP);
