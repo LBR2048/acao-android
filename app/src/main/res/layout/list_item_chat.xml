@@ -18,12 +18,22 @@
     <TextView
         android:id="@+id/list_item_chat_name_textview"
         style="@style/TextAppearance.AppCompat.Medium"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
         android:padding="8dp"
         android:text="Contato" />
 
+    <TextView
+        android:id="@+id/list_item_chat_unread_messages_textview"
+        style="@style/TextAppearance.AppCompat.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:padding="8dp"
+        android:text="0" />
 
 </LinearLayout>
