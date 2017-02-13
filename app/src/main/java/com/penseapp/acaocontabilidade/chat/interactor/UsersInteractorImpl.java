@@ -26,6 +26,7 @@ public class UsersInteractorImpl implements UsersInteractor {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User currentUser = dataSnapshot.getValue(User.class);
+                currentUser.setKey(dataSnapshot.getKey());
                 usersPresenter.onReceiveCurrentUserDetails(currentUser);
             }
 

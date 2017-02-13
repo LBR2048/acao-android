@@ -19,13 +19,8 @@ public class ChatsPresenterImpl implements ChatsPresenter {
     }
 
     @Override
-    public void createChat(String chatName, String contactId) {
-        chatsInteractor.createChat(chatName, contactId);
-    }
-
-    @Override
-    public void createChatIfNeeded(String recipientName, String recipientId) {
-        chatsInteractor.createChatIfNeeded(recipientName, recipientId);
+    public void createChatIfNeeded(String senderId, String senderName, String recipientId, String recipientName) {
+        chatsInteractor.createChatIfNeeded(senderId, senderName, recipientId, recipientName);
     }
 
     @Override

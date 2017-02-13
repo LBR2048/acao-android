@@ -90,7 +90,7 @@ public class ContactsActivity extends AppCompatActivity implements ContactsView{
             public void onItemClick(View itemView, int position) {
                 User selectedContact = mContacts.get(position);
                 Log.i(LOG_TAG, selectedContact.getName() + " clicked");
-                chatsPresenter.createChatIfNeeded(selectedContact.getName(), selectedContact.getKey());
+//                chatsPresenter.createChatIfNeeded(, , selectedContact.getKey(), selectedContact.getName());
             }
         });
     }

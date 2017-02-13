@@ -142,7 +142,7 @@ public class ChatsActivity extends AppCompatActivity implements ChatsView {
                 String contactId = data.getExtras().getString(ContactsActivity.SELECTED_CONTACT_KEY);
 
                 // Create new chat only if there isn't already a chat between currentUserId and contactId
-                chatsPresenter.createChatIfNeeded(chatName, contactId);
+//                chatsPresenter.createChatIfNeeded(, , contactId, chatName);
 //                userChatsPresenter.createChat(chatName, contactId);
             }
         }

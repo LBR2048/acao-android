@@ -8,7 +8,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
-import com.penseapp.acaocontabilidade.chat.model.Chat;
 import com.penseapp.acaocontabilidade.chat.model.Message;
 import com.penseapp.acaocontabilidade.chat.presenter.MessagesPresenter;
 import com.penseapp.acaocontabilidade.domain.FirebaseHelper;
@@ -23,21 +22,19 @@ public class MessagesInteractorImpl implements MessagesInteractor {
     private final static String LOG_TAG = ContactsInteractorImpl.class.getSimpleName();
 
     private final MessagesPresenter messagesPresenter;
+    private final DatabaseReference chatMessagesReference;
 
     // Firebase
     private FirebaseHelper mFirebaseHelperInstance = FirebaseHelper.getInstance();
-    private DatabaseReference currentChatReference;
-    private DatabaseReference currentChatMessagesReference;
-    private DatabaseReference currentChatUserChatsReference;
     private ChildEventListener messagesChildEventListener;
-    private String chatId;
+    private DatabaseReference userChatPropertiesReference;
+    private String currentChatId;
 
-    public MessagesInteractorImpl(MessagesPresenter messagesPresenter, String chatId) {
+    public MessagesInteractorImpl(MessagesPresenter messagesPresenter, String currentChatId) {
         this.messagesPresenter = messagesPresenter;
-        currentChatReference = mFirebaseHelperInstance.getCurrentChatReference(chatId);
-        currentChatMessagesReference = mFirebaseHelperInstance.getCurrentChatMessagesReference(chatId);
-        currentChatUserChatsReference = mFirebaseHelperInstance.getCurrentUserChatsReference().child(chatId);
-        this.chatId = chatId;
+        chatMessagesReference = mFirebaseHelperInstance.getChatMessagesReference();
+        userChatPropertiesReference = mFirebaseHelperInstance.getUserChatPropertiesReference();
+        this.currentChatId = currentChatId;
     }
 
     @Override
@@ -82,44 +79,45 @@ public class MessagesInteractorImpl implements MessagesInteractor {
                 }
             };
 
-            // TODO colocar dentro do FirebaseHelper
-            currentChatMessagesReference.addChildEventListener(messagesChildEventListener);
+            chatMessagesReference.child(currentChatId).addChildEventListener(messagesChildEventListener);
         }
     }
 
     @Override
     public void unsubscribeForMessagesUpdates() {
         if (messagesChildEventListener != null) {
-            currentChatMessagesReference.removeEventListener(messagesChildEventListener);
+            chatMessagesReference.child(currentChatId).removeEventListener(messagesChildEventListener);
         }
     }
 
     @Override
     public void sendMessage(String messageText, final String senderId, String senderName) {
-        // Create empty messageText and get its key so we can further reference it
-        String newMessageKey = currentChatMessagesReference.push().getKey();
+        // Create empty message at chats/$currentChatId/messages and get its key so we can further reference it
+        String newMessageKey = chatMessagesReference.child(currentChatId).push().getKey();
 
-        // Create new messageText with key received from Firebase
+        // Create new message with key received from Firebase
         Message newMessage = new Message();
         newMessage.setText(messageText);
         newMessage.setSenderId(senderId);
         newMessage.setSenderName(senderName);
         newMessage.setTimestamp(System.currentTimeMillis());
 
-        // Add newly created message to Firebase chats/$chatId/$messageId
-        currentChatMessagesReference.child(newMessageKey).setValue(newMessage);
+        // Save new messages in one node only
+        // Add newly created message to Firebase chats/$currentChatId/messages/$messageId
+        chatMessagesReference.child(currentChatId).child(newMessageKey).setValue(newMessage);
 
-        // Update current chat's latestMessageTimestamp and unreadMessageCount
-        currentChatReference.child("latestMessageTimestamp").setValue(ServerValue.TIMESTAMP);
-        currentChatReference.child("unreadMessageCount").addListenerForSingleValueEvent(new ValueEventListener() {
+        // Save new messages in two nodes, one for each user
+        // Add newly created message to Firebase user-chats-messages/$senderId/$currentChatId/$messageId
+        // Add newly created message to Firebase user-chats-messages/$recipientId/$currentChatId/$messageId
+
+        String currentUserId = mFirebaseHelperInstance.getAuthUserId();
+        updateLatestMessageTimestamp(currentUserId);
+        mFirebaseHelperInstance.getUserChatPropertiesReference().child(currentUserId).child(currentChatId).child("contactId").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                try {
-                    long timestamp = dataSnapshot.getValue(long.class);
-                    currentChatReference.child("unreadMessageCount").setValue(timestamp + 1);
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, "Could not read unreadMessageCount");
-                }
+                String contactId = dataSnapshot.getValue(String.class);
+                updateLatestMessageTimestamp(contactId);
+                incrementUnreadMessageCount(contactId);
             }
 
             @Override
@@ -127,25 +125,23 @@ public class MessagesInteractorImpl implements MessagesInteractor {
 
             }
         });
+    }
 
-        // Update timestamp at user-chats/$currentUserId/$chatId:timestamp
-        currentChatUserChatsReference.setValue(ServerValue.TIMESTAMP);
+    private void updateLatestMessageTimestamp(String userId) {
+        userChatPropertiesReference.child(userId).child(currentChatId).child("latestMessageTimestamp").setValue(ServerValue.TIMESTAMP);
+    }
 
-        currentChatReference.addListenerForSingleValueEvent(new ValueEventListener() {
+    private void incrementUnreadMessageCount(final String userId) {
+        final DatabaseReference unreadMessageCountPath = userChatPropertiesReference.child(userId).child(currentChatId).child("unreadMessageCount");
+        unreadMessageCountPath.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String recipientId;
-                Chat chat = dataSnapshot.getValue(Chat.class);
-                String firstUserId = chat.getFirstUserId();
-                String secondUserId = chat.getSecondUserId();
-                if (senderId.equals(firstUserId)) {
-                    recipientId = secondUserId;
-                } else {
-                    recipientId = firstUserId;
+                try {
+                    long timestamp = dataSnapshot.getValue(long.class);
+                    unreadMessageCountPath.setValue(timestamp + 1);
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "Could not read unreadMessageCount");
                 }
-                // Update timestamp at user-chats/$contactId/$chatId:timestamp
-                // TODO preciso do recipientID
-                mFirebaseHelperInstance.getUserChatsReference().child(recipientId).child(chatId).setValue(ServerValue.TIMESTAMP);
             }
 
             @Override
