@@ -21,8 +21,8 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.penseapp.acaocontabilidade.R;
-import com.penseapp.acaocontabilidade.chat.presenter.ChatsPresenter;
-import com.penseapp.acaocontabilidade.chat.presenter.ChatsPresenterImpl;
+import com.penseapp.acaocontabilidade.chat.presenter.ChatsWriterPresenter;
+import com.penseapp.acaocontabilidade.chat.presenter.ChatsWriterPresenterImpl;
 import com.penseapp.acaocontabilidade.chat.presenter.UsersPresenter;
 import com.penseapp.acaocontabilidade.chat.presenter.UsersPresenterImpl;
 import com.penseapp.acaocontabilidade.domain.FirebaseHelper;
@@ -57,7 +57,7 @@ public class TabbedMainActivity extends AppCompatActivity implements
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-    private ChatsPresenter chatsPresenter;
+    private ChatsWriterPresenter chatsWriterPresenter;
     private UsersPresenter usersPresenter;
 
     @Override
@@ -88,7 +88,7 @@ public class TabbedMainActivity extends AppCompatActivity implements
         super.onStart();
 
         // Connect to Presenters
-        chatsPresenter = new ChatsPresenterImpl(this);
+        chatsWriterPresenter = new ChatsWriterPresenterImpl(this);
         usersPresenter = new UsersPresenterImpl(this);
 
         // Get current user details
@@ -227,7 +227,7 @@ public class TabbedMainActivity extends AppCompatActivity implements
         SharedPreferences settings = getApplicationContext().getSharedPreferences("Settings", Context.MODE_PRIVATE);
         String senderId = settings.getString("userId", "");
         String senderName = settings.getString("userName", "");
-        chatsPresenter.createChatIfNeeded(senderId, senderName, contactId, contactName);
+        chatsWriterPresenter.createChatIfNeeded(senderId, senderName, contactId, contactName);
     }
 
     @Override

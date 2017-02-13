@@ -7,18 +7,18 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.penseapp.acaocontabilidade.chat.model.Chat;
-import com.penseapp.acaocontabilidade.chat.presenter.UserChatsPresenter;
+import com.penseapp.acaocontabilidade.chat.presenter.ChatsReaderPresenter;
 import com.penseapp.acaocontabilidade.domain.FirebaseHelper;
 
 /**
  * Created by unity on 21/11/16.
  */
 
-public class UserChatsInteractorImpl implements UserChatsInteractor {
+public class ChatsReaderInteractorImpl implements ChatsReaderInteractor {
 
-    private final static String LOG_TAG = UserChatsInteractorImpl.class.getSimpleName();
+    private final static String LOG_TAG = ChatsReaderInteractorImpl.class.getSimpleName();
 
-    private final UserChatsPresenter userChatsPresenter;
+    private final ChatsReaderPresenter chatsReaderPresenter;
 
     // Firebase
     private FirebaseHelper mFirebaseHelperInstance = FirebaseHelper.getInstance();
@@ -27,8 +27,8 @@ public class UserChatsInteractorImpl implements UserChatsInteractor {
 
     private ChildEventListener chatsChildEventListener;
 
-    public UserChatsInteractorImpl(UserChatsPresenter userChatsPresenter) {
-        this.userChatsPresenter = userChatsPresenter;
+    public ChatsReaderInteractorImpl(ChatsReaderPresenter chatsReaderPresenter) {
+        this.chatsReaderPresenter = chatsReaderPresenter;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class UserChatsInteractorImpl implements UserChatsInteractor {
                         Chat chat = dataSnapshot.getValue(Chat.class);
                         chat.setKey(dataSnapshot.getKey());
                         Log.i(LOG_TAG, "Chat " + chat.getName() + " added");
-                        userChatsPresenter.onChatAdded(chat);
+                        chatsReaderPresenter.onChatAdded(chat);
                     } catch (Exception e) {
                         Log.e(LOG_TAG, "Error while reading chat " + chatKey);
                     }
@@ -60,7 +60,7 @@ public class UserChatsInteractorImpl implements UserChatsInteractor {
                         Chat chat = dataSnapshot.getValue(Chat.class);
                         Log.i(LOG_TAG, "Chat " + chat.getName() + " changed");
                         chat.setKey(dataSnapshot.getKey());
-                        userChatsPresenter.onChatChanged(chat);
+                        chatsReaderPresenter.onChatChanged(chat);
                     } catch (Exception e) {
                         Log.e(LOG_TAG, "Error while reading chat " + chatKey);
                     }
@@ -72,7 +72,7 @@ public class UserChatsInteractorImpl implements UserChatsInteractor {
                     try {
                         String chatId = dataSnapshot.getKey();
                         Log.i(LOG_TAG, "Chat " + chatId + " removed");
-                        userChatsPresenter.onChatRemoved(chatId);
+                        chatsReaderPresenter.onChatRemoved(chatId);
                     } catch (Exception e) {
                         Log.e(LOG_TAG, "Error while reading chat " + chatKey);
                     }

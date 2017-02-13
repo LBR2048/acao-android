@@ -16,8 +16,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.penseapp.acaocontabilidade.R;
 import com.penseapp.acaocontabilidade.chat.adapters.ChatsAdapter;
 import com.penseapp.acaocontabilidade.chat.model.Chat;
-import com.penseapp.acaocontabilidade.chat.presenter.ChatsPresenter;
-import com.penseapp.acaocontabilidade.chat.presenter.UserChatsPresenter;
+import com.penseapp.acaocontabilidade.chat.presenter.ChatsWriterPresenter;
+import com.penseapp.acaocontabilidade.chat.presenter.ChatsReaderPresenter;
 import com.penseapp.acaocontabilidade.domain.FirebaseHelper;
 import com.penseapp.acaocontabilidade.login.view.activities.LoginActivity;
 
@@ -29,8 +29,8 @@ public class ChatsActivity extends AppCompatActivity implements ChatsView {
     public static final String SELECTED_CHAT_KEY = "selected_chat_key";
     public static final String SELECTED_CHAT_NAME = "selected_chat_name";
 
-    private UserChatsPresenter userChatsPresenter;
-    private ChatsPresenter chatsPresenter;
+    private ChatsReaderPresenter chatsReaderPresenter;
+    private ChatsWriterPresenter chatsWriterPresenter;
 
 
     public static ArrayList<Chat> mChats = new ArrayList<>();
@@ -126,7 +126,7 @@ public class ChatsActivity extends AppCompatActivity implements ChatsView {
 
     @Override
     protected void onStop() {
-        userChatsPresenter.unsubscribeForChatListUpdates();
+        chatsReaderPresenter.unsubscribeForChatListUpdates();
         super.onStop();
     }
 

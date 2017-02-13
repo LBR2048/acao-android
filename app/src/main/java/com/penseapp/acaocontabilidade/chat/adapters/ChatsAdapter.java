@@ -10,8 +10,8 @@ import android.widget.TextView;
 
 import com.penseapp.acaocontabilidade.R;
 import com.penseapp.acaocontabilidade.chat.model.Chat;
-import com.penseapp.acaocontabilidade.chat.presenter.UserChatsPresenter;
-import com.penseapp.acaocontabilidade.chat.presenter.UserChatsPresenterImpl;
+import com.penseapp.acaocontabilidade.chat.presenter.ChatsReaderPresenter;
+import com.penseapp.acaocontabilidade.chat.presenter.ChatsReaderPresenterImpl;
 
 import java.util.List;
 
@@ -32,12 +32,12 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder>
 
     private final List<Chat> mChats;
     private final Context mContext;
-    private final UserChatsPresenter userChatsPresenter;
+    private final ChatsReaderPresenter chatsReaderPresenter;
 
     public ChatsAdapter(List<Chat> chats, Context context) {
         mChats = chats;
         mContext = context;
-        userChatsPresenter = new UserChatsPresenterImpl(this);
+        chatsReaderPresenter = new ChatsReaderPresenterImpl(this);
     }
 
 
@@ -125,12 +125,12 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder>
 
     @Override
     public void subscribeForChatsUpdates() {
-        userChatsPresenter.subscribeForChatListUpdates();
+        chatsReaderPresenter.subscribeForChatListUpdates();
     }
 
     @Override
     public void unsubscribeForChatListUpdates() {
-        userChatsPresenter.unsubscribeForChatListUpdates();
+        chatsReaderPresenter.unsubscribeForChatListUpdates();
     }
 
     @Override

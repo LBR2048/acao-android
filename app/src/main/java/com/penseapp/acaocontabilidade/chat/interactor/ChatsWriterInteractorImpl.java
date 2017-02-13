@@ -5,18 +5,18 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.penseapp.acaocontabilidade.chat.model.Chat;
-import com.penseapp.acaocontabilidade.chat.presenter.ChatsPresenter;
+import com.penseapp.acaocontabilidade.chat.presenter.ChatsWriterPresenter;
 import com.penseapp.acaocontabilidade.domain.FirebaseHelper;
 
 /**
  * Created by Cleusa on 27/11/2016.
  */
 
-public class ChatsInteractorImpl implements ChatsInteractor {
+public class ChatsWriterInteractorImpl implements ChatsWriterInteractor {
 
-    private final static String LOG_TAG = ChatsInteractorImpl.class.getSimpleName();
+    private final static String LOG_TAG = ChatsWriterInteractorImpl.class.getSimpleName();
 
-    private final ChatsPresenter chatsPresenter;
+    private final ChatsWriterPresenter chatsWriterPresenter;
 
     // Firebase
     private FirebaseHelper mFirebaseHelperInstance = FirebaseHelper.getInstance();
@@ -26,8 +26,8 @@ public class ChatsInteractorImpl implements ChatsInteractor {
     private ValueEventListener userChatsChildEventListener;
     private String newChatKey;
 
-    public ChatsInteractorImpl(ChatsPresenter chatsPresenter) {
-        this.chatsPresenter = chatsPresenter;
+    public ChatsWriterInteractorImpl(ChatsWriterPresenter chatsWriterPresenter) {
+        this.chatsWriterPresenter = chatsWriterPresenter;
     }
 
     private void createChat(String senderId, String senderName, String recipientId, String recipientName) {
@@ -81,9 +81,9 @@ public class ChatsInteractorImpl implements ChatsInteractor {
                     Object dataSnapshotValue = dataSnapshot.getValue();
                     if (dataSnapshotValue == null) {
                         createChat(senderId, senderName, recipientId, recipientName);
-                        chatsPresenter.onChatCreated(newChatKey, recipientName);
+                        chatsWriterPresenter.onChatCreated(newChatKey, recipientName);
                     } else {
-                        chatsPresenter.onChatCreated(dataSnapshotValue.toString(), recipientName);
+                        chatsWriterPresenter.onChatCreated(dataSnapshotValue.toString(), recipientName);
                     }
                 }
 

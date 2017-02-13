@@ -11,8 +11,8 @@ import android.view.View;
 
 import com.penseapp.acaocontabilidade.R;
 import com.penseapp.acaocontabilidade.chat.adapters.ContactsAdapter;
-import com.penseapp.acaocontabilidade.chat.presenter.ChatsPresenter;
-import com.penseapp.acaocontabilidade.chat.presenter.ChatsPresenterImpl;
+import com.penseapp.acaocontabilidade.chat.presenter.ChatsWriterPresenter;
+import com.penseapp.acaocontabilidade.chat.presenter.ChatsWriterPresenterImpl;
 import com.penseapp.acaocontabilidade.chat.presenter.ContactsPresenter;
 import com.penseapp.acaocontabilidade.chat.presenter.ContactsPresenterImpl;
 import com.penseapp.acaocontabilidade.login.model.User;
@@ -29,7 +29,7 @@ public class ContactsActivity extends AppCompatActivity implements ContactsView{
     public static final String SELECTED_CONTACT_NAME = "selected_contact";
     public static final String SELECTED_CONTACT_KEY = "selected_contact_key";
     private ContactsPresenter contactsPresenter;
-    private ChatsPresenter chatsPresenter;
+    private ChatsWriterPresenter chatsWriterPresenter;
 
     public static ArrayList<User> mContacts = new ArrayList<>();
     private ContactsAdapter contactsAdapter;
@@ -55,7 +55,7 @@ public class ContactsActivity extends AppCompatActivity implements ContactsView{
 
         // Connect to Presenters
         contactsPresenter = new ContactsPresenterImpl(this);
-        chatsPresenter = new ChatsPresenterImpl(this);
+        chatsWriterPresenter = new ChatsWriterPresenterImpl(this);
 
         clearRecyclerView();
         contactsPresenter.subscribeForContactsUpdates();

@@ -1,26 +1,26 @@
 package com.penseapp.acaocontabilidade.chat.presenter;
 
-import com.penseapp.acaocontabilidade.chat.interactor.ChatsInteractor;
-import com.penseapp.acaocontabilidade.chat.interactor.ChatsInteractorImpl;
+import com.penseapp.acaocontabilidade.chat.interactor.ChatsWriterInteractor;
+import com.penseapp.acaocontabilidade.chat.interactor.ChatsWriterInteractorImpl;
 import com.penseapp.acaocontabilidade.chat.view.ContactsView;
 
 /**
  * Created by unity on 21/11/16.
  */
 
-public class ChatsPresenterImpl implements ChatsPresenter {
+public class ChatsWriterPresenterImpl implements ChatsWriterPresenter {
 
     private final ContactsView contactsView;
-    private final ChatsInteractor chatsInteractor;
+    private final ChatsWriterInteractor chatsWriterInteractor;
 
-    public ChatsPresenterImpl(ContactsView contactsView) {
+    public ChatsWriterPresenterImpl(ContactsView contactsView) {
         this.contactsView = contactsView;
-        this.chatsInteractor = new ChatsInteractorImpl(this);
+        this.chatsWriterInteractor = new ChatsWriterInteractorImpl(this);
     }
 
     @Override
     public void createChatIfNeeded(String senderId, String senderName, String recipientId, String recipientName) {
-        chatsInteractor.createChatIfNeeded(senderId, senderName, recipientId, recipientName);
+        chatsWriterInteractor.createChatIfNeeded(senderId, senderName, recipientId, recipientName);
     }
 
     @Override

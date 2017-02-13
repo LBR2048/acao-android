@@ -5,6 +5,7 @@ import android.util.Log;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.penseapp.acaocontabilidade.chat.presenter.ContactsPresenter;
 import com.penseapp.acaocontabilidade.domain.FirebaseHelper;
@@ -23,6 +24,8 @@ public class ContactsInteractorImpl implements ContactsInteractor {
     // Firebase
     private FirebaseHelper mFirebaseHelperInstance = FirebaseHelper.getInstance();
     private ChildEventListener contactsChildEventListener;
+    private DatabaseReference usersReference = mFirebaseHelperInstance.getUsersReference();
+
 
     public ContactsInteractorImpl(ContactsPresenter contactsPresenter) {
         this.contactsPresenter = contactsPresenter;
@@ -84,17 +87,18 @@ public class ContactsInteractorImpl implements ContactsInteractor {
                 }
             };
             // TODO funciona, mas parece lento e a atividade tem que ser reiniciada para que a lista de contatos seja atualizada
-            mFirebaseHelperInstance.getUsersReference().child(mFirebaseHelperInstance.getAuthUserId()).child("type").addListenerForSingleValueEvent(new ValueEventListener() {
+            String currentUserId = mFirebaseHelperInstance.getAuthUserId();
+            usersReference.child(currentUserId).child("type").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     String userType = dataSnapshot.getValue().toString();
                     if (userType.equals("customer")) {
                         // Show Ação list if you are a customer
-                        mFirebaseHelperInstance.getUsersReference().orderByChild("type").equalTo("acao").
+                        usersReference.orderByChild("type").equalTo("acao").
                                 addChildEventListener(contactsChildEventListener);
                     } else if (userType.equals("acao")) {
                         // Show customers list if you are an Ação employee
-                        mFirebaseHelperInstance.getUsersReference().orderByChild("type").equalTo("customer").
+                        usersReference.orderByChild("type").equalTo("customer").
                                 addChildEventListener(contactsChildEventListener);
                     }
                 }

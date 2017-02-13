@@ -1,32 +1,32 @@
 package com.penseapp.acaocontabilidade.chat.presenter;
 
 import com.penseapp.acaocontabilidade.chat.adapters.ChatsAdapterView;
-import com.penseapp.acaocontabilidade.chat.interactor.UserChatsInteractor;
-import com.penseapp.acaocontabilidade.chat.interactor.UserChatsInteractorImpl;
+import com.penseapp.acaocontabilidade.chat.interactor.ChatsReaderInteractor;
+import com.penseapp.acaocontabilidade.chat.interactor.ChatsReaderInteractorImpl;
 import com.penseapp.acaocontabilidade.chat.model.Chat;
 
 /**
  * Created by unity on 10/12/16.
  */
 
-public class UserChatsPresenterImpl implements UserChatsPresenter {
+public class ChatsReaderPresenterImpl implements ChatsReaderPresenter {
 
     private final ChatsAdapterView chatsView;
-    private final UserChatsInteractor userChatsInteractor;
+    private final ChatsReaderInteractor chatsReaderInteractor;
 
-    public UserChatsPresenterImpl(ChatsAdapterView chatsAdapterView) {
+    public ChatsReaderPresenterImpl(ChatsAdapterView chatsAdapterView) {
         this.chatsView = chatsAdapterView;
-        this.userChatsInteractor = new UserChatsInteractorImpl(this);
+        this.chatsReaderInteractor = new ChatsReaderInteractorImpl(this);
     }
 
     @Override
     public void subscribeForChatListUpdates() {
-        userChatsInteractor.subscribeForUserChatsUpdates();
+        chatsReaderInteractor.subscribeForUserChatsUpdates();
     }
 
     @Override
     public void unsubscribeForChatListUpdates() {
-        userChatsInteractor.unsubscribeForUserChatsUpdates();
+        chatsReaderInteractor.unsubscribeForUserChatsUpdates();
     }
 
     @Override
