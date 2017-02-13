@@ -98,7 +98,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder>
         final Chat selectedChat = mChats.get(position);
 
         // Set item views based on your views and data model
-        String recipientName = selectedChat.getContactName();
+        String recipientName = selectedChat.getName();
 //        String senderName = selectedChat.getFirstUserName();
 
 //        SharedPreferences mSettings = mContext.getSharedPreferences("Settings", Context.MODE_PRIVATE);

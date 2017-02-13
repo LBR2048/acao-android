@@ -37,12 +37,11 @@ public class ChatsInteractorImpl implements ChatsInteractor {
         newChatKey = userChatPropertiesReference.child(senderId).push().getKey();
         Chat newChat = new Chat();
         newChat.setContactId(recipientId);
-        newChat.setContactName(recipientName);
-        newChat.setName("Chat entre " + senderName + " e " + recipientName);
+        newChat.setName(recipientName);
         userChatPropertiesReference.child(senderId).child(newChatKey).setValue(newChat);
 
         newChat.setContactId(senderId);
-        newChat.setContactName(senderName);
+        newChat.setName(senderName);
         userChatPropertiesReference.child(recipientId).child(newChatKey).setValue(newChat);
 
         // Add reference to newly created chat to user-chatContacts-chat/$currentUserId/$contactId:$newChatId

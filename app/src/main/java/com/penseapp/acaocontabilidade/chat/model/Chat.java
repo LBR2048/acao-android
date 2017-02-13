@@ -4,7 +4,6 @@ public class Chat {
     private String key;
     private String name = "";
     private String contactId;
-    private String contactName;
     private int unreadMessageCount = 0;
     private long latestMessageTimestamp = 0;
 
@@ -38,14 +37,6 @@ public class Chat {
 
     public void setContactId(String contactId) {
         this.contactId = contactId;
-    }
-
-    public String getContactName() {
-        return contactName;
-    }
-
-    public void setContactName(String contactName) {
-        this.contactName = contactName;
     }
 
     public int getUnreadMessageCount() {
