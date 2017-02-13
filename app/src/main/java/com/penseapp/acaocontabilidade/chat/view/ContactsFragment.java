@@ -83,7 +83,7 @@ public class ContactsFragment extends Fragment {//implements ContactsView {
     // TODO: Rename method, update argument and hook method into UI event
     public void onContactClicked(String name, String key) {
         if (mListener != null) {
-            mListener.onContactSelected(name, key) ;
+            mListener.onContactSelected(key, name) ;
         }
     }
 
@@ -118,7 +118,7 @@ public class ContactsFragment extends Fragment {//implements ContactsView {
      */
     public interface OnContactsFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onContactSelected(String name, String key) ;
+        void onContactSelected(String key, String name) ;
     }
 
     private void setupRecyclerView() {

@@ -121,7 +121,7 @@ public class NewsFragment extends Fragment implements NewsView {
     // TODO: Rename method, update argument and hook method into UI event
     public void onNewsClicked(String name, String key) {
         if (mListener != null) {
-            mListener.onNewsSelected(name, key) ;
+            mListener.onNewsSelected(key, name) ;
         }
     }
 
@@ -156,7 +156,7 @@ public class NewsFragment extends Fragment implements NewsView {
      */
     public interface OnNewsFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onNewsSelected(String title, String key) ;
+        void onNewsSelected(String key, String title) ;
     }
 
     private void setupRecyclerView() {

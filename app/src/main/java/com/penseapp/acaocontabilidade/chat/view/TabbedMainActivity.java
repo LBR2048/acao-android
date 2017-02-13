@@ -116,7 +116,7 @@ public class TabbedMainActivity extends AppCompatActivity implements
         }
         if (id == R.id.action_logout) {
             logout();
-            showLoginActivity();
+            navigateToLoginActivity();
         }
 
         return super.onOptionsItemSelected(item);
@@ -223,38 +223,39 @@ public class TabbedMainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onContactSelected(String name, String key)  {
+    public void onContactSelected(String contactId, String contactName)  {
         SharedPreferences settings = getApplicationContext().getSharedPreferences("Settings", Context.MODE_PRIVATE);
         String senderId = settings.getString("userId", "");
         String senderName = settings.getString("userName", "");
-        chatsPresenter.createChatIfNeeded(senderId, senderName, key, name);
+        chatsPresenter.createChatIfNeeded(senderId, senderName, contactId, contactName);
     }
 
     @Override
-    // TODO inverter essa função com onChatCreated. Assim está confuso
-    public void onChatSelected(String name, String key) {
-        onChatCreated(key, name);
+    public void onChatSelected(String chatId, String chatName) {
+        navigateToMessagesActivity(chatId, chatName);
     }
 
     @Override
-    public void onNewsSelected(String title, String key) {
+    public void onNewsSelected(String newsId, String newsTitle) {
         Intent intent = new Intent(this, NewsItemActivity.class);
-        intent.putExtra(NewsItemActivity.SELECTED_NEWS_TITLE, title);
-        intent.putExtra(NewsItemActivity.SELECTED_NEWS_KEY, key);
+        intent.putExtra(NewsItemActivity.SELECTED_NEWS_TITLE, newsTitle);
+        intent.putExtra(NewsItemActivity.SELECTED_NEWS_KEY, newsId);
         startActivity(intent);
     }
 
     @Override
-    // TODO talvez mudar o nome para onChatSelected ou onContactSelected
-    // TODO será que intents e navegação devem fazer parte do Presenter?
     public void onChatCreated(String chatId, String chatName) {
+        navigateToMessagesActivity(chatId, chatName);
+    }
+
+    private void navigateToMessagesActivity(String chatId, String chatName) {
         Intent intent = new Intent(TabbedMainActivity.this, MessagesActivity.class);
         intent.putExtra(SELECTED_CHAT_KEY, chatId);
         intent.putExtra(SELECTED_CHAT_NAME, chatName);
         startActivity(intent);
     }
 
-    private void showLoginActivity() {
+    private void navigateToLoginActivity() {
         Intent intent = new Intent(TabbedMainActivity.this, LoginActivity.class);
         startActivity(intent);
     }

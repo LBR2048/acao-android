@@ -83,7 +83,7 @@ public class ChatsFragment extends Fragment {
     // TODO: Rename method, update argument and hook method into UI event
     public void onChatClicked(String name, String key) {
         if (mListener != null) {
-            mListener.onChatSelected(name, key);
+            mListener.onChatSelected(key, name);
         }
     }
 
@@ -118,7 +118,7 @@ public class ChatsFragment extends Fragment {
      */
     public interface OnChatsFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onChatSelected(String name, String key);
+        void onChatSelected(String key, String name);
     }
 
 
