@@ -137,8 +137,8 @@ public class MessagesInteractorImpl implements MessagesInteractor {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 try {
-                    long timestamp = dataSnapshot.getValue(long.class);
-                    unreadMessageCountPath.setValue(timestamp + 1);
+                    long unreadMessageCount = dataSnapshot.getValue(long.class);
+                    unreadMessageCountPath.setValue(unreadMessageCount + 1);
                 } catch (Exception e) {
                     Log.e(LOG_TAG, "Could not read unreadMessageCount");
                 }
