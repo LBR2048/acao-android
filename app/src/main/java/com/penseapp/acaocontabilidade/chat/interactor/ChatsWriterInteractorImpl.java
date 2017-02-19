@@ -34,7 +34,10 @@ public class ChatsWriterInteractorImpl implements ChatsWriterInteractor {
 
         DatabaseReference userChatPropertiesReference = mFirebaseHelperInstance.getUserChatPropertiesReference();
 
+        // Create empty chat and get its key so we can further reference it
         newChatKey = userChatPropertiesReference.child(senderId).push().getKey();
+
+        // Create new chat with key received from Firebase
         Chat newChat = new Chat();
         newChat.setContactId(recipientId);
         newChat.setName(recipientName);
