@@ -8,7 +8,7 @@ public class Message {
 
     private String text = "text";
     private String senderId = "senderId";
-    private String senderName = "senderName";
+    private String senderEmail = "senderEmail";
     private String key;
     private long timestamp = 0L;
 
@@ -28,12 +28,12 @@ public class Message {
         this.senderId = senderId;
     }
 
-    public String getSenderName() {
-        return senderName;
+    public String getSenderEmail() {
+        return senderEmail;
     }
 
-    public void setSenderName(String senderName) {
-        this.senderName = senderName;
+    public void setSenderEmail(String senderEmail) {
+        this.senderEmail = senderEmail;
     }
 
     public String getKey() {

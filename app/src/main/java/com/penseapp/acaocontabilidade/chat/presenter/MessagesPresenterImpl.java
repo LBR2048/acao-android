@@ -35,7 +35,7 @@ public class MessagesPresenterImpl implements MessagesPresenter {
     }
 
     @Override
-    public void sendMessage(String messageText, String senderId, String senderName) {
-        messagesInteractor.sendMessage(messageText, senderId, senderName);
+    public void sendMessage(String messageText, String senderId, String senderEmail) {
+        messagesInteractor.sendMessage(messageText, senderId, senderEmail);
     }
 }

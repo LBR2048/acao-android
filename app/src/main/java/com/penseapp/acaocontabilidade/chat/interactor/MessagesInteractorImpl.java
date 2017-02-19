@@ -91,7 +91,7 @@ public class MessagesInteractorImpl implements MessagesInteractor {
     }
 
     @Override
-    public void sendMessage(String messageText, final String senderId, String senderName) {
+    public void sendMessage(String messageText, final String senderId, String senderEmail) {
         // Create empty message at chats/$currentChatId/messages and get its key so we can further reference it
         String newMessageKey = chatMessagesReference.child(currentChatId).push().getKey();
 
@@ -99,7 +99,7 @@ public class MessagesInteractorImpl implements MessagesInteractor {
         Message newMessage = new Message();
         newMessage.setText(messageText);
         newMessage.setSenderId(senderId);
-        newMessage.setSenderName(senderName);
+        newMessage.setSenderEmail(senderEmail);
         newMessage.setTimestamp(System.currentTimeMillis());
 
         // Save new messages in one node only

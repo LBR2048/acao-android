@@ -10,5 +10,5 @@ public interface MessagesPresenter {
     void subscribeForMessagesUpdates();
     void unsubscribeForMessagesUpdates();
     void onMessageAdded(Message message);
-    void sendMessage(String messageText, String senderId, String senderName);
+    void sendMessage(String messageText, String senderId, String senderEmail);
 }

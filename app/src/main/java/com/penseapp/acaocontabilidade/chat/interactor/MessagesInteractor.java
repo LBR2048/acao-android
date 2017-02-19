@@ -7,5 +7,5 @@ package com.penseapp.acaocontabilidade.chat.interactor;
 public interface MessagesInteractor {
     void subscribeForMessagesUpdates();
     void unsubscribeForMessagesUpdates();
-    void sendMessage(String messageText, String senderId, String senderName);
+    void sendMessage(String messageText, String senderId, String senderEmail);
 }
