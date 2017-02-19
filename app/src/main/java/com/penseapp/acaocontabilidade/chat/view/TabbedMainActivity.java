@@ -219,6 +219,7 @@ public class TabbedMainActivity extends AppCompatActivity implements
         editor.putString("userName", user.getName());
         editor.putString("userEmail", user.getEmail());
         editor.putString("userType", user.getType());
+        editor.putString("userCompany", user.getCompany());
         editor.apply();
     }
 

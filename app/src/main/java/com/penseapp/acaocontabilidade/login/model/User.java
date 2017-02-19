@@ -7,6 +7,7 @@ public class User {
     private String name = "name";
     private String email = "email@email.com";
     private String key;
+    private String company = "company";
     private String type = "type";
 
     public User(){ }
@@ -38,6 +39,14 @@ public class User {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
     }
 
     public String getType() {
