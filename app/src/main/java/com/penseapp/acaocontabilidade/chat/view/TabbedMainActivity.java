@@ -30,6 +30,7 @@ import com.penseapp.acaocontabilidade.login.model.User;
 import com.penseapp.acaocontabilidade.login.view.activities.LoginActivity;
 import com.penseapp.acaocontabilidade.news.view.NewsFragment;
 import com.penseapp.acaocontabilidade.news.view.NewsItemActivity;
+import com.penseapp.acaocontabilidade.web.WebFragment;
 
 import static com.penseapp.acaocontabilidade.chat.view.ChatsActivity.SELECTED_CHAT_KEY;
 import static com.penseapp.acaocontabilidade.chat.view.ChatsActivity.SELECTED_CHAT_NAME;
@@ -41,7 +42,9 @@ public class TabbedMainActivity extends AppCompatActivity implements
         ChatsFragment.OnChatsFragmentInteractionListener,
         NewsFragment.OnNewsFragmentInteractionListener {
 
-    private static final String ACAO_FACEBOOK_URL = "https://www.facebook.com/acaocontabilidade/";
+    public static final int NUMBER_TABS = 4;
+    private static final String SITE_ACAO_FACEBOOK = "https://www.facebook.com/acaocontabilidade/";
+    public static final String SITE_ACAO = "http://acaocontabilidade.com";
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -178,6 +181,8 @@ public class TabbedMainActivity extends AppCompatActivity implements
                     return ChatsFragment.newInstance();
                 case 2:
                     return NewsFragment.newInstance();
+                case 3:
+                    return WebFragment.newInstance(SITE_ACAO);
                 default:
                     // Return a PlaceholderFragment (defined as a static inner class below).
                     return PlaceholderFragment.newInstance(position + 1);
@@ -186,7 +191,7 @@ public class TabbedMainActivity extends AppCompatActivity implements
 
         @Override
         public int getCount() {
-            return 3;
+            return NUMBER_TABS;
         }
 
         @Override
@@ -198,6 +203,8 @@ public class TabbedMainActivity extends AppCompatActivity implements
                     return "Chats";
                 case 2:
                     return "Notícias";
+                case 3:
+                    return "Site";
 //                case 2:
 //                    return "Lembretes";
             }
@@ -207,7 +214,7 @@ public class TabbedMainActivity extends AppCompatActivity implements
     }
     public void goToAcaoFacebookWebsite() {
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse(ACAO_FACEBOOK_URL));
+        intent.setData(Uri.parse(SITE_ACAO_FACEBOOK));
         startActivity(intent);
     }
 
