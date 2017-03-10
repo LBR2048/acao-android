@@ -30,7 +30,7 @@ public class ChatsWriterInteractorImpl implements ChatsWriterInteractor {
         this.chatsWriterPresenter = chatsWriterPresenter;
     }
 
-    private void createChat(String senderId, String senderName, String recipientId, String recipientName) {
+    private void createChat(String senderId, String senderName, String senderCompany, String recipientId, String recipientName, String recipientCompany) {
 
         DatabaseReference userChatPropertiesReference = mFirebaseHelperInstance.getUserChatPropertiesReference();
 
@@ -40,10 +40,12 @@ public class ChatsWriterInteractorImpl implements ChatsWriterInteractor {
         // Create new chat with key received from Firebase
         Chat newChat = new Chat();
         newChat.setContactId(recipientId);
+        newChat.setContactCompany(recipientCompany);
         newChat.setName(recipientName);
         userChatPropertiesReference.child(senderId).child(newChatKey).setValue(newChat);
 
         newChat.setContactId(senderId);
+        newChat.setContactCompany(senderCompany);
         newChat.setName(senderName);
         userChatPropertiesReference.child(recipientId).child(newChatKey).setValue(newChat);
 
@@ -76,14 +78,14 @@ public class ChatsWriterInteractorImpl implements ChatsWriterInteractor {
     }
 
     @Override
-    public void createChatIfNeeded(final String senderId, final String senderName, final String recipientId, final String recipientName) {
+    public void createChatIfNeeded(final String senderId, final String senderName, final String senderCompany, final String recipientId, final String recipientName, final String recipientCompany) {
         if (userChatsChildEventListener == null) {
             userChatsChildEventListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Object dataSnapshotValue = dataSnapshot.getValue();
                     if (dataSnapshotValue == null) {
-                        createChat(senderId, senderName, recipientId, recipientName);
+                        createChat(senderId, senderName, senderCompany, recipientId, recipientName, recipientCompany);
                         chatsWriterPresenter.onChatCreated(newChatKey, recipientName);
                     } else {
                         chatsWriterPresenter.onChatCreated(dataSnapshotValue.toString(), recipientName);

@@ -75,15 +75,15 @@ public class ContactsFragment extends Fragment {//implements ContactsView {
             public void onItemClick(View itemView, int position) {
                 User selectedContact = mContacts.get(position);
                 Log.i(LOG_TAG, selectedContact.getName() + " clicked");
-                onContactClicked(selectedContact.getName(), selectedContact.getKey());
+                onContactClicked(selectedContact.getKey(), selectedContact.getName(), selectedContact.getCompany());
             }
         });
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onContactClicked(String name, String key) {
+    public void onContactClicked(String key, String name, String company) {
         if (mListener != null) {
-            mListener.onContactSelected(key, name) ;
+            mListener.onContactSelected(key, name, company) ;
         }
     }
 
@@ -118,7 +118,7 @@ public class ContactsFragment extends Fragment {//implements ContactsView {
      */
     public interface OnContactsFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onContactSelected(String key, String name) ;
+        void onContactSelected(String key, String name, String company) ;
     }
 
     private void setupRecyclerView() {

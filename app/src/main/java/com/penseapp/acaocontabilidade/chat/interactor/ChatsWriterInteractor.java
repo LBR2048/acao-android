@@ -5,5 +5,5 @@ package com.penseapp.acaocontabilidade.chat.interactor;
  */
 
 public interface ChatsWriterInteractor {
-    void createChatIfNeeded(String senderId, String senderName, String recipientId, String recipientName);
+    void createChatIfNeeded(String senderId, String senderName, String senderCompany, String recipientId, String recipientName, String recipientCompany);
 }

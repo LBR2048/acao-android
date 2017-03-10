@@ -231,11 +231,12 @@ public class TabbedMainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onContactSelected(String contactId, String contactName)  {
+    public void onContactSelected(String contactId, String contactName, String company)  {
         SharedPreferences settings = getApplicationContext().getSharedPreferences("Settings", Context.MODE_PRIVATE);
         String senderId = settings.getString("userId", "");
         String senderName = settings.getString("userName", "");
-        chatsWriterPresenter.createChatIfNeeded(senderId, senderName, contactId, contactName);
+        String senderCompany = settings.getString("userCompany", "");
+        chatsWriterPresenter.createChatIfNeeded(senderId, senderName, senderCompany, contactId, contactName, company);
     }
 
     @Override
