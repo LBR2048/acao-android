@@ -6,7 +6,6 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.penseapp.acaocontabilidade.chat.model.Message;
 import com.penseapp.acaocontabilidade.chat.presenter.MessagesPresenter;
@@ -128,7 +127,7 @@ public class MessagesInteractorImpl implements MessagesInteractor {
     }
 
     private void updateLatestMessageTimestamp(String userId) {
-        userChatPropertiesReference.child(userId).child(currentChatId).child("latestMessageTimestamp").setValue(ServerValue.TIMESTAMP);
+        userChatPropertiesReference.child(userId).child(currentChatId).child("latestMessageTimestamp").setValue(- System.currentTimeMillis());
     }
 
     private void incrementUnreadMessageCount(final String userId) {
