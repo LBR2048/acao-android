@@ -68,7 +68,7 @@ public class NewsFragment extends Fragment implements NewsView {
 //        super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_news, menu);
         receiveNotificationsItem = menu.findItem(R.id.action_subscribe_news);
-        isSubscribedToNewsNotifications();
+//        isSubscribedToNewsNotifications();
     }
 
     @Override

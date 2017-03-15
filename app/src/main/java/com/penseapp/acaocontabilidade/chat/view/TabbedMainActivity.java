@@ -112,6 +112,10 @@ public class TabbedMainActivity extends AppCompatActivity implements
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
+        if (id == R.id.action_acao_web) {
+            goToAcaoWebsite();
+            return true;
+        }
         if (id == R.id.action_acao_facebook) {
             goToAcaoFacebookWebsite();
             return true;
@@ -202,6 +206,12 @@ public class TabbedMainActivity extends AppCompatActivity implements
             return null;
         }
 
+    }
+
+    public void goToAcaoWebsite() {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(SITE_ACAO));
+        startActivity(intent);
     }
 
     public void goToAcaoFacebookWebsite() {
