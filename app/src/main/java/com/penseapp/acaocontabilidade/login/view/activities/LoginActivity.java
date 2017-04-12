@@ -84,8 +84,8 @@ public class LoginActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onSignUpFragmentSignUpClicked(String name, String email, String type, String password) {
-        presenter.signUp(name, email, type, password);
+    public void onSignUpFragmentSignUpClicked(String name, String company, String email, String type, String password) {
+        presenter.signUp(name, company, email, type, password);
     }
 
     @Override

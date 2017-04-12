@@ -24,8 +24,8 @@ public class LoginPresenterImpl implements LoginPresenter {
     // Sign Up
 
     @Override
-    public void signUp(String name, String email, String type, String password) {
-        interactor.signUp(name, email, type, password);
+    public void signUp(String name, String company, String email, String type, String password) {
+        interactor.signUp(name, company, email, type, password);
     }
 
     @Override

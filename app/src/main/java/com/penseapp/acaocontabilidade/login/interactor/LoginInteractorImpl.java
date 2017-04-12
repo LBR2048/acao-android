@@ -32,16 +32,17 @@ public class LoginInteractorImpl implements LoginInteractor {
     }
 
     @Override
-    public void signUp(final String name, String email, final String type, String password){
+    public void signUp(final String name, final String company, String email, final String type, String password){
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
                     public void onSuccess(AuthResult authResult) {
                         String email = authResult.getUser().getEmail();
                         String userId = authResult.getUser().getUid();
+                        // TODO create constants for Strings or use object to write to Firebase
                         FirebaseHelper.getInstance().getUsersReference().child(userId).child("name").setValue(name);
+                        FirebaseHelper.getInstance().getUsersReference().child(userId).child("company").setValue(company);
                         FirebaseHelper.getInstance().getUsersReference().child(userId).child("email").setValue(email);
-                        FirebaseHelper.getInstance().getUsersReference().child(userId).child("key").setValue(userId);
                         FirebaseHelper.getInstance().getUsersReference().child(userId).child("type").setValue(type);
 
                         presenter.onSignUpSuccess(email, userId);

@@ -37,10 +37,12 @@ public class SignUpFragment extends Fragment {
     private ProgressBar mProgressBar;
     private EditText mNameEditText;
     private EditText mEmailEditText;
+    private EditText mCompanyEditText;
     private EditText mPasswordEditText;
     private EditText mPasswordRepeatEditText;
     private Button mSignUpButton;
     private TextInputLayout mNameWrapper;
+    private TextInputLayout mCompanyWrapper;
     private TextInputLayout mEmailWrapper;
     private TextInputLayout mPasswordWrapper;
     private Spinner mSpinner;
@@ -113,6 +115,18 @@ public class SignUpFragment extends Fragment {
             }
         });
 
+        // Clear error when company focus is true and validate name when focus is lost
+        mCompanyEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    mCompanyWrapper.setErrorEnabled(false);
+                } else {
+                    validateCompany();
+                }
+            }
+        });
+
         // Clear error when email focus is true and validate email when focus is lost
         mEmailEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -174,11 +188,13 @@ public class SignUpFragment extends Fragment {
     private void createUI(View view) {
         mProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
         mNameWrapper = (TextInputLayout) view.findViewById(R.id.signup_nameWrapper);
+        mCompanyWrapper = (TextInputLayout) view.findViewById(R.id.signup_companyWrapper);
         mEmailWrapper = (TextInputLayout) view.findViewById(R.id.signup_usernameWrapper);
         mPasswordWrapper = (TextInputLayout) view.findViewById(R.id.signup_passwordWrapper);
         mPasswordRepeatWrapper = (TextInputLayout) view.findViewById(R.id.signup_password2Wrapper);
         mNameEditText = (EditText) view.findViewById(R.id.signup_name_edit_text);
         mEmailEditText = (EditText) view.findViewById(R.id.signup_email_edit_text);
+        mCompanyEditText = (EditText) view.findViewById(R.id.signup_company_edit_text);
         mSpinner = (Spinner)view.findViewById(R.id.user_type_spinner);
         mPasswordEditText = (EditText) view.findViewById(R.id.signup_password_edit_text);
         mPasswordRepeatEditText = (EditText) view.findViewById(R.id.signup_password2_edit_text);
@@ -186,8 +202,9 @@ public class SignUpFragment extends Fragment {
 
         // Setup user type spinner
         List<String> spinnerArray =  new ArrayList<>();
-        spinnerArray.add("acao");
+        // TODO add constants (maybe in strings.xml)
         spinnerArray.add("customer");
+        spinnerArray.add("acao");
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 getActivity(), android.R.layout.simple_spinner_item, spinnerArray);
         mSpinner.setAdapter(adapter);
@@ -197,24 +214,27 @@ public class SignUpFragment extends Fragment {
             public void onClick(View view) {
                 onSignUpClicked(
                         mNameEditText.getText().toString(),
+                        mCompanyEditText.getText().toString(),
                         mEmailEditText.getText().toString(),
                         mSpinner.getSelectedItem().toString(),
-                        mPasswordEditText.getText().toString(), mPasswordRepeatEditText.getText().toString());
+                        mPasswordEditText.getText().toString()
+                );
             }
         });
     }
 
-    public void onSignUpClicked(String name, String email, String type, String password, String password2) {
+    public void onSignUpClicked(String name, String company, String email, String type, String password) {
 
         mNameWrapper.setErrorEnabled(false);
+        mCompanyWrapper.setErrorEnabled(false);
         mEmailWrapper.setErrorEnabled(false);
         mPasswordWrapper.setErrorEnabled(false);
         mPasswordRepeatWrapper.setErrorEnabled(false);
 
         // TODO too many nested ifs?
-        if (validateName() && validateEmail() && validatePassword() && checkPasswordsMatch()) {
+        if (validateName() && validateCompany() && validateEmail() && validatePassword() && checkPasswordsMatch()) {
             if (mListener != null) {
-                mListener.onSignUpFragmentSignUpClicked(name, email, type, password);
+                mListener.onSignUpFragmentSignUpClicked(name, company, email, type, password);
             }
         }
     }
@@ -240,7 +260,7 @@ public class SignUpFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        void onSignUpFragmentSignUpClicked(String name, String email, String type, String password);
+        void onSignUpFragmentSignUpClicked(String name, String company, String email, String type, String password);
     }
 
     /**
@@ -250,7 +270,21 @@ public class SignUpFragment extends Fragment {
     private boolean validateName() {
         String name = mNameEditText.getText().toString();
         if (name.trim().isEmpty()) {
-            mNameWrapper.setError("Nome não pode ser vazio");
+            mNameWrapper.setError("Nome em branco");
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * Validate company and return error message if needed
+     * @return email validity
+     */
+    private boolean validateCompany() {
+        String company = mCompanyEditText.getText().toString();
+        if (company.trim().isEmpty()) {
+            mCompanyWrapper.setError("Nome da empresa em branco");
             return false;
         } else {
             return true;
