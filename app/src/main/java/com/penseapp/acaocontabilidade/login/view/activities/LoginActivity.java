@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.penseapp.acaocontabilidade.R;
 import com.penseapp.acaocontabilidade.chat.view.TabbedMainActivity;
 import com.penseapp.acaocontabilidade.domain.FirebaseHelper;
@@ -149,6 +150,9 @@ public class LoginActivity extends AppCompatActivity implements
     @Override
     public void onLoginSuccess() {
         Toast.makeText(getApplicationContext(), "Logado como " + FirebaseHelper.getInstance().getAuthUserEmail(), Toast.LENGTH_SHORT).show();
+        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        FirebaseHelper.getInstance().sendFcmTokenToServer(refreshedToken);
+        Log.d(LOG_TAG, "Token: " + refreshedToken);
         showMainActivity();
     }
 

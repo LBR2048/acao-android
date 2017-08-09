@@ -10,6 +10,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".login.view.activities.LoginActivity"
             android:windowSoftInputMode="adjustResize">
@@ -19,18 +20,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".chat.view.ChatsActivity" />
+
         <activity android:name=".chat.view.ContactsActivity" />
+
         <activity android:name=".chat.view.MessagesActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.penseapp.acaocontabilidade.chat.view.TabbedMainActivity" />
         </activity>
+
         <activity
             android:name=".chat.view.TabbedMainActivity"
             android:label="@string/title_activity_tabbed_main"
             android:launchMode="singleTop"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme"/>
+
         <activity
             android:name=".news.view.NewsItemActivity"
             android:parentActivityName=".chat.view.TabbedMainActivity"
@@ -40,25 +46,31 @@
                 android:value="com.penseapp.acaocontabilidade.chat.view.TabbedMainActivity" />
         </activity>
 
-        <!-- [START firebase_service] -->
-        <service android:name=".domain.MyFirebaseMessagingService">
+        <!-- [START FirebaseMessagingService] -->
+        <!-- A service that extends FirebaseMessagingService.
+        This is required if you want to do any message handling beyond receiving notifications on apps in the background.
+        To receive notifications in foregrounded apps, to receive data payload, to send upstream messages, and so on, you must extend this service -->
+        <service android:name=".domain.MyFirebaseMessagingService"
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <!-- [END firebase_service] -->
+        <!-- [END FirebaseMessagingService] -->
 
-
-        <!-- [START firebase_iid_service] -->
+        <!-- [START FirebaseInstanceIdService] -->
+        <!-- A service that extends FirebaseInstanceIdService to handle the creation, rotation, and updating of registration tokens.
+        This is required for sending to specific devices or for creating device groups. -->
         <service android:name=".domain.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-        <!-- [END firebase_iid_service] -->
+        <!-- [END FirebaseInstanceIdService] -->
 
-
-        <!-- Within the application component, metadata elements to set a default icon and color for notifications. Android uses these values whenever incoming messages do not explicitly set icon and icon color. -->
+        <!-- Within the application component, metadata elements to set a default icon and color for notifications.
+        Android uses these values whenever incoming messages do not explicitly set icon and icon color. -->
         <!--
              Set custom default icon. This is used when no icon is set for incoming notification messages.
              See README(https://goo.gl/l4GJaQ) for more.
