@@ -29,6 +29,7 @@ public class MessagesInteractorImpl implements MessagesInteractor {
     private ChildEventListener messagesChildEventListener;
     private DatabaseReference userChatPropertiesReference;
     private String currentChatId;
+    private String currentUserId = mFirebaseHelperInstance.getAuthUserId();
 
     public MessagesInteractorImpl(MessagesPresenter messagesPresenter, String currentChatId) {
         this.messagesPresenter = messagesPresenter;
@@ -88,6 +89,11 @@ public class MessagesInteractorImpl implements MessagesInteractor {
         if (messagesChildEventListener != null) {
             chatMessagesReference.child(currentChatId).removeEventListener(messagesChildEventListener);
         }
+    }
+
+    @Override
+    public void resetUnreadMessageCount(String chatId) {
+        userChatPropertiesReference.child(currentUserId).child(chatId).child("unreadMessageCount").setValue(0);
     }
 
     @Override

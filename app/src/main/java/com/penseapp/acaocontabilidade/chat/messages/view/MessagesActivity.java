@@ -55,6 +55,7 @@ public class MessagesActivity extends AppCompatActivity implements MessagesView 
         messagesPresenter = new MessagesPresenterImpl(this, mChatId);
 
         clearRecyclerView();
+        resetUnreadMessageCount();
         messagesPresenter.subscribeForMessagesUpdates();
     }
 
@@ -100,12 +101,18 @@ public class MessagesActivity extends AppCompatActivity implements MessagesView 
         messagesAdapter.notifyDataSetChanged(); // TODO not efficient
     }
 
+    public void resetUnreadMessageCount() {
+        messagesPresenter.resetUnreadMessageCount(mChatId);
+    }
+
     @Override
     public void onMessageAdded(Message message) {
         Log.i(LOG_TAG, "View onMessageAdded called");
         mMessages.add(message);
         messagesAdapter.notifyItemInserted(mMessages.size() - 1);
         mMessagesRecyclerView.smoothScrollToPosition(mMessages.size() - 1);
+
+        resetUnreadMessageCount();
     }
 
     public void onClickSendMessage(View view) {

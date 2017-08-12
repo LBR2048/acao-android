@@ -44,7 +44,6 @@ public class ChatsFragment extends Fragment {
      *
      * @return A new instance of fragment ChatsFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static ChatsFragment newInstance() {
         ChatsFragment fragment = new ChatsFragment();
         Bundle args = new Bundle();
@@ -79,7 +78,6 @@ public class ChatsFragment extends Fragment {
         });
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onChatClicked(String name, String key) {
         if (mListener != null) {
             mListener.onChatSelected(key, name);
@@ -116,10 +114,8 @@ public class ChatsFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnChatsFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onChatSelected(String key, String name);
     }
-
 
     private void setupRecyclerView() {
         chatsAdapter = new ChatsAdapter(mChats, getContext());

@@ -9,6 +9,7 @@ import com.penseapp.acaocontabilidade.chat.messages.model.Message;
 public interface MessagesPresenter {
     void subscribeForMessagesUpdates();
     void unsubscribeForMessagesUpdates();
+    void resetUnreadMessageCount(String chatId);
     void onMessageAdded(Message message);
     void sendMessage(String messageText, String senderId, String senderEmail);
 }

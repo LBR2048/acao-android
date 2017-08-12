@@ -44,7 +44,7 @@ public class TabbedMainActivity extends AppCompatActivity implements
         ChatsFragment.OnChatsFragmentInteractionListener,
         NewsFragment.OnNewsFragmentInteractionListener {
 
-    public static final int NUMBER_TABS = 2;
+    public static final int NUMBER_TABS = 3;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -181,8 +181,10 @@ public class TabbedMainActivity extends AppCompatActivity implements
             switch (position) {
                 case 0:
                     return ContactsFragment.newInstance();
-                case 1:
+                case 2:
                     return NewsFragment.newInstance();
+                case 1:
+                    return ChatsFragment.newInstance();
                 default:
                     // Return a PlaceholderFragment (defined as a static inner class below).
                     return PlaceholderFragment.newInstance(position + 1);
@@ -198,11 +200,11 @@ public class TabbedMainActivity extends AppCompatActivity implements
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "Conversas";
-                case 1:
+                    return "Conversas (Contacts)";
+                case 2:
                     return "Notícias";
-//                case 2:
-//                    return "Lembretes";
+                case 1:
+                    return "Chats";
             }
             return null;
         }

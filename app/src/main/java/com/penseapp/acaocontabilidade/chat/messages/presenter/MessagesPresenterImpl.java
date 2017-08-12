@@ -30,6 +30,11 @@ public class MessagesPresenterImpl implements MessagesPresenter {
     }
 
     @Override
+    public void resetUnreadMessageCount(String chatId) {
+        messagesInteractor.resetUnreadMessageCount(chatId);
+    }
+
+    @Override
     public void onMessageAdded(Message message) {
         messagesView.onMessageAdded(message);
     }
