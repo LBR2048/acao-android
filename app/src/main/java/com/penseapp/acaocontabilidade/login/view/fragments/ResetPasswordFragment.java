@@ -43,6 +43,7 @@ public class ResetPasswordFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
+    //region Constructors
     public ResetPasswordFragment() {
         // Required empty public constructor
     }
@@ -68,10 +69,9 @@ public class ResetPasswordFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+    //endregion
 
-
-    // Fragment lifecycle
-
+    //region Fragment lifecycle
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,9 +121,9 @@ public class ResetPasswordFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+    //endregion
 
-
-    // GUI creation and interaction
+    //region GUI creation and interaction
 
     private void createUI(View view) {
         mProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
@@ -149,7 +149,7 @@ public class ResetPasswordFragment extends Fragment {
             }
         }
     }
-
+    //endregion
 
     public void spinProgressBar() {
         mProgressBar.setVisibility(View.VISIBLE);
@@ -159,8 +159,7 @@ public class ResetPasswordFragment extends Fragment {
         mProgressBar.setVisibility(View.GONE);
     }
 
-
-    // Communication between fragment and parent activity
+    //region Communication between fragment and parent activity
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -174,8 +173,9 @@ public class ResetPasswordFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         void onResetPasswordFragmentResetClicked(String email);
     }
+    //endregion
 
-
+    //region Data validation
     /**
      * Validate email and return error message if needed
      * @return email validity
@@ -189,4 +189,5 @@ public class ResetPasswordFragment extends Fragment {
             return true;
         }
     }
+    //endregion
 }

@@ -45,6 +45,7 @@ public class LoginFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
+    //region Constructors
     public LoginFragment() {
         // Required empty public constructor
     }
@@ -70,10 +71,9 @@ public class LoginFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+    //endregion
 
-
-    // Fragment lifecycle
-
+    //region Fragment lifecycle
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,10 +135,9 @@ public class LoginFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+    //endregion
 
-
-    // GUI creation and interaction
-
+    //region GUI creation and interaction
     private void createUI(View view) {
         mProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
         mEmailWrapper = (TextInputLayout) view.findViewById(R.id.usernameWrapper);
@@ -190,6 +189,7 @@ public class LoginFragment extends Fragment {
             mListener.onLoginFragmentSignUpClicked();
         }
     }
+    //endregion
 
     public void spinProgressBar() {
         mProgressBar.setVisibility(View.VISIBLE);
@@ -199,8 +199,7 @@ public class LoginFragment extends Fragment {
         mProgressBar.setVisibility(View.GONE);
     }
 
-
-    // Communication between fragment and parent activity
+    //region Communication between fragment and parent activity
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -218,8 +217,9 @@ public class LoginFragment extends Fragment {
 
         void onLoginFragmentSignUpClicked();
     }
+    //endregion
 
-
+    //region Data validation
     /**
      * Validate email and return error message if needed
      * @return email validity
@@ -247,4 +247,5 @@ public class LoginFragment extends Fragment {
             return true;
         }
     }
+    //endregion
 }

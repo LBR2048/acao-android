@@ -1,0 +1,9 @@
+package com.penseapp.acaocontabilidade.chat.chats.interactor;
+
+/**
+ * Created by Cleusa on 27/11/2016.
+ */
+
+public interface ChatsWriterInteractor {
+    void createChatIfNeeded(String senderId, String senderName, String senderCompany, String recipientId, String recipientName, String recipientCompany);
+}

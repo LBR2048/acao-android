@@ -11,7 +11,7 @@ import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.penseapp.acaocontabilidade.chat.view.TabbedMainActivity;
+import com.penseapp.acaocontabilidade.TabbedMainActivity;
 
 /**
  * Created by unity on 19/01/17.

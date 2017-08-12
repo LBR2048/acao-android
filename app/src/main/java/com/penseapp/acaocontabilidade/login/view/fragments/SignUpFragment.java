@@ -54,6 +54,7 @@ public class SignUpFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
+    //region Constructors
     public SignUpFragment() {
         // Required empty public constructor
     }
@@ -79,9 +80,9 @@ public class SignUpFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+    //endregion
 
-
-    // Fragment lifecycle
+    //region Fragment lifecycle
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -181,9 +182,9 @@ public class SignUpFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+    //endregion
 
-
-    // GUI creation and interaction
+    //region GUI creation and interaction
 
     private void createUI(View view) {
         mProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
@@ -238,6 +239,7 @@ public class SignUpFragment extends Fragment {
             }
         }
     }
+    //endregion
 
     public void spinProgressBar() {
         mProgressBar.setVisibility(View.VISIBLE);
@@ -248,7 +250,7 @@ public class SignUpFragment extends Fragment {
     }
 
 
-    // Communication between fragment and parent activity
+    //region Communication between fragment and parent activity
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -262,7 +264,9 @@ public class SignUpFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         void onSignUpFragmentSignUpClicked(String name, String company, String email, String type, String password);
     }
+    //endregion
 
+    //region Data validation
     /**
      * Validate name and return error message if needed
      * @return email validity
@@ -348,4 +352,5 @@ public class SignUpFragment extends Fragment {
             return true;
         }
     }
+    //endregion
 }

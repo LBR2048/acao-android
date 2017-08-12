@@ -63,6 +63,10 @@ public class FirebaseHelper {
         return userId;
     }
 
+    public void logout() {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        auth.signOut();
+    }
 
     // Realtime database
 

@@ -21,29 +21,29 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".chat.view.ChatsActivity" />
+        <activity android:name=".chat.chats.view.ChatsActivity" />
 
-        <activity android:name=".chat.view.ContactsActivity" />
+        <activity android:name=".chat.contacts.view.ContactsActivity" />
 
-        <activity android:name=".chat.view.MessagesActivity">
+        <activity android:name=".chat.messages.view.MessagesActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.penseapp.acaocontabilidade.chat.view.TabbedMainActivity" />
+                android:value="com.penseapp.acaocontabilidade.TabbedMainActivity" />
         </activity>
 
         <activity
-            android:name=".chat.view.TabbedMainActivity"
+            android:name=".TabbedMainActivity"
             android:label="@string/title_activity_tabbed_main"
             android:launchMode="singleTop"
             android:theme="@style/AppTheme"/>
 
         <activity
             android:name=".news.view.NewsItemActivity"
-            android:parentActivityName=".chat.view.TabbedMainActivity"
+            android:parentActivityName=".TabbedMainActivity"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.penseapp.acaocontabilidade.chat.view.TabbedMainActivity" />
+                android:value="com.penseapp.acaocontabilidade.TabbedMainActivity" />
         </activity>
 
         <!-- [START FirebaseMessagingService] -->

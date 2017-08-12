@@ -16,7 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.penseapp.acaocontabilidade.R;
-import com.penseapp.acaocontabilidade.chat.view.ContactsActivity;
+import com.penseapp.acaocontabilidade.chat.contacts.view.ContactsActivity;
 import com.penseapp.acaocontabilidade.news.adapter.NewsAdapter;
 import com.penseapp.acaocontabilidade.news.model.News;
 import com.penseapp.acaocontabilidade.news.presenter.NewsNotificationsPresenter;
