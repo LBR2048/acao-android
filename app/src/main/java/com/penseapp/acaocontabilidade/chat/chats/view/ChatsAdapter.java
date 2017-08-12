@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.penseapp.acaocontabilidade.R;
@@ -58,6 +59,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder>
         // for any view that will be set as you render a row
         TextView name;
         TextView unreadMessageCount;
+        FrameLayout badge;
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
@@ -67,6 +69,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder>
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.list_item_chat_name_textview);
             unreadMessageCount = (TextView) itemView.findViewById(R.id.list_item_chat_unread_messages_textview);
+            badge = (FrameLayout) itemView.findViewById(R.id.list_item_chat_unread_messages_badge);
 
             // Setup the click onItemClickListener
             // itemView.setOnClickListener(this);
@@ -110,7 +113,13 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder>
 //        }
         holder.name.setText(recipientName);
 
-        holder.unreadMessageCount.setText(Integer.toString(selectedChat.getUnreadMessageCount()));
+        int unreadMessageCount = selectedChat.getUnreadMessageCount();
+        if (unreadMessageCount != 0) {
+            holder.unreadMessageCount.setText(Integer.toString(unreadMessageCount));
+            holder.badge.setVisibility(View.VISIBLE);
+        } else {
+            holder.badge.setVisibility(View.GONE);
+        }
     }
 
     // Returns the total count of items in the list

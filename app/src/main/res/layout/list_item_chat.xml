@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?selectableItemBackground"
@@ -13,27 +14,43 @@
         android:id="@+id/list_item_contact_icon"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/ic_default"/>
+        android:src="@drawable/ic_default" />
 
     <TextView
         android:id="@+id/list_item_chat_name_textview"
         style="@style/TextAppearance.AppCompat.Medium"
         android:layout_width="0dp"
-        android:layout_weight="1"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:layout_weight="1"
         android:gravity="center_vertical"
         android:padding="8dp"
         android:text="Contato" />
 
-    <TextView
-        android:id="@+id/list_item_chat_unread_messages_textview"
-        style="@style/TextAppearance.AppCompat.Medium"
+    <FrameLayout
+        android:id="@+id/list_item_chat_unread_messages_badge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:gravity="center_vertical"
-        android:padding="8dp"
-        android:text="0" />
+        android:layout_gravity="center"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:src="@drawable/badge" />
+
+        <TextView
+            android:id="@+id/list_item_chat_unread_messages_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            tools:text="12" />
+
+    </FrameLayout>
 
 </LinearLayout>
