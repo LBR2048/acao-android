@@ -14,21 +14,34 @@
         android:id="@+id/list_item_chat_contact_icon"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        tools:src="@drawable/ic_default" />
+        android:layout_gravity="center"
+        tools:src="@drawable/ic_contabil" />
 
-    <TextView
-        android:id="@+id/list_item_chat_name_textview"
-        style="@style/TextAppearance.AppCompat.Medium"
+    <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
         android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:padding="8dp"
-        android:text="Contato" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/list_item_chat_contact_name_textview"
+            style="@style/TextAppearance.AppCompat.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Contato" />
+
+        <TextView
+            android:id="@+id/list_item_chat_contact_availability_textview"
+            style="@style/TextAppearance.AppCompat.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Disponível" />
+
+    </LinearLayout>
 
     <FrameLayout
-        android:id="@+id/list_item_chat_unread_messages_badge"
+        android:id="@+id/list_item_chat_contact_unread_messages_badge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -42,7 +55,7 @@
             android:src="@drawable/badge" />
 
         <TextView
-            android:id="@+id/list_item_chat_unread_messages_textview"
+            android:id="@+id/list_item_chat_contact_unread_messages_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

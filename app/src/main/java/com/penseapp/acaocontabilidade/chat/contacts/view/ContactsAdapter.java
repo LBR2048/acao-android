@@ -58,6 +58,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
         // for any view that will be set as you render a row
         TextView name;
         ImageView icon;
+        TextView availability;
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
@@ -65,8 +66,9 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
             // Stores the itemView in a public final member variable that can be used
             // to access the context from any ViewHolder instance.
             super(itemView);
-            name = (TextView) itemView.findViewById(R.id.list_item_contact_name_textview);
-            icon = (ImageView) itemView.findViewById(R.id.list_item_contact_icon);
+            icon = (ImageView) itemView.findViewById(R.id.list_item_chat_contact_icon);
+            name = (TextView) itemView.findViewById(R.id.list_item_chat_contact_name_textview);
+            availability = (TextView) itemView.findViewById(R.id.list_item_chat_contact_availability_textview);
 
             // Setup the click onItemClickListener
             // itemView.setOnClickListener(this);
@@ -85,7 +87,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // Inflate the custom layout
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_contact, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_chat_contact, parent, false);
 
         // Return a new holder instance
         return new ViewHolder(view);
@@ -119,6 +121,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
                 holder.icon.setImageResource(R.drawable.ic_default);
                 break;
         }
+
+        holder.availability.setText("Disponível");
     }
 
     // Returns the total count of items in the list
