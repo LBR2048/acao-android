@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.penseapp.acaocontabilidade.R;
@@ -57,6 +58,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder>
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
+        ImageView icon;
         TextView name;
         TextView unreadMessageCount;
         FrameLayout badge;
@@ -67,6 +69,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder>
             // Stores the itemView in a public final member variable that can be used
             // to access the context from any ViewHolder instance.
             super(itemView);
+            icon = (ImageView) itemView.findViewById(R.id.list_item_contact_icon);
             name = (TextView) itemView.findViewById(R.id.list_item_chat_name_textview);
             unreadMessageCount = (TextView) itemView.findViewById(R.id.list_item_chat_unread_messages_textview);
             badge = (FrameLayout) itemView.findViewById(R.id.list_item_chat_unread_messages_badge);
@@ -112,6 +115,24 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder>
 //            holder.name.setText(senderName);
 //        }
         holder.name.setText(recipientName);
+
+        switch (recipientName) {
+            case "Contábil":
+                holder.icon.setImageResource(R.drawable.ic_contabil);
+                break;
+            case "Fiscal":
+                holder.icon.setImageResource(R.drawable.ic_fiscal);
+                break;
+            case "Pessoal":
+                holder.icon.setImageResource(R.drawable.ic_pessoal);
+                break;
+            case "Societário":
+                holder.icon.setImageResource(R.drawable.ic_societario);
+                break;
+            default:
+                holder.icon.setImageResource(R.drawable.ic_default);
+                break;
+        }
 
         int unreadMessageCount = selectedChat.getUnreadMessageCount();
         if (unreadMessageCount != 0) {
