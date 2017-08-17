@@ -32,6 +32,15 @@
             android:layout_height="wrap_content"
             tools:text="Isto é uma mensagem" />
 
+        <TextView
+            android:id="@+id/list_item_chat_contact_time_textview"
+            style="@style/TextAppearance.AppCompat.Caption"
+            android:paddingTop="4dp"
+            android:layout_gravity="start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="11:50" />
+
     </LinearLayout>
 
     <FrameLayout
