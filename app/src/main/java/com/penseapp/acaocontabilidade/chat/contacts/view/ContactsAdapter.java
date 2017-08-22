@@ -5,12 +5,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.penseapp.acaocontabilidade.R;
 import com.penseapp.acaocontabilidade.chat.contacts.presenter.ContactsPresenter;
 import com.penseapp.acaocontabilidade.chat.contacts.presenter.ContactsPresenterImpl;
+import com.penseapp.acaocontabilidade.domain.FirebaseHelper;
 import com.penseapp.acaocontabilidade.login.model.User;
 
 import java.util.List;
@@ -28,6 +35,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
         implements ContactsAdapterView {//ItemTouchHelperAdapter {
 
     private static final String LOG_TAG = ContactsAdapter.class.getSimpleName();
+
+    private FirebaseHelper mFirebaseHelperInstance = FirebaseHelper.getInstance();
 
     // Define onItemClickListener member variable
     private static OnItemClickListener onItemClickListener;
@@ -56,8 +65,10 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
-        TextView name;
         ImageView icon;
+        TextView name;
+        TextView unreadMessageCount;
+        FrameLayout badge;
         TextView availability;
 
         // We also create a constructor that accepts the entire item row
@@ -69,6 +80,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
             icon = (ImageView) itemView.findViewById(R.id.list_item_chat_contact_icon);
             name = (TextView) itemView.findViewById(R.id.list_item_chat_contact_name_textview);
             availability = (TextView) itemView.findViewById(R.id.list_item_chat_contact_availability_textview);
+            unreadMessageCount = (TextView) itemView.findViewById(R.id.list_item_chat_contact_unread_messages_textview);
+            badge = (FrameLayout) itemView.findViewById(R.id.list_item_chat_contact_unread_messages_badge);
 
             // Setup the click onItemClickListener
             // itemView.setOnClickListener(this);
@@ -123,6 +136,15 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
         }
 
         holder.availability.setText("Disponível");
+
+//        int unreadMessageCount = selectedChat.getUnreadMessageCount();
+        int unreadMessageCount = 5;
+        if (unreadMessageCount != 0) {
+            holder.unreadMessageCount.setText(Integer.toString(unreadMessageCount));
+            holder.badge.setVisibility(View.VISIBLE);
+        } else {
+            holder.badge.setVisibility(View.GONE);
+        }
     }
 
     // Returns the total count of items in the list
@@ -150,7 +172,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
         Log.i(LOG_TAG, "View onContactAdded called");
         mContacts.add(contact);
         notifyItemInserted(mContacts.size() - 1);
-//        contactsAdapter.notifyItemInserted(mContacts.size() - 1);
+        setNotificationObserver(contact);
     }
 
     @Override
@@ -158,7 +180,6 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
         Log.i(LOG_TAG, "View onContactChanged called");
         int index = getIndexForKey(contact.getKey());
         mContacts.set(index, contact);
-//        contactsAdapter.notifyItemChanged(index);
         notifyItemChanged(index);
     }
 
@@ -169,7 +190,6 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
             int index = getIndexForKey(contactId);
             mChats.remove(index);
             notifyDataSetChanged();
-//            contactsAdapter.notifyItemRemoved(index);
             notifyItemRemoved(index);
         } catch(IllegalArgumentException e) {
             e.printStackTrace();
@@ -189,4 +209,63 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
         }
         throw new IllegalArgumentException("Key not found");
     }
+
+    public void setNotificationObservers() {
+        DatabaseReference notifRef = mFirebaseHelperInstance.getNotificationsReference();
+        for (User user : mContacts) {
+            DatabaseReference userNotifRef = notifRef.child(user.getKey());
+            userNotifRef.addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    dataSnapshot.getValue();
+                }
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+        }
+    }
+
+    public void setNotificationObserver(User user) {
+        DatabaseReference notifRef = mFirebaseHelperInstance.getNotificationsReference();
+            DatabaseReference userNotifRef = notifRef.child(user.getKey());
+            userNotifRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    dataSnapshot.getValue();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+    }
+//        for  user in users {
+//            let userNotifRef = notifRef.child(user.key)
+//            userNotifRef.removeAllObservers()
+//            userNotifRef.observe(.value, with: { (snapshot) in
+//                self.setCellNotification(forUser: user, snapshot)
+//            })
+//        }
+
+
 }

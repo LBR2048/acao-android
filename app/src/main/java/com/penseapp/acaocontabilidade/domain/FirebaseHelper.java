@@ -10,6 +10,7 @@ import com.google.firebase.database.FirebaseDatabase;
  */
 public class FirebaseHelper {
     private static final String LOG_TAG = FirebaseHelper.class.getSimpleName();
+    public static final String NOTIFICATIONS = "notifications";
 
     // Firebase database
     private FirebaseDatabase database;
@@ -111,6 +112,10 @@ public class FirebaseHelper {
             currentUserFcmTokenReference = getUsersReference().child(authUserId).child(FCM_TOKEN);
         }
         return currentUserFcmTokenReference;
+    }
+
+    public DatabaseReference getNotificationsReference() {
+        return getUsersReference().child(getAuthUserId()).child(NOTIFICATIONS);
     }
 
     public DatabaseReference getNewsReference(){
