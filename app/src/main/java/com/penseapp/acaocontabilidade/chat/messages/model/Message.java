@@ -11,6 +11,7 @@ public class Message {
     private String senderEmail = "senderEmail";
     private String key;
     private long timestamp = 0L;
+    private String photoURL;
 
     public String getText() {
         return text;
@@ -50,5 +51,13 @@ public class Message {
 
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public String getPhotoURL() {
+        return photoURL;
+    }
+
+    public void setPhotoURL(String photoURL) {
+        this.photoURL = photoURL;
     }
 }

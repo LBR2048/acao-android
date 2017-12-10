@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -62,6 +63,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
         TextView text;
+        ImageView image;
         TextView time;
         FrameLayout leftArrow;
         FrameLayout rightArrow;
@@ -75,6 +77,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
             // to access the context from any ViewHolder instance.
             super(itemView);
             text = (TextView) itemView.findViewById(R.id.list_item_chat_contact_name_textview);
+            image = (ImageView) itemView.findViewById(R.id.list_item_message_image);
             time = (TextView) itemView.findViewById(R.id.list_item_chat_contact_time_textview);
             leftArrow = (FrameLayout) itemView.findViewById(left_arrow);
             rightArrow = (FrameLayout) itemView.findViewById(right_arrow);
@@ -109,13 +112,23 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
         // Get the data model based on position
         final Message message = mMessages.get(position);
 
-        // Set item views based on your views and data model
+        // Show text
         holder.text.setText(message.getText());
 
+        // Show image
+        String photoURL = message.getPhotoURL();
+        if (photoURL != null) {
+            holder.image.setVisibility(View.VISIBLE);
+        } else {
+            holder.image.setVisibility(View.GONE);
+        }
+
+        // Show time
         long timestamp = message.getTimestamp();
         String timeString = SimpleDateFormat.getTimeInstance(DateFormat.SHORT).format(timestamp);
         holder.time.setText(timeString);
 
+        // Show message bubble
         int color;
         if (message.getSenderId().equals(FirebaseHelper.getInstance().getAuthUserId())) {
             // Sent message
