@@ -4,6 +4,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 /**
  * Created by unity.
@@ -22,6 +24,9 @@ public class FirebaseHelper {
     private static final String USER_CHAT_CONTACTS_CHAT = "user-chatContacts:chat";
     private static final String FCM_TOKEN = "fcm_token";
     private static final String NEWS_PATH = "news";
+
+    // Storage
+    private StorageReference mStorageRef;
 
     // TODO útil apenas para grupos retirar por enquanto
 //    private static final String CHAT_USERS_PATH = "chat-users";
@@ -67,6 +72,10 @@ public class FirebaseHelper {
     public void logout() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         auth.signOut();
+    }
+
+    public FirebaseStorage getStorage() {
+        return FirebaseStorage.getInstance();
     }
 
     // Realtime database

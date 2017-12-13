@@ -1,12 +1,17 @@
 package com.penseapp.acaocontabilidade.chat.messages.interactor;
 
+import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
 import com.penseapp.acaocontabilidade.chat.contacts.interactor.ContactsInteractorImpl;
 import com.penseapp.acaocontabilidade.chat.messages.model.Message;
 import com.penseapp.acaocontabilidade.chat.messages.presenter.MessagesPresenter;
@@ -26,6 +31,7 @@ public class MessagesInteractorImpl implements MessagesInteractor {
 
     // Firebase
     private FirebaseHelper mFirebaseHelperInstance = FirebaseHelper.getInstance();
+    private FirebaseStorage mStorage = mFirebaseHelperInstance.getStorage();
     private ChildEventListener messagesChildEventListener;
     private DatabaseReference userChatPropertiesReference;
     private String currentChatId;
@@ -45,13 +51,30 @@ public class MessagesInteractorImpl implements MessagesInteractor {
         if (messagesChildEventListener == null) {
             messagesChildEventListener = new ChildEventListener() {
                 @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                public void onChildAdded(final DataSnapshot dataSnapshot, String s) {
                     String messageKey = dataSnapshot.getKey();
                     try {
-                        Message message = dataSnapshot.getValue(Message.class);
+                        final Message message = dataSnapshot.getValue(Message.class);
                         message.setKey(messageKey);
-                        Log.i(LOG_TAG, dataSnapshot.toString() + " added");
-                        messagesPresenter.onMessageAdded(message);
+
+                        mStorage.getReferenceFromUrl(message.getPhotoURL()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                Log.d(LOG_TAG, uri.toString());
+                                message.setFileDownloadUrl(uri.toString());
+
+                                Log.i(LOG_TAG, dataSnapshot.toString() + " added");
+                                messagesPresenter.onMessageAdded(message);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception exception) {
+                                Log.d(LOG_TAG, "Failure");
+
+                                Log.i(LOG_TAG, dataSnapshot.toString() + " added");
+                                messagesPresenter.onMessageAdded(message);
+                            }
+                        });
                     } catch (Exception e) {
                         Log.e(LOG_TAG, "Error while reading message " + messageKey);
                         Message message = new Message();

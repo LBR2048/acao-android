@@ -212,17 +212,21 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
 
     public void setNotificationObservers() {
         DatabaseReference notifRef = mFirebaseHelperInstance.getNotificationsReference();
+        Log.d(LOG_TAG, "notifRef " + notifRef.toString());
         for (User user : mContacts) {
             DatabaseReference userNotifRef = notifRef.child(user.getKey());
+            Log.d(LOG_TAG, "userNotifRef " + userNotifRef.toString());
             userNotifRef.addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    dataSnapshot.getValue();
+                    Integer value = dataSnapshot.getValue(int.class);
+                    Log.d(LOG_TAG, "Added " + value);
                 }
 
                 @Override
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
+                    Integer value = dataSnapshot.getValue(int.class);
+                    Log.d(LOG_TAG, "Changed " + value);
                 }
 
                 @Override
@@ -250,7 +254,11 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
             userNotifRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    dataSnapshot.getValue();
+                    String key = dataSnapshot.getKey();
+                    int position = getIndexForKey(key);
+                    Integer value = dataSnapshot.getValue(int.class);
+
+                    Log.d(LOG_TAG, "Posição " + String.valueOf(position) + ": Valor " +String.valueOf(value));
                 }
 
                 @Override

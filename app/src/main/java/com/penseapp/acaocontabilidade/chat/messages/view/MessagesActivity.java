@@ -78,7 +78,7 @@ public class MessagesActivity extends AppCompatActivity implements MessagesView 
     // Messages list
 
     private void setupRecyclerView() {
-        messagesAdapter = new MessagesAdapter(mMessages);
+        messagesAdapter = new MessagesAdapter(this, mMessages);
         mMessagesRecyclerView.setAdapter(messagesAdapter);
         mMessagesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 //        mMessagesRecyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
