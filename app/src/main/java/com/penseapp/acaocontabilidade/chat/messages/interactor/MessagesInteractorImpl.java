@@ -57,24 +57,32 @@ public class MessagesInteractorImpl implements MessagesInteractor {
                         final Message message = dataSnapshot.getValue(Message.class);
                         message.setKey(messageKey);
 
-                        mStorage.getReferenceFromUrl(message.getPhotoURL()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                Log.d(LOG_TAG, uri.toString());
-                                message.setFileDownloadUrl(uri.toString());
+                        String photoURL = message.getPhotoURL();
+                        if (photoURL != null) {
+                            mStorage.getReferenceFromUrl(photoURL).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    Log.d(LOG_TAG, uri.toString());
+                                    message.setFileDownloadUrl(uri.toString());
 
-                                Log.i(LOG_TAG, dataSnapshot.toString() + " added");
-                                messagesPresenter.onMessageAdded(message);
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception exception) {
-                                Log.d(LOG_TAG, "Failure");
+                                    Log.i(LOG_TAG, dataSnapshot.toString() + " added");
+                                    messagesPresenter.onMessageAdded(message);
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception exception) {
+                                    Log.d(LOG_TAG, "Failure");
 
-                                Log.i(LOG_TAG, dataSnapshot.toString() + " added");
-                                messagesPresenter.onMessageAdded(message);
-                            }
-                        });
+                                    Log.i(LOG_TAG, dataSnapshot.toString() + " added");
+                                    messagesPresenter.onMessageAdded(message);
+                                }
+                            });
+
+                        } else {
+                            Log.i(LOG_TAG, dataSnapshot.toString() + " added");
+                            messagesPresenter.onMessageAdded(message);
+                        }
+
                     } catch (Exception e) {
                         Log.e(LOG_TAG, "Error while reading message " + messageKey);
                         Message message = new Message();
