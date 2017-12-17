@@ -1,6 +1,9 @@
 package com.penseapp.acaocontabilidade.chat.messages.view;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,6 +33,7 @@ public class MessagesActivity extends AppCompatActivity implements MessagesView 
     private RecyclerView mMessagesRecyclerView;
     private MessagesAdapter messagesAdapter;
     private String mChatId;
+    public final static int PICK_PHOTO_CODE = 1046;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +98,7 @@ public class MessagesActivity extends AppCompatActivity implements MessagesView 
                 return true;
             case R.id.action_gallery:
                 Toast.makeText(this, "Open gallery", Toast.LENGTH_SHORT).show();
+                pickPhotoFromGallery();
                 return true;
             case R.id.action_document:
                 Toast.makeText(this, "Open document", Toast.LENGTH_SHORT).show();
@@ -159,6 +164,33 @@ public class MessagesActivity extends AppCompatActivity implements MessagesView 
 
         if (!text.isEmpty()) {
             messagesPresenter.sendMessage(text, senderId, senderName);
+        }
+    }
+
+    private void pickPhotoFromGallery() {
+        // Create intent for picking a photo from the gallery
+        Intent intent = new Intent(Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
+        // So as long as the result is not null, it's safe to use the intent.
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            // Bring up gallery to select a photo
+            startActivityForResult(intent, PICK_PHOTO_CODE);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data != null) {
+            Uri photoUri = data.getData();
+            Toast.makeText(this, photoUri.getPath() + "selected", Toast.LENGTH_SHORT).show();
+
+//            // Do something with the photo based on Uri
+//            Bitmap selectedImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
+//            // Load the selected image into a preview
+//            ImageView ivPreview = (ImageView) findViewById(R.id.ivPreview);
+//            ivPreview.setImageBitmap(selectedImage);
         }
     }
 }
