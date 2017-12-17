@@ -13,6 +13,8 @@ public class Message {
     private long timestamp = 0L;
     private String photoURL;
     private String photoDownloadURL;
+    private String PDF;
+    private String PDFDownloadURL;
 
     public String getText() {
         return text;
@@ -69,4 +71,22 @@ public class Message {
     public void setPhotoDownloadURL(String photoDownloadURL) {
         this.photoDownloadURL = photoDownloadURL;
     }
+
+    public String getPDF() {
+        return PDF;
+    }
+
+    public void setPDF(String PDF) {
+        this.PDF = PDF;
+    }
+
+    public String getPDFDownloadURL() {
+        return PDFDownloadURL;
+    }
+
+    public void setPDFDownloadURL(String PDFDownloadURL) {
+        this.PDFDownloadURL = PDFDownloadURL;
+    }
+
+
 }
