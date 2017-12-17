@@ -6,9 +6,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.penseapp.acaocontabilidade.R;
 import com.penseapp.acaocontabilidade.chat.messages.model.Message;
@@ -73,6 +77,30 @@ public class MessagesActivity extends AppCompatActivity implements MessagesView 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 //        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_send_file, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_camera:
+                Toast.makeText(this, "Open camera", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_gallery:
+                Toast.makeText(this, "Open gallery", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_document:
+                Toast.makeText(this, "Open document", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     // Messages list
