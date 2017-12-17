@@ -12,7 +12,7 @@ public class Message {
     private String key;
     private long timestamp = 0L;
     private String photoURL;
-    private String fileDownloadUrl;
+    private String photoDownloadURL;
 
     public String getText() {
         return text;
@@ -62,11 +62,11 @@ public class Message {
         this.photoURL = photoURL;
     }
 
-    public String getFileDownloadUrl() {
-        return fileDownloadUrl;
+    public String getPhotoDownloadURL() {
+        return photoDownloadURL;
     }
 
-    public void setFileDownloadUrl(String fileDownloadUrl) {
-        this.fileDownloadUrl = fileDownloadUrl;
+    public void setPhotoDownloadURL(String photoDownloadURL) {
+        this.photoDownloadURL = photoDownloadURL;
     }
 }

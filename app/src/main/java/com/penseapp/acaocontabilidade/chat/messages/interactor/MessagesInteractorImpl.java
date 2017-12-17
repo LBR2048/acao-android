@@ -63,7 +63,7 @@ public class MessagesInteractorImpl implements MessagesInteractor {
                                 @Override
                                 public void onSuccess(Uri uri) {
                                     Log.d(LOG_TAG, uri.toString());
-                                    message.setFileDownloadUrl(uri.toString());
+                                    message.setPhotoDownloadURL(uri.toString());
 
                                     Log.i(LOG_TAG, dataSnapshot.toString() + " added");
                                     messagesPresenter.onMessageAdded(message);

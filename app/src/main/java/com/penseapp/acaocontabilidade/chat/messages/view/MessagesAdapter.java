@@ -4,11 +4,8 @@ import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.RotateDrawable;
-import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,9 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
 import com.penseapp.acaocontabilidade.R;
 import com.penseapp.acaocontabilidade.chat.messages.model.Message;
 import com.penseapp.acaocontabilidade.domain.FirebaseHelper;
@@ -135,7 +129,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
         String photoURL = message.getPhotoURL();
         if (photoURL != null) {
             holder.image.setVisibility(View.VISIBLE);
-            Picasso.with(mContext).load(message.getFileDownloadUrl()).into(holder.image);
+            Picasso.with(mContext).load(message.getPhotoDownloadURL()).into(holder.image);
         } else {
             holder.image.setVisibility(View.GONE);
         }
