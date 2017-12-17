@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import java.util.regex.Pattern;
+
 /**
  * Created by unity on 22/11/16.
  */
@@ -15,6 +17,7 @@ import android.view.inputmethod.InputMethodManager;
 public class Utilities {
     private static final String SITE_ACAO = "http://acaocontabilidade.com";
     private static final String SITE_ACAO_FACEBOOK = "https://www.facebook.com/acaocontabilidade/";
+    private static final String SITE_ACAO_NEW_CUSTOMER = "https://acaocontabilidadejoinville.com.br/orcamento-online/";
 
     /**
      * Hides the soft keyboard
@@ -56,5 +59,15 @@ public class Utilities {
             ((InputMethodManager) appCompatActivity.getSystemService(Context.INPUT_METHOD_SERVICE)).
                     hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
+    }
+
+    public static boolean validatePassword(String password) {
+        return password.length() > 5;
+    }
+
+    public static boolean validateEmail(String email) {
+        String EMAIL_PATTERN = "^[a-zA-Z0-9#_~!$&'()*+,;=:.\"(),:;<>@\\[\\]\\\\]+@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*$";
+        Pattern pattern = Pattern.compile(EMAIL_PATTERN);
+        return pattern.matcher(email).matches();
     }
 }
