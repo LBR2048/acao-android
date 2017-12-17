@@ -86,9 +86,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="right"
+                android:gravity="center"
                 android:padding="4dp"
-                android:text="Não tenho conta ainda"
+                android:text="Não sou cliente"
                 android:visibility="visible" />
         </LinearLayout>
 

@@ -53,6 +53,12 @@ public class Utilities {
         context.startActivity(intent);
     }
 
+    public static void goToAcaoNewCustomerWebsite(Context context) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(SITE_ACAO_NEW_CUSTOMER));
+        context.startActivity(intent);
+    }
+
     public static void hideKeyboard(AppCompatActivity appCompatActivity) {
         View view = appCompatActivity.getCurrentFocus();
         if (view != null) {

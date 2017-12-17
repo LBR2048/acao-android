@@ -15,7 +15,6 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 
 import com.penseapp.acaocontabilidade.R;
-import com.penseapp.acaocontabilidade.login.Utilities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -301,7 +300,7 @@ public class SignUpFragment extends Fragment {
      */
     private boolean validateEmail() {
         String email = mEmailEditText.getText().toString();
-        if (!Utilities.validateEmail(email)) {
+        if (!com.penseapp.acaocontabilidade.domain.Utilities.validateEmail(email)) {
             mEmailWrapper.setError("Endereço de email inválido");
             return false;
         } else {
@@ -315,7 +314,7 @@ public class SignUpFragment extends Fragment {
      */
     private boolean validatePassword() {
         String password = mPasswordEditText.getText().toString();
-        if (!Utilities.validatePassword(password)) {
+        if (!com.penseapp.acaocontabilidade.domain.Utilities.validatePassword(password)) {
             mPasswordWrapper.setError("Senha deve ter no mínimo 6 caracteres");
             return false;
         } else {
@@ -329,7 +328,7 @@ public class SignUpFragment extends Fragment {
      */
     private boolean validatePasswordRepeat() {
         String password = mPasswordRepeatEditText.getText().toString();
-        if (!Utilities.validatePassword(password)) {
+        if (!com.penseapp.acaocontabilidade.domain.Utilities.validatePassword(password)) {
             mPasswordRepeatWrapper.setError("Senha deve ter no mínimo 6 caracteres");
             return false;
         } else {

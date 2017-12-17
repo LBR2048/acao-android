@@ -14,7 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.penseapp.acaocontabilidade.R;
-import com.penseapp.acaocontabilidade.login.Utilities;
+import com.penseapp.acaocontabilidade.domain.Utilities;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -185,9 +185,7 @@ public class LoginFragment extends Fragment {
     }
 
     public void onSignUpClicked() {
-        if (mListener != null) {
-            mListener.onLoginFragmentSignUpClicked();
-        }
+        Utilities.goToAcaoNewCustomerWebsite(getContext());
     }
     //endregion
 
