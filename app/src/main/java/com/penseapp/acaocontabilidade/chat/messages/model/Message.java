@@ -6,7 +6,7 @@ package com.penseapp.acaocontabilidade.chat.messages.model;
 
 public class Message {
 
-    private String text = "text";
+    private String text;
     private String senderId = "senderId";
     private String senderEmail = "senderEmail";
     private String key;

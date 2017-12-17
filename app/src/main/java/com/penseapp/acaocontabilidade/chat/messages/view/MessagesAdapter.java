@@ -123,7 +123,13 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
         final Message message = mMessages.get(position);
 
         // Show text
-        holder.text.setText(message.getText());
+        String text = message.getText();
+        if (text != null) {
+            holder.text.setVisibility(View.VISIBLE);
+            holder.text.setText(text);
+        } else {
+            holder.text.setVisibility(View.GONE);
+        }
 
         // Show image
         String photoURL = message.getPhotoURL();
