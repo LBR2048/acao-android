@@ -134,6 +134,13 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
             holder.image.setVisibility(View.GONE);
         }
 
+        // Show PDF
+        String pdf = message.getPDF();
+        if (pdf != null) {
+            holder.image.setVisibility(View.VISIBLE);
+            holder.image.setImageResource(R.drawable.ic_picture_as_pdf_black_24dp);
+        }
+
         // Show time
         long timestamp = message.getTimestamp();
         String timeString = SimpleDateFormat.getDateTimeInstance().format(timestamp);
