@@ -136,7 +136,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
 
         // Show time
         long timestamp = message.getTimestamp();
-        String timeString = SimpleDateFormat.getTimeInstance(DateFormat.SHORT).format(timestamp);
+        String timeString = SimpleDateFormat.getDateTimeInstance().format(timestamp);
         holder.time.setText(timeString);
 
         // Show message bubble
