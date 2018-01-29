@@ -121,15 +121,27 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (message.getPhotoDownloadURL() != null) {
+                if (message.getPhotoURL() != null) {
                     Toast.makeText(mContext, "Abrindo imagem", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(message.getPhotoDownloadURL()));
-                    mContext.startActivity(intent);
+                    FirebaseHelper.getInstance().getHttpFromGs(new FirebaseHelper.GetHttpFromGsCallback() {
+                        @Override
+                        public void showHttp(Uri http) {
+                            // TODO check if device has an app available to open this type of file
+                            Intent intent = new Intent(Intent.ACTION_VIEW, http);
+                            mContext.startActivity(intent);
+                        }
+                    }, message.getPhotoURL());
 
-                } else if (message.getPDFDownloadURL() != null){
+                } else if (message.getPDF() != null){
                     Toast.makeText(mContext, "Abrindo documento", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(message.getPDFDownloadURL()));
-                    mContext.startActivity(intent);
+                    FirebaseHelper.getInstance().getPdfHttpFromGsWithoutPrefix(new FirebaseHelper.GetHttpFromGsCallback() {
+                        @Override
+                        public void showHttp(Uri http) {
+                            // TODO check if device has an app available to open this type of file
+                            Intent intent = new Intent(Intent.ACTION_VIEW, http);
+                            mContext.startActivity(intent);
+                        }
+                    }, message.getPDF());
 
                 } else {
                     // TODO log which file could not be opened
@@ -150,8 +162,15 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
         // Show image
         String photoURL = message.getPhotoURL();
         if (photoURL != null) {
+            // Workaround to avoid PDF icon from showing briefly before the image // TODO improve this
+            holder.image.setImageResource(0);
             holder.image.setVisibility(View.VISIBLE);
-            Picasso.with(mContext).load(message.getPhotoDownloadURL()).into(holder.image);
+            FirebaseHelper.getInstance().getHttpFromGs(new FirebaseHelper.GetHttpFromGsCallback() {
+                @Override
+                public void showHttp(Uri http) {
+                    Picasso.with(mContext).load(http).into(holder.image);
+                }
+            }, photoURL);
         } else {
             holder.image.setVisibility(View.GONE);
         }

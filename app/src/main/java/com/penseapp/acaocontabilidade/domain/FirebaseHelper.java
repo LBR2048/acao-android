@@ -1,5 +1,10 @@
 package com.penseapp.acaocontabilidade.domain;
 
+import android.net.Uri;
+import android.support.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -27,6 +32,32 @@ public class FirebaseHelper {
 
     // Storage
     private StorageReference mStorageRef;
+
+    public interface GetHttpFromGsCallback {
+
+        void showHttp(Uri http);
+    }
+
+    public void getHttpFromGs(final GetHttpFromGsCallback getHttpFromGsCallback, String http) {
+        getStorage().getReferenceFromUrl(http).getDownloadUrl()
+                .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        getHttpFromGsCallback.showHttp(uri);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // TODO Log error
+                    }
+                });
+    }
+
+    public void getPdfHttpFromGsWithoutPrefix(final GetHttpFromGsCallback getHttpFromGsCallback, String http) {
+        String gsPrefix = "gs://acao-f519d.appspot.com/";
+        getHttpFromGs(getHttpFromGsCallback, gsPrefix + http);
+    }
 
     // TODO útil apenas para grupos retirar por enquanto
 //    private static final String CHAT_USERS_PATH = "chat-users";
