@@ -1,9 +1,11 @@
 package com.penseapp.acaocontabilidade.chat.messages.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.RotateDrawable;
+import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -15,13 +17,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.penseapp.acaocontabilidade.R;
 import com.penseapp.acaocontabilidade.chat.messages.model.Message;
 import com.penseapp.acaocontabilidade.domain.FirebaseHelper;
 import com.squareup.picasso.Picasso;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -115,6 +117,26 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
     public void onBindViewHolder(final ViewHolder holder, int position) {
         // Get the data model based on position
         final Message message = mMessages.get(position);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (message.getPhotoDownloadURL() != null) {
+                    Toast.makeText(mContext, "Abrindo imagem", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(message.getPhotoDownloadURL()));
+                    mContext.startActivity(intent);
+
+                } else if (message.getPDFDownloadURL() != null){
+                    Toast.makeText(mContext, "Abrindo documento", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(message.getPDFDownloadURL()));
+                    mContext.startActivity(intent);
+
+                } else {
+                    // TODO log which file could not be opened
+                    Toast.makeText(mContext, "Tipo de arquivo desconhecido", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         // Show text
         String text = message.getText();

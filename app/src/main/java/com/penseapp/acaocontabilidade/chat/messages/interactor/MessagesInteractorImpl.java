@@ -52,6 +52,7 @@ public class MessagesInteractorImpl implements MessagesInteractor {
             messagesChildEventListener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(final DataSnapshot dataSnapshot, String s) {
+                    Log.d("Messages", dataSnapshot.toString());
                     String messageKey = dataSnapshot.getKey();
                     try {
                         final Message message = dataSnapshot.getValue(Message.class);
@@ -59,24 +60,49 @@ public class MessagesInteractorImpl implements MessagesInteractor {
 
                         String photoURL = message.getPhotoURL();
                         if (photoURL != null) {
-                            mStorage.getReferenceFromUrl(photoURL).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    Log.d(LOG_TAG, uri.toString());
-                                    message.setPhotoDownloadURL(uri.toString());
+                            mStorage.getReferenceFromUrl(photoURL).getDownloadUrl()
+                                    .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        @Override
+                                        public void onSuccess(Uri uri) {
+                                            Log.d(LOG_TAG, uri.toString());
+                                            message.setPhotoDownloadURL(uri.toString());
 
-                                    Log.i(LOG_TAG, dataSnapshot.toString() + " added");
-                                    messagesPresenter.onMessageAdded(message);
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception exception) {
-                                    Log.d(LOG_TAG, "Failure");
+                                            Log.i(LOG_TAG, dataSnapshot.toString() + " added");
+                                            messagesPresenter.onMessageAdded(message);
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception exception) {
+                                            Log.d(LOG_TAG, "Failure");
 
-                                    Log.i(LOG_TAG, dataSnapshot.toString() + " added");
-                                    messagesPresenter.onMessageAdded(message);
-                                }
-                            });
+                                            Log.i(LOG_TAG, dataSnapshot.toString() + " added");
+                                            messagesPresenter.onMessageAdded(message);
+                                        }
+                                    });
+
+                        } else if (message.getPDF() != null) {
+                            String gsPrefix = "gs://acao-f519d.appspot.com/";
+                            mStorage.getReferenceFromUrl(gsPrefix + message.getPDF()).getDownloadUrl()
+                                    .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        @Override
+                                        public void onSuccess(Uri uri) {
+                                            Log.d(LOG_TAG, uri.toString());
+                                            message.setPDFDownloadURL(uri.toString());
+
+                                            Log.i(LOG_TAG, dataSnapshot.toString() + " added");
+                                            messagesPresenter.onMessageAdded(message);
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception exception) {
+                                            Log.d(LOG_TAG, "Failure");
+
+                                            Log.i(LOG_TAG, dataSnapshot.toString() + " added");
+                                            messagesPresenter.onMessageAdded(message);
+                                        }
+                                    });
 
                         } else {
                             Log.i(LOG_TAG, dataSnapshot.toString() + " added");
