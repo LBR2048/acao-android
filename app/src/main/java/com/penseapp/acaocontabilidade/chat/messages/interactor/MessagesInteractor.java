@@ -8,5 +8,5 @@ public interface MessagesInteractor {
     void subscribeForMessagesUpdates();
     void unsubscribeForMessagesUpdates();
     void resetUnreadMessageCount(String chatId);
-    void sendMessage(String messageText, String senderId, String senderEmail);
+    void sendMessage(String messageText, String senderId, String senderEmail, String photoURL);
 }
