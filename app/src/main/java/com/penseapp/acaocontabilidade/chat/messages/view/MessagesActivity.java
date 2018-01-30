@@ -102,6 +102,7 @@ public class MessagesActivity extends AppCompatActivity implements MessagesView 
                 return true;
             case R.id.action_document:
                 Toast.makeText(this, "Open document", Toast.LENGTH_SHORT).show();
+                pickFileFromGallery();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -181,6 +182,29 @@ public class MessagesActivity extends AppCompatActivity implements MessagesView 
         // To search for all documents available via installed storage providers,
         // it would be "*/*".
         intent.setType("image/*");
+
+        // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
+        // So as long as the result is not null, it's safe to use the intent.
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            // Bring up gallery to select a photo
+            startActivityForResult(intent, PICK_PHOTO_CODE);
+        }
+    }
+
+    private void pickFileFromGallery() {
+        // ACTION_OPEN_DOCUMENT is the intent to choose a file via the system's file
+        // browser.
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+
+        // Filter to only show results that can be "opened", such as a
+        // file (as opposed to a list of contacts or timezones)
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+        // Filter to show only images, using the image MIME data type.
+        // If one wanted to search for ogg vorbis files, the type would be "audio/ogg".
+        // To search for all documents available via installed storage providers,
+        // it would be "*/*".
+        intent.setType("file/*");
 
         // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
         // So as long as the result is not null, it's safe to use the intent.
