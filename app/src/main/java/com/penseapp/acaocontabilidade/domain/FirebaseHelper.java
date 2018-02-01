@@ -31,6 +31,7 @@ public class FirebaseHelper {
     private static final String NEWS_PATH = "news";
 
     // Storage
+    public final static String GS_PREFIX = "gs://acao-f519d.appspot.com/";
     private StorageReference mStorageRef;
 
     public interface GetHttpFromGsCallback {
@@ -38,6 +39,7 @@ public class FirebaseHelper {
         void showHttp(Uri http);
     }
 
+    // TODO handle wrong http to avoid crashing the app
     public void getHttpFromGs(final GetHttpFromGsCallback getHttpFromGsCallback, String http) {
         getStorage().getReferenceFromUrl(http).getDownloadUrl()
                 .addOnSuccessListener(new OnSuccessListener<Uri>() {

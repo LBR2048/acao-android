@@ -1,5 +1,7 @@
 package com.penseapp.acaocontabilidade.chat.messages.presenter;
 
+import android.net.Uri;
+
 import com.penseapp.acaocontabilidade.chat.messages.model.Message;
 
 /**
@@ -11,5 +13,5 @@ public interface MessagesPresenter {
     void unsubscribeForMessagesUpdates();
     void resetUnreadMessageCount(String chatId);
     void onMessageAdded(Message message);
-    void sendMessage(String messageText, String senderId, String senderEmail);
+    void sendMessage(String messageText, String senderId, String senderEmail, Uri fileUri);
 }

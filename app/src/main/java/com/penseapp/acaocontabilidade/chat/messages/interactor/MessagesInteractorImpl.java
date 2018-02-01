@@ -12,9 +12,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.UploadTask;
 import com.penseapp.acaocontabilidade.chat.contacts.interactor.ContactsInteractorImpl;
 import com.penseapp.acaocontabilidade.chat.messages.model.Message;
 import com.penseapp.acaocontabilidade.chat.messages.presenter.MessagesPresenter;
+import com.penseapp.acaocontabilidade.chat.storage.Storage;
+import com.penseapp.acaocontabilidade.chat.storage.StorageImpl;
 import com.penseapp.acaocontabilidade.domain.FirebaseHelper;
 
 
@@ -28,6 +31,7 @@ public class MessagesInteractorImpl implements MessagesInteractor {
 
     private final MessagesPresenter messagesPresenter;
     private final DatabaseReference chatMessagesReference;
+    private final Storage storage;
 
     // Firebase
     private FirebaseHelper mFirebaseHelperInstance = FirebaseHelper.getInstance();
@@ -42,6 +46,7 @@ public class MessagesInteractorImpl implements MessagesInteractor {
         chatMessagesReference = mFirebaseHelperInstance.getChatMessagesReference();
         userChatPropertiesReference = mFirebaseHelperInstance.getUserChatPropertiesReference();
         this.currentChatId = currentChatId;
+        storage = new StorageImpl();
     }
 
     @Override
@@ -145,7 +150,33 @@ public class MessagesInteractorImpl implements MessagesInteractor {
     }
 
     @Override
-    public void sendMessage(String messageText, final String senderId, String senderEmail, String photoURL) {
+    public void sendMessage(final String messageText, final String senderId, final String senderEmail, Uri fileUri) {
+
+        if (fileUri != null) {
+            final String storagePath = "images/" + String.valueOf(System.currentTimeMillis());
+
+            storage.uploadFile(new Storage.UploadFileCallback() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                    Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                    Log.i("Storage", "Success: " + downloadUrl);
+                    saveMessage(messageText, senderId, senderEmail, FirebaseHelper.GS_PREFIX + storagePath);
+                }
+
+                @Override
+                public void onFailure(Exception exception) {
+                    Log.i("Storage", exception.getMessage());
+                }
+            }, fileUri, storagePath);
+
+            return;
+        }
+
+        saveMessage(messageText, senderId, senderEmail, null);
+    }
+
+    private void saveMessage(String messageText, String senderId, String senderEmail, String storagePath) {
         // Create empty message at chats/$currentChatId/messages and get its key so we can further reference it
         String newMessageKey = chatMessagesReference.child(currentChatId).push().getKey();
 
@@ -154,6 +185,7 @@ public class MessagesInteractorImpl implements MessagesInteractor {
         newMessage.setText(messageText);
         newMessage.setSenderId(senderId);
         newMessage.setSenderEmail(senderEmail);
+        newMessage.setPhotoURL(storagePath);
         newMessage.setTimestamp(System.currentTimeMillis());
 
         // Save new messages in one node only

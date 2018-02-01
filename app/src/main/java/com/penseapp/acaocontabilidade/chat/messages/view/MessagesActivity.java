@@ -1,6 +1,7 @@
 package com.penseapp.acaocontabilidade.chat.messages.view;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -24,6 +25,7 @@ import com.penseapp.acaocontabilidade.chat.messages.presenter.MessagesPresenterI
 import com.penseapp.acaocontabilidade.chat.chats.view.ChatsActivity;
 import com.penseapp.acaocontabilidade.domain.FirebaseHelper;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class MessagesActivity extends AppCompatActivity implements MessagesView {
@@ -34,6 +36,8 @@ public class MessagesActivity extends AppCompatActivity implements MessagesView 
     private MessagesAdapter messagesAdapter;
     private String mChatId;
     public final static int PICK_PHOTO_CODE = 1046;
+    private String senderId = FirebaseHelper.getInstance().getAuthUserId();;
+    private String senderName = FirebaseHelper.getInstance().getAuthUserEmail();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,15 +160,13 @@ public class MessagesActivity extends AppCompatActivity implements MessagesView 
 
         // Create message with entered text and current user information
         String text = messageEdit.getText().toString().trim();
-        String senderId = FirebaseHelper.getInstance().getAuthUserId();
-        String senderName = FirebaseHelper.getInstance().getAuthUserEmail();
 
         // Clear messageEdit and hide keyboard
         messageEdit.getText().clear();
 //        Utilities.hideSoftKeyboard(this);
 
         if (!text.isEmpty()) {
-            messagesPresenter.sendMessage(text, senderId, senderName);
+            messagesPresenter.sendMessage(text, senderId, senderName, null);
         }
     }
 
@@ -218,7 +220,10 @@ public class MessagesActivity extends AppCompatActivity implements MessagesView 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null) {
             Uri photoUri = data.getData();
-            Toast.makeText(this, photoUri.getPath() + "selected", Toast.LENGTH_SHORT).show();
+            String filePath = photoUri.getPath();
+            Toast.makeText(this, filePath + " selected", Toast.LENGTH_SHORT).show();
+
+            messagesPresenter.sendMessage(null, senderId, senderName, photoUri);
 
 //            // Do something with the photo based on Uri
 //            Bitmap selectedImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);

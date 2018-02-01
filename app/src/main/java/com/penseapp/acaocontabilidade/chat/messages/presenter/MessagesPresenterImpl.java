@@ -1,5 +1,7 @@
 package com.penseapp.acaocontabilidade.chat.messages.presenter;
 
+import android.net.Uri;
+
 import com.penseapp.acaocontabilidade.chat.messages.interactor.MessagesInteractor;
 import com.penseapp.acaocontabilidade.chat.messages.interactor.MessagesInteractorImpl;
 import com.penseapp.acaocontabilidade.chat.messages.model.Message;
@@ -40,7 +42,7 @@ public class MessagesPresenterImpl implements MessagesPresenter {
     }
 
     @Override
-    public void sendMessage(String messageText, String senderId, String senderEmail) {
-        messagesInteractor.sendMessage(messageText, senderId, senderEmail, null);
+    public void sendMessage(String messageText, String senderId, String senderEmail, Uri fileUri) {
+        messagesInteractor.sendMessage(messageText, senderId, senderEmail, fileUri);
     }
 }
