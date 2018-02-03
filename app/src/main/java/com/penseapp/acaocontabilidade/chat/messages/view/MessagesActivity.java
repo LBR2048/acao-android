@@ -1,10 +1,8 @@
 package com.penseapp.acaocontabilidade.chat.messages.view;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,7 +23,6 @@ import com.penseapp.acaocontabilidade.chat.messages.presenter.MessagesPresenterI
 import com.penseapp.acaocontabilidade.chat.chats.view.ChatsActivity;
 import com.penseapp.acaocontabilidade.domain.FirebaseHelper;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class MessagesActivity extends AppCompatActivity implements MessagesView {
@@ -36,6 +33,7 @@ public class MessagesActivity extends AppCompatActivity implements MessagesView 
     private MessagesAdapter messagesAdapter;
     private String mChatId;
     public final static int PICK_PHOTO_CODE = 1046;
+    public final static int PICK_DOCUMENT_CODE = 1047;
     private String senderId = FirebaseHelper.getInstance().getAuthUserId();;
     private String senderName = FirebaseHelper.getInstance().getAuthUserEmail();
 
@@ -166,7 +164,7 @@ public class MessagesActivity extends AppCompatActivity implements MessagesView 
 //        Utilities.hideSoftKeyboard(this);
 
         if (!text.isEmpty()) {
-            messagesPresenter.sendMessage(text, senderId, senderName, null);
+            messagesPresenter.sendMessage(text, senderId, senderName, null, null);
         }
     }
 
@@ -206,30 +204,38 @@ public class MessagesActivity extends AppCompatActivity implements MessagesView 
         // If one wanted to search for ogg vorbis files, the type would be "audio/ogg".
         // To search for all documents available via installed storage providers,
         // it would be "*/*".
-        intent.setType("file/*");
+        intent.setType("*/*");
 
         // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
         // So as long as the result is not null, it's safe to use the intent.
         if (intent.resolveActivity(getPackageManager()) != null) {
             // Bring up gallery to select a photo
-            startActivityForResult(intent, PICK_PHOTO_CODE);
+            startActivityForResult(intent, PICK_DOCUMENT_CODE);
         }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (data != null) {
-            Uri photoUri = data.getData();
-            String filePath = photoUri.getPath();
-            Toast.makeText(this, filePath + " selected", Toast.LENGTH_SHORT).show();
+        if (resultCode == RESULT_OK && data != null) {
+            if (requestCode == PICK_PHOTO_CODE) {
+                Uri photoUri = data.getData();
+                String filePath = photoUri.getPath();
+                Toast.makeText(this, filePath + " selected", Toast.LENGTH_SHORT).show();
 
-            messagesPresenter.sendMessage(null, senderId, senderName, photoUri);
+                messagesPresenter.sendMessage(null, senderId, senderName, photoUri, null);
 
 //            // Do something with the photo based on Uri
 //            Bitmap selectedImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
 //            // Load the selected image into a preview
 //            ImageView ivPreview = (ImageView) findViewById(R.id.ivPreview);
 //            ivPreview.setImageBitmap(selectedImage);
+            } else if (requestCode == PICK_DOCUMENT_CODE) {
+                Uri documentUri = data.getData();
+                String documentPath = documentUri.getPath();
+                Toast.makeText(this, documentPath + " selected", Toast.LENGTH_SHORT).show();
+
+                messagesPresenter.sendMessage(null, senderId, senderName, null, documentUri);
+            }
         }
     }
 }

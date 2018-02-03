@@ -42,7 +42,7 @@ public class MessagesPresenterImpl implements MessagesPresenter {
     }
 
     @Override
-    public void sendMessage(String messageText, String senderId, String senderEmail, Uri fileUri) {
-        messagesInteractor.sendMessage(messageText, senderId, senderEmail, fileUri);
+    public void sendMessage(String messageText, String senderId, String senderEmail, Uri imageUri, Uri documentUri) {
+        messagesInteractor.sendMessage(messageText, senderId, senderEmail, imageUri, documentUri);
     }
 }
