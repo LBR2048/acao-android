@@ -52,7 +52,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:src="@drawable/badge" />
+            android:src="@drawable/badge"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/list_item_chat_contact_unread_messages_textview"
@@ -62,7 +63,8 @@
             android:gravity="center"
             android:textColor="@android:color/white"
             android:textSize="12sp"
-            tools:text="12" />
+            tools:text="12"
+            android:visibility="gone"/>
 
     </FrameLayout>
 
