@@ -95,9 +95,9 @@ public class MessagesActivity extends AppCompatActivity implements MessagesView 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-//            case R.id.action_camera:
-//                Toast.makeText(this, "Open camera", Toast.LENGTH_SHORT).show();
-//                return true;
+            case R.id.action_camera:
+                Toast.makeText(this, "Open camera", Toast.LENGTH_SHORT).show();
+                return true;
             case R.id.action_gallery:
                 pickPhotoFromGallery();
                 return true;
