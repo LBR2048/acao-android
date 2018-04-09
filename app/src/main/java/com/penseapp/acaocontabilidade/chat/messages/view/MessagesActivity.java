@@ -1,8 +1,13 @@
 package com.penseapp.acaocontabilidade.chat.messages.view;
 
+import android.Manifest;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,17 +19,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.penseapp.acaocontabilidade.R;
+import com.penseapp.acaocontabilidade.chat.chats.view.ChatsActivity;
 import com.penseapp.acaocontabilidade.chat.messages.model.Message;
 import com.penseapp.acaocontabilidade.chat.messages.presenter.MessagesPresenter;
 import com.penseapp.acaocontabilidade.chat.messages.presenter.MessagesPresenterImpl;
-import com.penseapp.acaocontabilidade.chat.chats.view.ChatsActivity;
 import com.penseapp.acaocontabilidade.domain.FirebaseHelper;
 
+import java.io.File;
 import java.util.ArrayList;
 
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.RuntimePermissions;
+
+@RuntimePermissions
 public class MessagesActivity extends AppCompatActivity implements MessagesView {
     private final static String LOG_TAG = MessagesActivity.class.getSimpleName();
     public static ArrayList<Message> mMessages = new ArrayList<>();
@@ -37,6 +46,12 @@ public class MessagesActivity extends AppCompatActivity implements MessagesView 
     private String senderId = FirebaseHelper.getInstance().getAuthUserId();;
     private String senderName = FirebaseHelper.getInstance().getAuthUserEmail();
 
+    private final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
+    private final String DIRECTORY_TAG = "Camera";
+    private File photoFile;
+    private String photoFileName = "photo.jpg";
+
+    //region Lifecycle
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,8 +89,9 @@ public class MessagesActivity extends AppCompatActivity implements MessagesView 
         messagesPresenter.unsubscribeForMessagesUpdates();
         super.onStop();
     }
+    //endregion
 
-    // Toolbar
+    //region Toolbar
     private void setupToolBar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar == null) return;
@@ -96,7 +112,7 @@ public class MessagesActivity extends AppCompatActivity implements MessagesView 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_camera:
-                Toast.makeText(this, "Open camera", Toast.LENGTH_SHORT).show();
+                MessagesActivityPermissionsDispatcher.launchCameraWithPermissionCheck(this);
                 return true;
             case R.id.action_gallery:
                 pickPhotoFromGallery();
@@ -108,9 +124,9 @@ public class MessagesActivity extends AppCompatActivity implements MessagesView 
                 return super.onOptionsItemSelected(item);
         }
     }
+    //endregion
 
-    // Messages list
-
+    //region Messages list
     private void setupRecyclerView() {
         messagesAdapter = new MessagesAdapter(this, mMessages);
         mMessagesRecyclerView.setAdapter(messagesAdapter);
@@ -138,6 +154,7 @@ public class MessagesActivity extends AppCompatActivity implements MessagesView 
     public void resetUnreadMessageCount() {
         messagesPresenter.resetUnreadMessageCount(mChatId);
     }
+    //endregion
 
     @Override
     public void onMessageAdded(Message message) {
@@ -212,13 +229,69 @@ public class MessagesActivity extends AppCompatActivity implements MessagesView 
         }
     }
 
+    @NeedsPermission({Manifest.permission.CAMERA,
+            Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE})
+    public void launchCamera() {
+        // create Intent to take a picture and return control to the calling application
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Create a File reference to access to future access
+        photoFile = getPhotoFileUri(photoFileName);
+
+        // wrap File object into a content provider
+        // required for API >= 24
+        // See https://guides.codepath.com/android/Sharing-Content-with-Intents#sharing-files-with-api-24-or-higher
+        Uri fileProvider = FileProvider.getUriForFile(MessagesActivity.this, "com.penseapp.fileprovider", photoFile);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
+
+        // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
+        // So as long as the result is not null, it's safe to use the intent.
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            // Start the image capture intent to take photo
+            startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+        }
+    }
+
+    // Returns the File for a photo stored on disk given the fileName
+    private File getPhotoFileUri(String fileName) {
+        // Only continue if the SD Card is mounted
+        if (isExternalStorageAvailable()) {
+            // Get safe storage directory for photos
+            // Use `getExternalFilesDir` on Context to access package-specific directories.
+            // This way, we don't need to request external read/write runtime permissions.
+            File mediaStorageDir = new File(
+                    getExternalFilesDir(Environment.DIRECTORY_PICTURES), DIRECTORY_TAG);
+
+            // Create the storage directory if it does not exist
+            if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()) {
+                Log.d(DIRECTORY_TAG, "failed to create directory");
+            }
+
+            // Return the file target for the photo based on filename
+            return new File(mediaStorageDir.getPath() + File.separator + fileName);
+        }
+        return null;
+    }
+
+    // Returns true if external storage for photos is available
+    private boolean isExternalStorageAvailable() {
+        String state = Environment.getExternalStorageState();
+        return state.equals(Environment.MEDIA_MOUNTED);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        // Delegate the permission handling to generated method
+        MessagesActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && data != null) {
             if (requestCode == PICK_PHOTO_CODE) {
                 Uri photoUri = data.getData();
-                String filePath = photoUri.getPath();
-                Toast.makeText(this, filePath + " selected", Toast.LENGTH_SHORT).show();
+//                String filePath = photoUri.getPath();
+//                Toast.makeText(this, filePath + " selected", Toast.LENGTH_SHORT).show();
 
                 messagesPresenter.sendMessage(null, senderId, senderName, photoUri, null);
 
@@ -229,10 +302,21 @@ public class MessagesActivity extends AppCompatActivity implements MessagesView 
 //            ivPreview.setImageBitmap(selectedImage);
             } else if (requestCode == PICK_DOCUMENT_CODE) {
                 Uri documentUri = data.getData();
-                String documentPath = documentUri.getPath();
-                Toast.makeText(this, documentPath + " selected", Toast.LENGTH_SHORT).show();
+//                String documentPath = documentUri.getPath();
+//                Toast.makeText(this, documentPath + " selected", Toast.LENGTH_SHORT).show();
 
                 messagesPresenter.sendMessage(null, senderId, senderName, null, documentUri);
+
+            } else if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+//                Toast.makeText(this, "Camera OK", Toast.LENGTH_SHORT).show();
+                // by this point we have the camera photo on disk
+//                Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getPath());
+                // RESIZE BITMAP, see section below
+                // Load the taken image into a preview
+                // ivPreview.setImageBitmap(takenImage);
+
+                Uri photoUri = Uri.fromFile(photoFile);
+                messagesPresenter.sendMessage(null, senderId, senderName, photoUri, null);
             }
         }
     }
