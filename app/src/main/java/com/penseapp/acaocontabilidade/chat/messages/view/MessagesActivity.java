@@ -117,9 +117,9 @@ public class MessagesActivity extends AppCompatActivity implements MessagesView 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_camera:
-                MessagesActivityPermissionsDispatcher.launchCameraWithPermissionCheck(this);
-                return true;
+//            case R.id.action_camera:
+//                MessagesActivityPermissionsDispatcher.launchCameraWithPermissionCheck(this);
+//                return true;
             case R.id.action_gallery:
                 pickPhotoFromGallery();
                 return true;
