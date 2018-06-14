@@ -99,6 +99,7 @@ public class ContactsFragment extends Fragment {//implements ContactsView {
 
     @Override
     public void onDetach() {
+        // TODO Attempt to invoke virtual method 'void com.penseapp.acaocontabilidade.chat.contacts.view.ContactsAdapter.unsubscribeForContactsUpdates()' on a null object reference
         contactsAdapter.unsubscribeForContactsUpdates();
 
         super.onDetach();

@@ -33,6 +33,7 @@ import com.penseapp.acaocontabilidade.login.model.User;
 import com.penseapp.acaocontabilidade.login.view.activities.LoginActivity;
 import com.penseapp.acaocontabilidade.news.view.NewsFragment;
 import com.penseapp.acaocontabilidade.news.view.NewsItemActivity;
+import com.penseapp.acaocontabilidade.web.WebFragment;
 
 import static com.penseapp.acaocontabilidade.chat.chats.view.ChatsActivity.SELECTED_CHAT_KEY;
 import static com.penseapp.acaocontabilidade.chat.chats.view.ChatsActivity.SELECTED_CHAT_NAME;
@@ -44,7 +45,7 @@ public class TabbedMainActivity extends AppCompatActivity implements
         ChatsFragment.OnChatsFragmentInteractionListener,
         NewsFragment.OnNewsFragmentInteractionListener {
 
-    public static final int NUMBER_TABS = 2;
+    public static final int NUMBER_TABS = 3;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -183,8 +184,9 @@ public class TabbedMainActivity extends AppCompatActivity implements
                     return ContactsFragment.newInstance();
                 case 1:
                     return NewsFragment.newInstance();
-//                case 1:
-//                    return ChatsFragment.newInstance();
+                case 2:
+                    return WebFragment.newInstance("http://acaocont.app.questorpublico.com.br/entrar");
+//                    return WebFragment.newInstance("https://www.google.com");
                 default:
                     // Return a PlaceholderFragment (defined as a static inner class below).
                     return PlaceholderFragment.newInstance(position + 1);
@@ -203,8 +205,8 @@ public class TabbedMainActivity extends AppCompatActivity implements
                     return "Conversas";
                 case 1:
                     return "Notícias";
-//                case 1:
-//                    return "Chats";
+                case 2:
+                    return "Documentos";
             }
             return null;
         }

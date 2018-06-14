@@ -4,15 +4,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.net.http.SslError;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.penseapp.acaocontabilidade.R;
 
@@ -82,9 +85,9 @@ public class WebFragment extends Fragment {
         // Enable JavaScript
         webView.getSettings().setJavaScriptEnabled(true);
         // Enable responsive layout
-        webView.getSettings().setUseWideViewPort(true);
+        webView.getSettings().setUseWideViewPort(false);
         // Zoom out if the content width is greater than the width of the viewport
-        webView.getSettings().setLoadWithOverviewMode(true);
+        webView.getSettings().setLoadWithOverviewMode(false);
         // Configure the client to use when opening URLs
         webView.setWebViewClient(new MyWebViewClient());
 
@@ -155,6 +158,11 @@ public class WebFragment extends Fragment {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             startActivity(intent);
             return true;
+        }
+
+        @Override
+        public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+            Toast.makeText(getContext(), error.toString(), Toast.LENGTH_SHORT).show();
         }
     }
 
