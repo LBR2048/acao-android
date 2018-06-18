@@ -182,7 +182,7 @@ public class MessagesInteractorImpl implements MessagesInteractor {
                     // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
                     Log.i("Storage", "Success: " + downloadUrl);
-                    saveMessage(messageText, senderId, senderEmail, null,FirebaseHelper.GS_PREFIX + documentPath);
+                    saveMessage(messageText, senderId, senderEmail, null, documentPath);
                 }
 
                 @Override
