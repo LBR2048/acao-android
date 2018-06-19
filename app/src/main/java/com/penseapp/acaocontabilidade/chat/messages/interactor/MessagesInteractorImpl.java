@@ -158,9 +158,6 @@ public class MessagesInteractorImpl implements MessagesInteractor {
             storage.uploadFile(new Storage.UploadFileCallback() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                    Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                    Log.i("Storage", "Success: " + downloadUrl);
                     saveMessage(messageText, senderId, senderEmail, FirebaseHelper.GS_PREFIX + imagePath, null);
                 }
 
@@ -179,9 +176,6 @@ public class MessagesInteractorImpl implements MessagesInteractor {
             storage.uploadFile(new Storage.UploadFileCallback() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                    Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                    Log.i("Storage", "Success: " + downloadUrl);
                     saveMessage(messageText, senderId, senderEmail, null, documentPath);
                 }
 

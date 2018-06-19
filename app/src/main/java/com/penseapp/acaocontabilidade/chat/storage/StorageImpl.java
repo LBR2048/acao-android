@@ -43,9 +43,6 @@ public class StorageImpl implements Storage {
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                Log.i("Storage", "Success: " + downloadUrl);
                 uploadFileCallback.onSuccess(taskSnapshot);
             }
         });
