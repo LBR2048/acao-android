@@ -143,9 +143,6 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
                         }
                     }, message.getPDF());
 
-                } else {
-                    // TODO log which file could not be opened
-                    Toast.makeText(mContext, "Tipo de arquivo desconhecido", Toast.LENGTH_SHORT).show();
                 }
             }
         });
