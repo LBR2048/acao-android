@@ -57,7 +57,9 @@ dependencies {
     implementation 'com.uncopt:android.justified:1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
 
-    implementation 'com.squareup.picasso:picasso:2.5.2'
+    // Glide
+    implementation 'com.github.bumptech.glide:glide:4.7.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
 
     // PermissionsDispatcher
     implementation 'com.github.hotchemi:permissionsdispatcher:3.1.0'

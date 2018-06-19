@@ -19,10 +19,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.storage.StorageReference;
 import com.penseapp.acaocontabilidade.R;
 import com.penseapp.acaocontabilidade.chat.messages.model.Message;
 import com.penseapp.acaocontabilidade.domain.FirebaseHelper;
-import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -162,12 +162,14 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
             // Workaround to avoid PDF icon from showing briefly before the image // TODO improve this
             holder.image.setImageResource(0);
             holder.image.setVisibility(View.VISIBLE);
-            FirebaseHelper.getInstance().getHttpFromGs(new FirebaseHelper.GetHttpFromGsCallback() {
-                @Override
-                public void showHttp(Uri http) {
-                    Picasso.with(mContext).load(http).into(holder.image);
-                }
-            }, photoURL);
+
+            StorageReference photoRef =
+                    FirebaseHelper.getInstance().getStorage().getReferenceFromUrl(photoURL);
+
+            GlideApp.with(mContext)
+                    .load(photoRef)
+                    .into(holder.image);
+
         } else {
             holder.image.setVisibility(View.GONE);
         }
