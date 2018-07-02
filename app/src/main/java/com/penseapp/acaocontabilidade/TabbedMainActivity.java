@@ -18,12 +18,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.penseapp.acaocontabilidade.chat.chats.presenter.ChatsWriterPresenter;
+import com.penseapp.acaocontabilidade.chat.chats.presenter.ChatsWriterPresenterImpl;
 import com.penseapp.acaocontabilidade.chat.chats.view.ChatsFragment;
 import com.penseapp.acaocontabilidade.chat.contacts.view.ContactsFragment;
 import com.penseapp.acaocontabilidade.chat.contacts.view.ContactsView;
 import com.penseapp.acaocontabilidade.chat.messages.view.MessagesActivity;
-import com.penseapp.acaocontabilidade.chat.chats.presenter.ChatsWriterPresenter;
-import com.penseapp.acaocontabilidade.chat.chats.presenter.ChatsWriterPresenterImpl;
 import com.penseapp.acaocontabilidade.chat.users.presenter.UsersPresenter;
 import com.penseapp.acaocontabilidade.chat.users.presenter.UsersPresenterImpl;
 import com.penseapp.acaocontabilidade.chat.users.view.UsersView;
@@ -185,7 +185,10 @@ public class TabbedMainActivity extends AppCompatActivity implements
                 case 1:
                     return NewsFragment.newInstance();
                 case 2:
-                    return WebFragment.newInstance("http://acaocont.app.questorpublico.com.br/entrar");
+//                    return WebFragment.newInstance("https://www.nets.eu/no-nb/Pages/default.aspx");
+                    return WebFragment.newInstance("https://help.equifax.com/");
+//                    return WebFragment.newInstance("https://acaocont.app.questorpublico.com.br/");
+//                    return WebFragment.newInstance("https://acaocont.app.questorpublico.com.br/entrar");
 //                    return WebFragment.newInstance("https://www.google.com");
                 default:
                     // Return a PlaceholderFragment (defined as a static inner class below).

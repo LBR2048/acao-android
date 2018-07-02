@@ -8,6 +8,7 @@ import android.net.http.SslError;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,6 @@ import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.penseapp.acaocontabilidade.R;
 
@@ -83,11 +83,14 @@ public class WebFragment extends Fragment {
         // Configure related browser settings
 
         // Enable JavaScript
-        webView.getSettings().setJavaScriptEnabled(true);
+//        webView.getSettings().setJavaScriptEnabled(true);
         // Enable responsive layout
         webView.getSettings().setUseWideViewPort(false);
         // Zoom out if the content width is greater than the width of the viewport
         webView.getSettings().setLoadWithOverviewMode(false);
+
+        webView.getSettings().setDomStorageEnabled(true);
+
         // Configure the client to use when opening URLs
         webView.setWebViewClient(new MyWebViewClient());
 
@@ -162,7 +165,9 @@ public class WebFragment extends Fragment {
 
         @Override
         public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-            Toast.makeText(getContext(), error.toString(), Toast.LENGTH_SHORT).show();
+            Log.d("Web", error.toString());
+//            handler.proceed();
+//            Toast.makeText(getContext(), error.toString(), Toast.LENGTH_SHORT).show();
         }
     }
 
