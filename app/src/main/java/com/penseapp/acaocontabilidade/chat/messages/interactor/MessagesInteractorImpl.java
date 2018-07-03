@@ -201,12 +201,13 @@ public class MessagesInteractorImpl implements MessagesInteractor {
         newMessage.setSenderId(senderId);
         newMessage.setSenderEmail(senderEmail);
         newMessage.setPhotoURL(imagePath);
-        newMessage.setPDF(documentPath);
+//        newMessage.setPDF(documentPath);    // Do not save property pdf in lowercase
         newMessage.setTimestamp(System.currentTimeMillis());
 
         // Save new messages in one node only
         // Add newly created message to Firebase chats/$currentChatId/messages/$messageId
         chatMessagesReference.child(currentChatId).child(newMessageKey).setValue(newMessage);
+        chatMessagesReference.child(currentChatId).child(newMessageKey).child("PDF").setValue(documentPath);    // Save property PDF in uppercase
 
         // Save new messages in two nodes, one for each user
         // Add newly created message to Firebase user-chats-messages/$senderId/$currentChatId/$messageId
