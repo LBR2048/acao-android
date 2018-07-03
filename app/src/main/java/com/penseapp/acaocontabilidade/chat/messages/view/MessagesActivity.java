@@ -167,7 +167,7 @@ public class MessagesActivity extends AppCompatActivity implements MessagesView 
         Log.i(LOG_TAG, "View onMessageAdded called");
         mMessages.add(message);
         messagesAdapter.notifyItemInserted(mMessages.size() - 1);
-        mMessagesRecyclerView.smoothScrollToPosition(mMessages.size() - 1);
+        mMessagesRecyclerView.scrollToPosition(mMessages.size() - 1);
 
         resetUnreadMessageCount();
     }
