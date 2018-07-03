@@ -3,12 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.penseapp.acaocontabilidade.TabbedMainActivity">
     <item
-        android:id="@+id/action_acao_web"
+        android:id="@+id/action_questor_documents"
         android:orderInCategory="1"
+        android:title="@string/action_documents"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_acao_web"
+        android:orderInCategory="2"
         android:title="Site da Ação" />
     <item
         android:id="@+id/action_acao_facebook"
-        android:orderInCategory="2"
+        android:orderInCategory="3"
         android:title="@string/action_acao_facebook"
         app:showAsAction="never" />
     <item

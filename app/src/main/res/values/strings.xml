@@ -2,6 +2,7 @@
     <string name="app_name">Ação</string>
     <string name="title_activity_tabbed_main">Ação</string>
     <string name="action_acao_facebook">Ação no Facebook</string>
+    <string name="action_documents">Documentos</string>
     <string name="section_format">Hello World from section: %1$d</string>
 
     <!-- TODO: Remove or change this placeholder text -->

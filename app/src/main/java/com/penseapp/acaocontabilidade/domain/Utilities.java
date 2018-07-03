@@ -18,6 +18,7 @@ public class Utilities {
     private static final String SITE_ACAO = "http://acaocontabilidade.com";
     private static final String SITE_ACAO_FACEBOOK = "https://www.facebook.com/acaocontabilidade/";
     private static final String SITE_ACAO_NEW_CUSTOMER = "https://acaocontabilidadejoinville.com.br/orcamento-online/";
+    private static final String SITE_QUESTOR_DOCUMENTS = "https://acaocont.app.questorpublico.com.br/entrar/";
 
     /**
      * Hides the soft keyboard
@@ -56,6 +57,12 @@ public class Utilities {
     public static void goToAcaoNewCustomerWebsite(Context context) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(SITE_ACAO_NEW_CUSTOMER));
+        context.startActivity(intent);
+    }
+
+    public static void goToDocumentsWebsite(Context context) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(SITE_QUESTOR_DOCUMENTS));
         context.startActivity(intent);
     }
 

@@ -56,6 +56,10 @@ public class MainActivity extends AppCompatActivity implements
             Utilities.goToAcaoFacebookWebsite(this);
             return true;
         }
+        if (id == R.id.action_questor_documents) {
+            Utilities.goToDocumentsWebsite(this);
+            return true;
+        }
         if (id == R.id.action_logout) {
             FirebaseHelper.getInstance().logout();
             navigateToLoginActivity();
