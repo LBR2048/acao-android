@@ -9,6 +9,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.penseapp.acaocontabilidade.MainActivity;
 import com.penseapp.acaocontabilidade.R;
 import com.penseapp.acaocontabilidade.TabbedMainActivity;
 import com.penseapp.acaocontabilidade.domain.FirebaseHelper;
@@ -96,7 +97,8 @@ public class LoginActivity extends AppCompatActivity
 
     //region Navigation
     private void showMainActivity() {
-        Intent intent = new Intent(LoginActivity.this, TabbedMainActivity.class);
+//        Intent intent = new Intent(LoginActivity.this, TabbedMainActivity.class);
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         // Ao pressionar Logout, a WorkoutsActivity não pode mais ser acessada através do back button
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);

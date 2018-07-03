@@ -5,8 +5,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!--<uses-permission android:name="android.permission.CAMERA" />-->
 
+    <!-- <uses-permission android:name="android.permission.CAMERA" /> -->
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -34,11 +34,15 @@
                 android:value="com.penseapp.acaocontabilidade.TabbedMainActivity" />
         </activity>
 
+        <activity android:name=".MainActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme" />
+
         <activity
             android:name=".TabbedMainActivity"
             android:label="@string/title_activity_tabbed_main"
             android:launchMode="singleTop"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
 
         <activity
             android:name=".news.view.NewsItemActivity"
@@ -50,10 +54,13 @@
         </activity>
 
         <!-- [START FirebaseMessagingService] -->
-        <!-- A service that extends FirebaseMessagingService.
+        <!--
+        A service that extends FirebaseMessagingService.
         This is required if you want to do any message handling beyond receiving notifications on apps in the background.
-        To receive notifications in foregrounded apps, to receive data payload, to send upstream messages, and so on, you must extend this service -->
-        <service android:name=".domain.MyFirebaseMessagingService"
+        To receive notifications in foregrounded apps, to receive data payload, to send upstream messages, and so on, you must extend this service
+        -->
+        <service
+            android:name=".domain.MyFirebaseMessagingService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -62,9 +69,12 @@
         </service>
         <!-- [END FirebaseMessagingService] -->
 
+
         <!-- [START FirebaseInstanceIdService] -->
-        <!-- A service that extends FirebaseInstanceIdService to handle the creation, rotation, and updating of registration tokens.
-        This is required for sending to specific devices or for creating device groups. -->
+        <!--
+        A service that extends FirebaseInstanceIdService to handle the creation, rotation, and updating of registration tokens.
+        This is required for sending to specific devices or for creating device groups.
+        -->
         <service android:name=".domain.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
@@ -72,8 +82,11 @@
         </service>
         <!-- [END FirebaseInstanceIdService] -->
 
-        <!-- Within the application component, metadata elements to set a default icon and color for notifications.
-        Android uses these values whenever incoming messages do not explicitly set icon and icon color. -->
+
+        <!--
+        Within the application component, metadata elements to set a default icon and color for notifications.
+        Android uses these values whenever incoming messages do not explicitly set icon and icon color.
+        -->
         <!--
              Set custom default icon. This is used when no icon is set for incoming notification messages.
              See README(https://goo.gl/l4GJaQ) for more.
