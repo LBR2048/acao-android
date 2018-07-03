@@ -36,10 +36,10 @@
         <EditText
             android:id="@+id/messageEdit"
             style="Small"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:inputType="textCapSentences"
+            android:inputType="textCapSentences|textMultiLine"
             android:hint="Digite aqui..."/>
 
         <Button
