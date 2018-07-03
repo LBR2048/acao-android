@@ -7,7 +7,7 @@ android {
         applicationId "com.penseapp.acaocontabilidade"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 7
+        versionCode 8
         versionName "1.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
