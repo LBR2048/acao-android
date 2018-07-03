@@ -227,11 +227,7 @@ public class TabbedMainActivity extends AppCompatActivity implements
 
     @Override
     public void onContactSelected(String contactId, String contactName, String company)  {
-        SharedPreferences settings = getApplicationContext().getSharedPreferences("Settings", Context.MODE_PRIVATE);
-        String senderId = settings.getString("userId", "");
-        String senderName = settings.getString("userName", "");
-        String senderCompany = settings.getString("userCompany", "");
-        chatsWriterPresenter.createChatIfNeeded(senderId, senderName, senderCompany, contactId, contactName, company);
+        createChatIfNeeded(contactId, contactName, company);
     }
 
     @Override
@@ -241,10 +237,7 @@ public class TabbedMainActivity extends AppCompatActivity implements
 
     @Override
     public void onNewsSelected(String newsId, String newsTitle) {
-        Intent intent = new Intent(this, NewsItemActivity.class);
-        intent.putExtra(NewsItemActivity.SELECTED_NEWS_TITLE, newsTitle);
-        intent.putExtra(NewsItemActivity.SELECTED_NEWS_KEY, newsId);
-        startActivity(intent);
+        navigateToNewsActivity(newsId, newsTitle);
     }
 
     @Override
@@ -259,9 +252,24 @@ public class TabbedMainActivity extends AppCompatActivity implements
         startActivity(intent);
     }
 
+    private void navigateToNewsActivity(String newsId, String newsTitle) {
+        Intent intent = new Intent(this, NewsItemActivity.class);
+        intent.putExtra(NewsItemActivity.SELECTED_NEWS_TITLE, newsTitle);
+        intent.putExtra(NewsItemActivity.SELECTED_NEWS_KEY, newsId);
+        startActivity(intent);
+    }
+
     private void navigateToLoginActivity() {
         Intent intent = new Intent(TabbedMainActivity.this, LoginActivity.class);
         startActivity(intent);
+    }
+
+    private void createChatIfNeeded(String contactId, String contactName, String company) {
+        SharedPreferences settings = getApplicationContext().getSharedPreferences("Settings", Context.MODE_PRIVATE);
+        String senderId = settings.getString("userId", "");
+        String senderName = settings.getString("userName", "");
+        String senderCompany = settings.getString("userCompany", "");
+        chatsWriterPresenter.createChatIfNeeded(senderId, senderName, senderCompany, contactId, contactName, company);
     }
 
 }
