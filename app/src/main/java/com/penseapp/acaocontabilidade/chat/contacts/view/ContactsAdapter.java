@@ -138,13 +138,13 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
         holder.availability.setText("Disponível");
 
 //        int unreadMessageCount = selectedChat.getUnreadMessageCount();
-        int unreadMessageCount = 5;
-        if (unreadMessageCount != 0) {
-            holder.unreadMessageCount.setText(Integer.toString(unreadMessageCount));
-            holder.badge.setVisibility(View.VISIBLE);
-        } else {
-            holder.badge.setVisibility(View.GONE);
-        }
+//        int unreadMessageCount = 5;
+//        if (unreadMessageCount != 0) {
+//            holder.unreadMessageCount.setText(Integer.toString(unreadMessageCount));
+//            holder.badge.setVisibility(View.VISIBLE);
+//        } else {
+//            holder.badge.setVisibility(View.GONE);
+//        }
     }
 
     // Returns the total count of items in the list

@@ -3,6 +3,7 @@ package com.penseapp.acaocontabilidade.chat.chats.view;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -76,6 +77,14 @@ public class ChatsFragment extends Fragment {
                 onChatClicked(selectedChat.getName(), selectedChat.getKey());
             }
         });
+
+        FloatingActionButton fab = view.findViewById(R.id.fragment_chats_show_contacts);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onShowContactsClicked();
+            }
+        });
     }
 
     public void onChatClicked(String name, String key) {
@@ -115,6 +124,7 @@ public class ChatsFragment extends Fragment {
      */
     public interface OnChatsFragmentInteractionListener {
         void onChatSelected(String key, String name);
+        void onShowContactsClicked();
     }
 
     private void setupRecyclerView() {

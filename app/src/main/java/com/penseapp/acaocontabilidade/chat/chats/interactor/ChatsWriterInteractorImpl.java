@@ -23,7 +23,6 @@ public class ChatsWriterInteractorImpl implements ChatsWriterInteractor {
     private DatabaseReference userChatContactsReference = mFirebaseHelperInstance.getUserChatContactsReference();
 
     private String currentUserId = mFirebaseHelperInstance.getAuthUserId();
-    private ValueEventListener userChatsChildEventListener;
     private String newChatKey;
 
     public ChatsWriterInteractorImpl(ChatsWriterPresenter chatsWriterPresenter) {
@@ -79,25 +78,23 @@ public class ChatsWriterInteractorImpl implements ChatsWriterInteractor {
 
     @Override
     public void createChatIfNeeded(final String senderId, final String senderName, final String senderCompany, final String recipientId, final String recipientName, final String recipientCompany) {
-        if (userChatsChildEventListener == null) {
-            userChatsChildEventListener = new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    Object dataSnapshotValue = dataSnapshot.getValue();
-                    if (dataSnapshotValue == null) {
-                        createChat(senderId, senderName, senderCompany, recipientId, recipientName, recipientCompany);
-                        chatsWriterPresenter.onChatCreated(newChatKey, recipientName);
-                    } else {
-                        chatsWriterPresenter.onChatCreated(dataSnapshotValue.toString(), recipientName);
+        userChatContactsReference.child(currentUserId).child(recipientId).addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Object dataSnapshotValue = dataSnapshot.getValue();
+                        if (dataSnapshotValue == null) {
+                            createChat(senderId, senderName, senderCompany, recipientId, recipientName, recipientCompany);
+                            chatsWriterPresenter.onChatCreated(newChatKey, recipientName);
+                        } else {
+                            chatsWriterPresenter.onChatCreated(dataSnapshotValue.toString(), recipientName);
+                        }
                     }
-                }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
 
-                }
-            };
-            userChatContactsReference.child(currentUserId).child(recipientId).addListenerForSingleValueEvent(userChatsChildEventListener);
-        }
+                    }
+                });
     }
 }

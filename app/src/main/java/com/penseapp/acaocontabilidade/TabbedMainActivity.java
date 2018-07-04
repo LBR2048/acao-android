@@ -18,12 +18,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.penseapp.acaocontabilidade.chat.chats.presenter.ChatsWriterPresenter;
+import com.penseapp.acaocontabilidade.chat.chats.presenter.ChatsWriterPresenterImpl;
 import com.penseapp.acaocontabilidade.chat.chats.view.ChatsFragment;
 import com.penseapp.acaocontabilidade.chat.contacts.view.ContactsFragment;
 import com.penseapp.acaocontabilidade.chat.contacts.view.ContactsView;
 import com.penseapp.acaocontabilidade.chat.messages.view.MessagesActivity;
-import com.penseapp.acaocontabilidade.chat.chats.presenter.ChatsWriterPresenter;
-import com.penseapp.acaocontabilidade.chat.chats.presenter.ChatsWriterPresenterImpl;
 import com.penseapp.acaocontabilidade.chat.users.presenter.UsersPresenter;
 import com.penseapp.acaocontabilidade.chat.users.presenter.UsersPresenterImpl;
 import com.penseapp.acaocontabilidade.chat.users.view.UsersView;
@@ -233,6 +233,11 @@ public class TabbedMainActivity extends AppCompatActivity implements
     @Override
     public void onChatSelected(String chatId, String chatName) {
         navigateToMessagesActivity(chatId, chatName);
+    }
+
+    @Override
+    public void onShowContactsClicked() {
+
     }
 
     @Override

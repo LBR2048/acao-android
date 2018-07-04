@@ -1,13 +1,20 @@
 package com.penseapp.acaocontabilidade;
 
+import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.penseapp.acaocontabilidade.chat.chats.presenter.ChatsWriterPresenterImpl;
 import com.penseapp.acaocontabilidade.chat.chats.view.ChatsFragment;
+import com.penseapp.acaocontabilidade.chat.contacts.view.ContactsFragment;
+import com.penseapp.acaocontabilidade.chat.contacts.view.ContactsView;
 import com.penseapp.acaocontabilidade.chat.messages.view.MessagesActivity;
 import com.penseapp.acaocontabilidade.domain.FirebaseHelper;
 import com.penseapp.acaocontabilidade.domain.Utilities;
@@ -17,7 +24,12 @@ import static com.penseapp.acaocontabilidade.chat.chats.view.ChatsActivity.SELEC
 import static com.penseapp.acaocontabilidade.chat.chats.view.ChatsActivity.SELECTED_CHAT_NAME;
 
 public class MainActivity extends AppCompatActivity implements
-        ChatsFragment.OnChatsFragmentInteractionListener {
+        ContactsView,
+        ChatsFragment.OnChatsFragmentInteractionListener,
+        ContactsFragment.OnContactsFragmentInteractionListener {
+
+    private ChatsWriterPresenterImpl chatsWriterPresenter;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +41,26 @@ public class MainActivity extends AppCompatActivity implements
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.main_activity_fragment_holder, ChatsFragment.newInstance())
+//                    .replace(R.id.main_activity_fragment_holder, ContactsFragment.newInstance())
                     .commit();
         }
+
+        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_activity_fragment_holder);
+                if (fragment instanceof ContactsFragment) {
+                    toolbar.setTitle("Contatos");
+                } else if (fragment instanceof ChatsFragment) {
+                    toolbar.setTitle("Conversas");
+//                    getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
+                } else {
+                    toolbar.setTitle("Ação");
+                }
+            }
+        });
+
+        chatsWriterPresenter = new ChatsWriterPresenterImpl(this);
     }
 
     @Override
@@ -73,10 +103,26 @@ public class MainActivity extends AppCompatActivity implements
         navigateToMessagesActivity(key, name);
     }
 
+    @Override
+    public void onShowContactsClicked() {
+        showContactsFragment();
+    }
+
+    @Override
+    public void onContactSelected(String key, String name, String company) {
+        createChatIfNeeded(key, name, company);
+    }
+
+    @Override
+    public void onChatCreated(String chatId, String chatName) {
+        navigateToMessagesActivity(chatId, chatName);
+    }
+
     private void setupToolBar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar == null) return;
         setSupportActionBar(toolbar);
+        toolbar.setTitle("Conversas");
 //        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
     }
 
@@ -90,6 +136,22 @@ public class MainActivity extends AppCompatActivity implements
     private void navigateToLoginActivity() {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
+    }
+
+    private void showContactsFragment() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.main_activity_fragment_holder, ContactsFragment.newInstance())
+                .addToBackStack(null)
+                .commit();
+    }
+
+    private void createChatIfNeeded(String contactId, String contactName, String company) {
+        SharedPreferences settings = getApplicationContext().getSharedPreferences("Settings", Context.MODE_PRIVATE);
+        String senderId = settings.getString("userId", "");
+        String senderName = settings.getString("userName", "");
+        String senderCompany = settings.getString("userCompany", "");
+        chatsWriterPresenter.createChatIfNeeded(senderId, senderName, senderCompany, contactId, contactName, company);
     }
 
 }
