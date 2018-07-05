@@ -1,5 +1,6 @@
 package com.penseapp.acaocontabilidade.chat.chats.interactor;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.firebase.database.ChildEventListener;
@@ -21,9 +22,9 @@ public class ChatsReaderInteractorImpl implements ChatsReaderInteractor {
     private final ChatsReaderPresenter chatsReaderPresenter;
 
     // Firebase
-    private FirebaseHelper mFirebaseHelperInstance = FirebaseHelper.getInstance();
-    private DatabaseReference currentUserChatsReference = mFirebaseHelperInstance.getCurrentUserChatsReference();
-    private String currentUserId = mFirebaseHelperInstance.getAuthUserId();
+    private final FirebaseHelper mFirebaseHelperInstance = FirebaseHelper.getInstance();
+    private final DatabaseReference currentUserChatsReference = mFirebaseHelperInstance.getCurrentUserChatsReference();
+    private final String currentUserId = mFirebaseHelperInstance.getAuthUserId();
 
     private ChildEventListener chatsChildEventListener;
 
@@ -41,50 +42,48 @@ public class ChatsReaderInteractorImpl implements ChatsReaderInteractor {
 
             chatsChildEventListener = new ChildEventListener() {
                 @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    final String chatKey = dataSnapshot.getKey();
-                    try {
-                        Chat chat = dataSnapshot.getValue(Chat.class);
+                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
+                    final Chat chat = dataSnapshot.getValue(Chat.class);
+                    if (chat != null){
                         chat.setKey(dataSnapshot.getKey());
-                        Log.i(LOG_TAG, "Chat " + chat.getName() + " added");
                         chatsReaderPresenter.onChatAdded(chat);
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "Error while reading chat " + chatKey);
+                        Log.i(LOG_TAG, "Chat added " + chat.getName());
+                    } else {
+                        Log.e(LOG_TAG, "Error reading chat " + dataSnapshot.getKey());
                     }
                 }
 
                 @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                    final String chatKey = dataSnapshot.getKey();
-                    try {
-                        Chat chat = dataSnapshot.getValue(Chat.class);
-                        Log.i(LOG_TAG, "Chat " + chat.getName() + " changed");
+                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, String s) {
+                    final Chat chat = dataSnapshot.getValue(Chat.class);
+                    if (chat != null){
                         chat.setKey(dataSnapshot.getKey());
                         chatsReaderPresenter.onChatChanged(chat);
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "Error while reading chat " + chatKey);
+                        Log.i(LOG_TAG, "Chat changed " + chat.getName());
+                    } else {
+                        Log.e(LOG_TAG, "Error while reading chat " + dataSnapshot.getKey());
+                    }
+
+                }
+
+                @Override
+                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                    final String key = dataSnapshot.getKey();
+                    if (key != null){
+                        Log.i(LOG_TAG, "Chat removed " + key);
+                        chatsReaderPresenter.onChatRemoved(key);
+                    } else {
+                        Log.e(LOG_TAG, "Error removing chat");
                     }
                 }
 
                 @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
-                    final String chatKey = dataSnapshot.getKey();
-                    try {
-                        String chatId = dataSnapshot.getKey();
-                        Log.i(LOG_TAG, "Chat " + chatId + " removed");
-                        chatsReaderPresenter.onChatRemoved(chatId);
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "Error while reading chat " + chatKey);
-                    }
-                }
-
-                @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, String s) {
 
                 }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError) {
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
                 }
             };

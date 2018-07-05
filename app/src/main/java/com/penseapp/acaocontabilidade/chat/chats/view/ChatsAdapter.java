@@ -1,6 +1,7 @@
 package com.penseapp.acaocontabilidade.chat.chats.view;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,9 +26,13 @@ import java.util.List;
 // Create the basic adapter extending from RecyclerView.Adapter
 // Note that we specify the custom ViewHolder which gives us access to our views
 public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder>
-        implements ChatsAdapterView { //ItemTouchHelperAdapter {
+        implements ChatsAdapterView {
 
     private static final String LOG_TAG = ChatsAdapter.class.getSimpleName();
+    private static final String CONTABIL = "Contábil";
+    private static final String FISCAL = "Fiscal";
+    private static final String PESSOAL = "Pessoal";
+    private static final String SOCIETARIO = "Societário";
 
     // Define onItemClickListener member variable
     private static OnItemClickListener onItemClickListener;
@@ -53,45 +58,10 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder>
         this.onItemClickListener = listener;
     }
 
-    // Provide a direct reference to each of the views within a data item
-    // Used to cache the views within the item layout for fast access
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        // Your holder should contain a member variable
-        // for any view that will be set as you render a row
-        ImageView icon;
-        TextView name;
-        TextView unreadMessageCount;
-        FrameLayout badge;
-        TextView availability;
-
-        // We also create a constructor that accepts the entire item row
-        // and does the view lookups to find each subview
-        public ViewHolder(final View itemView) {
-            // Stores the itemView in a public final member variable that can be used
-            // to access the context from any ViewHolder instance.
-            super(itemView);
-            icon = (ImageView) itemView.findViewById(R.id.list_item_chat_contact_icon);
-            name = (TextView) itemView.findViewById(R.id.list_item_chat_contact_name_textview);
-            availability = (TextView) itemView.findViewById(R.id.list_item_chat_contact_availability_textview);
-            unreadMessageCount = (TextView) itemView.findViewById(R.id.list_item_chat_contact_unread_messages_textview);
-            badge = (FrameLayout) itemView.findViewById(R.id.list_item_chat_contact_unread_messages_badge);
-
-            // Setup the click onItemClickListener
-            // itemView.setOnClickListener(this);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Triggers click upwards to the adapter on click
-                    if (onItemClickListener != null)
-                        onItemClickListener.onItemClick(itemView, getLayoutPosition());
-                }
-            });
-        }
-    }
-
     // Usually involves inflating a layout from XML and returning the holder
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Inflate the custom layout
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_chat_contact, parent, false);
 
@@ -101,7 +71,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder>
 
     // Involves populating data into the item through holder
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         // Get the data model based on position
         final Chat selectedChat = mChats.get(position);
 
@@ -119,16 +89,16 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder>
         holder.name.setText(recipientName);
 
         switch (recipientName) {
-            case "Contábil":
+            case CONTABIL:
                 holder.icon.setImageResource(R.drawable.ic_contabil);
                 break;
-            case "Fiscal":
+            case FISCAL:
                 holder.icon.setImageResource(R.drawable.ic_fiscal);
                 break;
-            case "Pessoal":
+            case PESSOAL:
                 holder.icon.setImageResource(R.drawable.ic_pessoal);
                 break;
-            case "Societário":
+            case SOCIETARIO:
                 holder.icon.setImageResource(R.drawable.ic_societario);
                 break;
             default:
@@ -136,7 +106,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder>
                 break;
         }
 
-        holder.availability.setText("Disponível");
+        holder.availability.setText(R.string.status_available);
 
         int unreadMessageCount = selectedChat.getUnreadMessageCount();
         if (unreadMessageCount != 0) {
@@ -144,6 +114,42 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder>
             holder.badge.setVisibility(View.VISIBLE);
         } else {
             holder.badge.setVisibility(View.GONE);
+        }
+    }
+
+    // Provide a direct reference to each of the views within a data item
+    // Used to cache the views within the item layout for fast access
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        // Your holder should contain a member variable
+        // for any view that will be set as you render a row
+        final ImageView icon;
+        final TextView name;
+        final TextView unreadMessageCount;
+        final FrameLayout badge;
+        final TextView availability;
+
+        // We also create a constructor that accepts the entire item row
+        // and does the view lookups to find each subview
+        ViewHolder(final View itemView) {
+            // Stores the itemView in a public final member variable that can be used
+            // to access the context from any ViewHolder instance.
+            super(itemView);
+            icon = itemView.findViewById(R.id.list_item_chat_contact_icon);
+            name = itemView.findViewById(R.id.list_item_chat_contact_name_textview);
+            availability = itemView.findViewById(R.id.list_item_chat_contact_availability_textview);
+            unreadMessageCount = itemView.findViewById(R.id.list_item_chat_contact_unread_messages_textview);
+            badge = itemView.findViewById(R.id.list_item_chat_contact_unread_messages_badge);
+
+            // Setup the click onItemClickListener
+            // itemView.setOnClickListener(this);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Triggers click upwards to the adapter on click
+                    if (onItemClickListener != null)
+                        onItemClickListener.onItemClick(itemView, getLayoutPosition());
+                }
+            });
         }
     }
 

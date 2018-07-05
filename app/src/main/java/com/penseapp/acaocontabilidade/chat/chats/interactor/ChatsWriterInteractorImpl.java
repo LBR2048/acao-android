@@ -1,5 +1,7 @@
 package com.penseapp.acaocontabilidade.chat.chats.interactor;
 
+import android.support.annotation.NonNull;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -19,10 +21,10 @@ public class ChatsWriterInteractorImpl implements ChatsWriterInteractor {
     private final ChatsWriterPresenter chatsWriterPresenter;
 
     // Firebase
-    private FirebaseHelper mFirebaseHelperInstance = FirebaseHelper.getInstance();
-    private DatabaseReference userChatContactsReference = mFirebaseHelperInstance.getUserChatContactsReference();
+    private final FirebaseHelper mFirebaseHelperInstance = FirebaseHelper.getInstance();
+    private final DatabaseReference userChatContactsReference = mFirebaseHelperInstance.getUserChatContactsReference();
 
-    private String currentUserId = mFirebaseHelperInstance.getAuthUserId();
+    private final String currentUserId = mFirebaseHelperInstance.getAuthUserId();
     private ValueEventListener userChatsChildEventListener;
     private String newChatKey;
 
@@ -82,7 +84,7 @@ public class ChatsWriterInteractorImpl implements ChatsWriterInteractor {
         if (userChatsChildEventListener == null) {
             userChatsChildEventListener = new ValueEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     Object dataSnapshotValue = dataSnapshot.getValue();
                     if (dataSnapshotValue == null) {
                         createChat(senderId, senderName, senderCompany, recipientId, recipientName, recipientCompany);
@@ -93,7 +95,7 @@ public class ChatsWriterInteractorImpl implements ChatsWriterInteractor {
                 }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError) {
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
                 }
             };
