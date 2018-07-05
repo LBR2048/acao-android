@@ -5,10 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Patterns;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-
-import java.util.regex.Pattern;
 
 /**
  * Created by unity on 22/11/16.
@@ -79,8 +78,6 @@ public class Utilities {
     }
 
     public static boolean validateEmail(String email) {
-        String EMAIL_PATTERN = "^[a-zA-Z0-9#_~!$&'()*+,;=:.\"(),:;<>@\\[\\]\\\\]+@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*$";
-        Pattern pattern = Pattern.compile(EMAIL_PATTERN);
-        return pattern.matcher(email).matches();
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 }
