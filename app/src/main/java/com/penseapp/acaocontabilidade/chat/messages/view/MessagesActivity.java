@@ -42,18 +42,17 @@ public class MessagesActivity extends AppCompatActivity implements MessagesView 
     private final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
     //endregion
 
-    //region Member variables
-    private ArrayList<Message> mMessages = new ArrayList<>();
+    private static final String DIRECTORY_TAG = "Camera";
     private MessagesPresenter messagesPresenter;
     private RecyclerView mMessagesRecyclerView;
     private MessagesAdapter messagesAdapter;
     private String mChatId;
-    private String senderId = FirebaseHelper.getInstance().getAuthUserId();;
-    private String senderName = FirebaseHelper.getInstance().getAuthUserEmail();
-
-    private final String DIRECTORY_TAG = "Camera";
+    private static final String photoFileName = "photo.jpg";
+    //region Member variables
+    private final ArrayList<Message> mMessages = new ArrayList<>();
+    private final String senderId = FirebaseHelper.getInstance().getAuthUserId();
+    private final String senderName = FirebaseHelper.getInstance().getAuthUserEmail();
     private File photoFile;
-    private String photoFileName = "photo.jpg";
     //endregion
 
     //region Lifecycle
@@ -64,9 +63,12 @@ public class MessagesActivity extends AppCompatActivity implements MessagesView 
         setupToolBar();
 
         // Get information from Intent that called this Activity
-        mChatId = getIntent().getExtras().getString(ChatsActivity.SELECTED_CHAT_KEY);
-        String mChatName = getIntent().getExtras().getString(ChatsActivity.SELECTED_CHAT_NAME);
-        setTitle(mChatName);
+        if (getIntent().getExtras() != null) {
+            mChatId = getIntent().getExtras().getString(ChatsActivity.SELECTED_CHAT_KEY);
+
+            String mChatName = getIntent().getExtras().getString(ChatsActivity.SELECTED_CHAT_NAME);
+            setTitle(mChatName);
+        }
 
         mMessagesRecyclerView = findViewById(R.id.list_messages);
 
@@ -172,6 +174,13 @@ public class MessagesActivity extends AppCompatActivity implements MessagesView 
         resetUnreadMessageCount();
     }
 
+    @Override
+    public void onMessageChanged(Message message) {
+        int index = getIndexForKey(message.getKey());
+        mMessages.set(index, message);
+        messagesAdapter.notifyItemChanged(index);
+    }
+
     public void onClickSendMessage(View view) {
         EditText messageEdit = findViewById(R.id.messageEdit);
         String text = messageEdit.getText().toString().trim();
@@ -247,18 +256,38 @@ public class MessagesActivity extends AppCompatActivity implements MessagesView 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && data != null) {
-            if (requestCode == PICK_PHOTO_CODE) {
-                Uri photoUri = data.getData();
-                messagesPresenter.sendMessage(null, senderId, senderName, photoUri, null);
+            switch (requestCode) {
+                case PICK_PHOTO_CODE: {
+                    Uri photoUri = data.getData();
+                    messagesPresenter.sendMessage(null, senderId, senderName, photoUri, null);
 
-            } else if (requestCode == PICK_DOCUMENT_CODE) {
-                Uri documentUri = data.getData();
-                messagesPresenter.sendMessage(null, senderId, senderName, null, documentUri);
+                    break;
+                }
+                case PICK_DOCUMENT_CODE:
+                    Uri documentUri = data.getData();
+                    messagesPresenter.sendMessage(null, senderId, senderName, null, documentUri);
 
-            } else if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-                Uri photoUri = Uri.fromFile(photoFile);
-                messagesPresenter.sendMessage(null, senderId, senderName, photoUri, null);
+                    break;
+                case CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE: {
+                    Uri photoUri = Uri.fromFile(photoFile);
+                    messagesPresenter.sendMessage(null, senderId, senderName, photoUri, null);
+                    break;
+                }
             }
         }
+    }
+
+    // TODO this method should go somewhere else? Does it belong in the View?
+    // TODO duplicado em ExerciseChooserActivity
+    private int getIndexForKey(String key) {
+        int index = 0;
+        for (Message message : mMessages) {
+            if (message.getKey().equals(key)) {
+                return index;
+            } else {
+                index++;
+            }
+        }
+        throw new IllegalArgumentException("Key not found");
     }
 }
