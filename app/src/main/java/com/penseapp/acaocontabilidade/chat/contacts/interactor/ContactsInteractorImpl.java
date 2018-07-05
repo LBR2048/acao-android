@@ -1,5 +1,6 @@
 package com.penseapp.acaocontabilidade.chat.contacts.interactor;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.firebase.database.ChildEventListener;
@@ -22,9 +23,9 @@ public class ContactsInteractorImpl implements ContactsInteractor {
     private final ContactsPresenter contactsPresenter;
 
     // Firebase
-    private FirebaseHelper mFirebaseHelperInstance = FirebaseHelper.getInstance();
+    private final FirebaseHelper mFirebaseHelperInstance = FirebaseHelper.getInstance();
     private ChildEventListener contactsChildEventListener;
-    private DatabaseReference usersReference = mFirebaseHelperInstance.getUsersReference();
+    private final DatabaseReference usersReference = mFirebaseHelperInstance.getUsersReference();
 
 
     public ContactsInteractorImpl(ContactsPresenter contactsPresenter) {
@@ -40,49 +41,47 @@ public class ContactsInteractorImpl implements ContactsInteractor {
 
             contactsChildEventListener = new ChildEventListener() {
                 @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    String contactKey = dataSnapshot.getKey();
-                    try {
-                        User contact = dataSnapshot.getValue(User.class);
-                        contact.setKey(contactKey);
-                        Log.i(LOG_TAG, dataSnapshot.getKey() + " added");
+                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
+                    final User contact = dataSnapshot.getValue(User.class);
+                    if (contact != null) {
+                        contact.setKey(dataSnapshot.getKey());
                         contactsPresenter.onContactAdded(contact);
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "Error while reading chat " + contactKey);
+                        Log.i(LOG_TAG, "Chat added " + dataSnapshot.getKey());
+                    } else {
+                        Log.e(LOG_TAG, "Error reading chat " + dataSnapshot.getKey());
                     }
                 }
 
                 @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                    String contactKey = dataSnapshot.getKey();
-                    try {
-                        User contact = dataSnapshot.getValue(User.class);
-                        contact.setKey(contactKey);
-                        Log.i(LOG_TAG, dataSnapshot.getKey() + " changed");
+                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, String s) {
+                    final User contact = dataSnapshot.getValue(User.class);
+                    if (contact != null){
+                        contact.setKey(dataSnapshot.getKey());
                         contactsPresenter.onContactChanged(contact);
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "Error while reading chat " + contactKey);
+                        Log.i(LOG_TAG, "Chat changed " + dataSnapshot.getKey());
+                    } else {
+                        Log.e(LOG_TAG, "Error reading chat " + dataSnapshot.getKey());
                     }
                 }
 
                 @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
-                    String contactKey = dataSnapshot.getKey();
-                    try {
-                        Log.i(LOG_TAG, dataSnapshot.getKey() + " removed");
+                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                    final String contactKey = dataSnapshot.getKey();
+                    if (contactKey != null) {
                         contactsPresenter.onContactRemoved(contactKey);
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "Error while reading chat " + contactKey);
+                        Log.i(LOG_TAG, "Chat removed " + dataSnapshot.getKey());
+                    } else {
+                        Log.e(LOG_TAG, "Error reading chat");
                     }
                 }
 
                 @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, String s) {
 
                 }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError) {
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
                 }
             };
@@ -90,7 +89,7 @@ public class ContactsInteractorImpl implements ContactsInteractor {
             String currentUserId = mFirebaseHelperInstance.getAuthUserId();
             usersReference.child(currentUserId).child("type").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     String userType = dataSnapshot.getValue().toString();
                     if (userType.equals("customer")) {
                         // Show Ação list if you are a customer
@@ -104,7 +103,7 @@ public class ContactsInteractorImpl implements ContactsInteractor {
                 }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError) {
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
                 }
             });

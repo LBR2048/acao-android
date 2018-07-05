@@ -2,6 +2,7 @@ package com.penseapp.acaocontabilidade.chat.contacts.view;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
@@ -29,7 +30,7 @@ public class ContactsFragment extends Fragment {//implements ContactsView {
 
     private final static String LOG_TAG = ContactsActivity.class.getSimpleName();
 
-    public static ArrayList<User> mContacts = new ArrayList<>();
+    private static final ArrayList<User> mContacts = new ArrayList<>();
     private ContactsAdapter contactsAdapter;
     private RecyclerView mContactsRecyclerView;
     private OnContactsFragmentInteractionListener mListener;
@@ -53,17 +54,17 @@ public class ContactsFragment extends Fragment {//implements ContactsView {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_contacts, container, false);
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mContactsRecyclerView = (RecyclerView) getActivity().findViewById(R.id.list_contacts);
+        mContactsRecyclerView = view.findViewById(R.id.list_contacts);
         setupRecyclerView();
         setupRecyclerViewDecorator();
         clearRecyclerView();
@@ -80,7 +81,7 @@ public class ContactsFragment extends Fragment {//implements ContactsView {
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onContactClicked(String key, String name, String company) {
+    private void onContactClicked(String key, String name, String company) {
         if (mListener != null) {
             mListener.onContactSelected(key, name, company) ;
         }
@@ -130,9 +131,11 @@ public class ContactsFragment extends Fragment {//implements ContactsView {
 
     private void setupRecyclerViewDecorator() {
         // Display dividers between each item of the RecyclerView
-        RecyclerView.ItemDecoration itemDecoration = new
-                DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
-        mContactsRecyclerView.addItemDecoration(itemDecoration);
+        if (getContext() != null){
+            RecyclerView.ItemDecoration itemDecoration = new
+                    DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+            mContactsRecyclerView.addItemDecoration(itemDecoration);
+        }
     }
 
     private void clearRecyclerView() {
