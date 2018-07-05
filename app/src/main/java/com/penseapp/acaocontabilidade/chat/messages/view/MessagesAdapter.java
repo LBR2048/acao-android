@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.storage.StorageReference;
+import com.penseapp.acaocontabilidade.GlideApp;
 import com.penseapp.acaocontabilidade.R;
 import com.penseapp.acaocontabilidade.chat.messages.model.Message;
 import com.penseapp.acaocontabilidade.domain.FirebaseHelper;
