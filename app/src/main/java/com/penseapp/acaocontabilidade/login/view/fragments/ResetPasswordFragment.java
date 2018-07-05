@@ -2,6 +2,7 @@ package com.penseapp.acaocontabilidade.login.view.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
@@ -82,14 +83,14 @@ public class ResetPasswordFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_reset_password, container, false);
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         createUI(view);
 
         // Clear error when email focus is true and validate email when focus is lost
@@ -126,11 +127,11 @@ public class ResetPasswordFragment extends Fragment {
     //region GUI creation and interaction
 
     private void createUI(View view) {
-        mProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
-        mEmailWrapper = (TextInputLayout) view.findViewById(R.id.usernameWrapper);
-        mPasswordWrapper = (TextInputLayout) view.findViewById(R.id.passwordWrapper);
-        mEmailEditText = (EditText) view.findViewById(R.id.login_email_edit_text);
-        mLoginButton = (Button) view.findViewById(R.id.login_button);
+        mProgressBar = view.findViewById(R.id.progress_bar);
+        mEmailWrapper = view.findViewById(R.id.usernameWrapper);
+        mPasswordWrapper = view.findViewById(R.id.passwordWrapper);
+        mEmailEditText = view.findViewById(R.id.login_email_edit_text);
+        mLoginButton = view.findViewById(R.id.login_button);
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -139,7 +140,7 @@ public class ResetPasswordFragment extends Fragment {
         });
     }
 
-    public void onResetClicked(String email) {
+    private void onResetClicked(String email) {
 
         mEmailWrapper.setErrorEnabled(false);
 
@@ -183,7 +184,7 @@ public class ResetPasswordFragment extends Fragment {
     private boolean validateEmail() {
         String email = mEmailEditText.getText().toString();
         if (!Utilities.validateEmail(email)) {
-            mEmailWrapper.setError("Endereço de email inválido");
+            mEmailWrapper.setError(getString(R.string.login_invalid_email));
             return false;
         } else {
             return true;

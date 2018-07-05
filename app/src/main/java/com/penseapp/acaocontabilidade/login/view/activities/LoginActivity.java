@@ -11,7 +11,6 @@ import android.widget.Toast;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.penseapp.acaocontabilidade.MainActivity;
 import com.penseapp.acaocontabilidade.R;
-import com.penseapp.acaocontabilidade.TabbedMainActivity;
 import com.penseapp.acaocontabilidade.domain.FirebaseHelper;
 import com.penseapp.acaocontabilidade.domain.Utilities;
 import com.penseapp.acaocontabilidade.login.presenter.LoginPresenterImpl;
@@ -30,10 +29,10 @@ public class LoginActivity extends AppCompatActivity
         SignUpFragment.OnFragmentInteractionListener {
 
     //region Constants
-    private static String LOG_TAG = LoginActivity.class.getSimpleName();
-    public static final String LOGIN_FRAGMENT_TAG = "login";
-    public static final String RESET_PASSWORD_FRAGMENT_TAG = "reset";
-    public static final String SIGNUP_FRAGMENT_TAG = "signup";
+    private static final String LOG_TAG = LoginActivity.class.getSimpleName();
+    private static final String LOGIN_FRAGMENT_TAG = "login";
+    private static final String RESET_PASSWORD_FRAGMENT_TAG = "reset";
+    private static final String SIGNUP_FRAGMENT_TAG = "signup";
     //endregion
 
     private LoginPresenterImpl presenter;
@@ -137,7 +136,7 @@ public class LoginActivity extends AppCompatActivity
 
     @Override
     public void onSignUpFailure() {
-        Toast.makeText(getApplicationContext(), "Falha ao registrar ", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), R.string.login_register_error, Toast.LENGTH_SHORT).show();
     }
     //endregion
 
@@ -153,19 +152,19 @@ public class LoginActivity extends AppCompatActivity
 
     @Override
     public void onLoginFailure() {
-        Toast.makeText(getApplicationContext(), "Falha ao fazer login", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), R.string.login_error, Toast.LENGTH_SHORT).show();
     }
     //endregion
 
     //region Password reset callbacks
     @Override
     public void onPasswordResetSuccess() {
-        Toast.makeText(getApplicationContext(), "Verifique seu email para criar uma nova senha", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), R.string.login_reset_password_success, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onPasswordResetFailure() {
-        Toast.makeText(getApplicationContext(), "Não há nenhuma conta registrada com o email informado", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), R.string.login_reset_password_failure, Toast.LENGTH_SHORT).show();
     }
     //endregion
 

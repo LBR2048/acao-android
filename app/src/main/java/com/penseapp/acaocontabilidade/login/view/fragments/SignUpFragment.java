@@ -2,6 +2,7 @@ package com.penseapp.acaocontabilidade.login.view.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
@@ -39,7 +40,6 @@ public class SignUpFragment extends Fragment {
     private EditText mCompanyEditText;
     private EditText mPasswordEditText;
     private EditText mPasswordRepeatEditText;
-    private Button mSignUpButton;
     private TextInputLayout mNameWrapper;
     private TextInputLayout mCompanyWrapper;
     private TextInputLayout mEmailWrapper;
@@ -59,8 +59,7 @@ public class SignUpFragment extends Fragment {
     }
 
     public static SignUpFragment newInstance() {
-        SignUpFragment fragment = new SignUpFragment();
-        return fragment;
+        return new SignUpFragment();
     }
 
     /**
@@ -93,14 +92,14 @@ public class SignUpFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_sign_up, container, false);
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         createUI(view);
 
         // Clear error when name focus is true and validate name when focus is lost
@@ -186,28 +185,30 @@ public class SignUpFragment extends Fragment {
     //region GUI creation and interaction
 
     private void createUI(View view) {
-        mProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
-        mNameWrapper = (TextInputLayout) view.findViewById(R.id.signup_nameWrapper);
-        mCompanyWrapper = (TextInputLayout) view.findViewById(R.id.signup_companyWrapper);
-        mEmailWrapper = (TextInputLayout) view.findViewById(R.id.signup_usernameWrapper);
-        mPasswordWrapper = (TextInputLayout) view.findViewById(R.id.signup_passwordWrapper);
-        mPasswordRepeatWrapper = (TextInputLayout) view.findViewById(R.id.signup_password2Wrapper);
-        mNameEditText = (EditText) view.findViewById(R.id.signup_name_edit_text);
-        mEmailEditText = (EditText) view.findViewById(R.id.signup_email_edit_text);
-        mCompanyEditText = (EditText) view.findViewById(R.id.signup_company_edit_text);
-        mSpinner = (Spinner)view.findViewById(R.id.user_type_spinner);
-        mPasswordEditText = (EditText) view.findViewById(R.id.signup_password_edit_text);
-        mPasswordRepeatEditText = (EditText) view.findViewById(R.id.signup_password2_edit_text);
-        mSignUpButton = (Button) view.findViewById(R.id.signup_button);
+        mProgressBar = view.findViewById(R.id.progress_bar);
+        mNameWrapper = view.findViewById(R.id.signup_nameWrapper);
+        mCompanyWrapper = view.findViewById(R.id.signup_companyWrapper);
+        mEmailWrapper = view.findViewById(R.id.signup_usernameWrapper);
+        mPasswordWrapper = view.findViewById(R.id.signup_passwordWrapper);
+        mPasswordRepeatWrapper = view.findViewById(R.id.signup_password2Wrapper);
+        mNameEditText = view.findViewById(R.id.signup_name_edit_text);
+        mEmailEditText = view.findViewById(R.id.signup_email_edit_text);
+        mCompanyEditText = view.findViewById(R.id.signup_company_edit_text);
+        mSpinner = view.findViewById(R.id.user_type_spinner);
+        mPasswordEditText = view.findViewById(R.id.signup_password_edit_text);
+        mPasswordRepeatEditText = view.findViewById(R.id.signup_password2_edit_text);
+        Button mSignUpButton = view.findViewById(R.id.signup_button);
 
         // Setup user type spinner
         List<String> spinnerArray =  new ArrayList<>();
         // TODO add constants (maybe in strings.xml)
         spinnerArray.add("customer");
         spinnerArray.add("acao");
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                getActivity(), android.R.layout.simple_spinner_item, spinnerArray);
-        mSpinner.setAdapter(adapter);
+        if (getContext() != null) {
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                    getContext(), android.R.layout.simple_spinner_item, spinnerArray);
+            mSpinner.setAdapter(adapter);
+        }
 
         mSignUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -223,7 +224,7 @@ public class SignUpFragment extends Fragment {
         });
     }
 
-    public void onSignUpClicked(String name, String company, String email, String type, String password) {
+    private void onSignUpClicked(String name, String company, String email, String type, String password) {
 
         mNameWrapper.setErrorEnabled(false);
         mCompanyWrapper.setErrorEnabled(false);
@@ -273,7 +274,7 @@ public class SignUpFragment extends Fragment {
     private boolean validateName() {
         String name = mNameEditText.getText().toString();
         if (name.trim().isEmpty()) {
-            mNameWrapper.setError("Nome em branco");
+            mNameWrapper.setError(getString(R.string.login_register_blank_name_error));
             return false;
         } else {
             return true;
@@ -287,7 +288,7 @@ public class SignUpFragment extends Fragment {
     private boolean validateCompany() {
         String company = mCompanyEditText.getText().toString();
         if (company.trim().isEmpty()) {
-            mCompanyWrapper.setError("Nome da empresa em branco");
+            mCompanyWrapper.setError(getString(R.string.login_register_blank_company_name_error));
             return false;
         } else {
             return true;
@@ -301,7 +302,7 @@ public class SignUpFragment extends Fragment {
     private boolean validateEmail() {
         String email = mEmailEditText.getText().toString();
         if (!com.penseapp.acaocontabilidade.domain.Utilities.validateEmail(email)) {
-            mEmailWrapper.setError("Endereço de email inválido");
+            mEmailWrapper.setError(getString(R.string.login_invalid_email));
             return false;
         } else {
             return true;
@@ -315,7 +316,7 @@ public class SignUpFragment extends Fragment {
     private boolean validatePassword() {
         String password = mPasswordEditText.getText().toString();
         if (!com.penseapp.acaocontabilidade.domain.Utilities.validatePassword(password)) {
-            mPasswordWrapper.setError("Senha deve ter no mínimo 6 caracteres");
+            mPasswordWrapper.setError(getString(R.string.login_password_too_short_error));
             return false;
         } else {
             return true;
@@ -329,7 +330,7 @@ public class SignUpFragment extends Fragment {
     private boolean validatePasswordRepeat() {
         String password = mPasswordRepeatEditText.getText().toString();
         if (!com.penseapp.acaocontabilidade.domain.Utilities.validatePassword(password)) {
-            mPasswordRepeatWrapper.setError("Senha deve ter no mínimo 6 caracteres");
+            mPasswordRepeatWrapper.setError(getString(R.string.login_password_too_short_error));
             return false;
         } else {
             return true;
@@ -344,8 +345,8 @@ public class SignUpFragment extends Fragment {
         String password = mPasswordEditText.getText().toString();
         String passwordRepeat = mPasswordRepeatEditText.getText().toString();
         if (!password.equals(passwordRepeat)) {
-            mPasswordWrapper.setError("Senhas devem ser iguais");
-            mPasswordRepeatWrapper.setError("Senhas devem ser iguais");
+            mPasswordWrapper.setError(getString(R.string.login_register_passwords_must_match));
+            mPasswordRepeatWrapper.setError(getString(R.string.login_register_passwords_must_match));
             return false;
         } else {
             return true;

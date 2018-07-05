@@ -23,7 +23,7 @@ public class LoginInteractorImpl implements LoginInteractor {
     private final LoginPresenter presenter;
 
     // Firebase
-    private FirebaseAuth mAuth;
+    private final FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
     public LoginInteractorImpl(LoginPresenter presenter) {
