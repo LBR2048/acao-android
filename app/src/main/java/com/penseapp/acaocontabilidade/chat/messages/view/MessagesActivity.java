@@ -20,7 +20,6 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.penseapp.acaocontabilidade.R;
-import com.penseapp.acaocontabilidade.chat.chats.view.ChatsActivity;
 import com.penseapp.acaocontabilidade.chat.messages.model.Message;
 import com.penseapp.acaocontabilidade.chat.messages.presenter.MessagesPresenter;
 import com.penseapp.acaocontabilidade.chat.messages.presenter.MessagesPresenterImpl;
@@ -35,6 +34,8 @@ import permissions.dispatcher.RuntimePermissions;
 @RuntimePermissions
 public class MessagesActivity extends AppCompatActivity implements MessagesView {
 
+    public static final String SELECTED_CHAT_KEY = "selected_chat_key";
+    public static final String SELECTED_CHAT_NAME = "selected_chat_name";
     //region Constants
     private final static String LOG_TAG = MessagesActivity.class.getSimpleName();
     private final static int PICK_PHOTO_CODE = 1046;
@@ -64,9 +65,9 @@ public class MessagesActivity extends AppCompatActivity implements MessagesView 
 
         // Get information from Intent that called this Activity
         if (getIntent().getExtras() != null) {
-            mChatId = getIntent().getExtras().getString(ChatsActivity.SELECTED_CHAT_KEY);
+            mChatId = getIntent().getExtras().getString(SELECTED_CHAT_KEY);
 
-            String mChatName = getIntent().getExtras().getString(ChatsActivity.SELECTED_CHAT_NAME);
+            String mChatName = getIntent().getExtras().getString(SELECTED_CHAT_NAME);
             setTitle(mChatName);
         }
 

@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,8 +20,8 @@ import com.penseapp.acaocontabilidade.domain.FirebaseHelper;
 import com.penseapp.acaocontabilidade.domain.Utilities;
 import com.penseapp.acaocontabilidade.login.view.activities.LoginActivity;
 
-import static com.penseapp.acaocontabilidade.chat.chats.view.ChatsActivity.SELECTED_CHAT_KEY;
-import static com.penseapp.acaocontabilidade.chat.chats.view.ChatsActivity.SELECTED_CHAT_NAME;
+import static com.penseapp.acaocontabilidade.chat.messages.view.MessagesActivity.SELECTED_CHAT_KEY;
+import static com.penseapp.acaocontabilidade.chat.messages.view.MessagesActivity.SELECTED_CHAT_NAME;
 
 public class MainActivity extends AppCompatActivity implements
         ContactsView,

@@ -28,15 +28,15 @@ import java.util.List;
 public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder>
         implements ChatsAdapterView {
 
+    //region Constants
     private static final String LOG_TAG = ChatsAdapter.class.getSimpleName();
     private static final String CONTABIL = "Contábil";
     private static final String FISCAL = "Fiscal";
     private static final String PESSOAL = "Pessoal";
     private static final String SOCIETARIO = "Societário";
+    //endregion
 
-    // Define onItemClickListener member variable
     private static OnItemClickListener onItemClickListener;
-
     private final List<Chat> mChats;
     private final Context mContext;
     private final ChatsReaderPresenter chatsReaderPresenter;

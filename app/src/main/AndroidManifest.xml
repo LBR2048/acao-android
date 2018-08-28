@@ -25,8 +25,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".chat.chats.view.ChatsActivity" />
-
         <activity android:name=".chat.contacts.view.ContactsActivity" />
 
         <activity android:name=".chat.messages.view.MessagesActivity">

@@ -35,8 +35,8 @@ import com.penseapp.acaocontabilidade.news.view.NewsFragment;
 import com.penseapp.acaocontabilidade.news.view.NewsItemActivity;
 import com.penseapp.acaocontabilidade.web.WebFragment;
 
-import static com.penseapp.acaocontabilidade.chat.chats.view.ChatsActivity.SELECTED_CHAT_KEY;
-import static com.penseapp.acaocontabilidade.chat.chats.view.ChatsActivity.SELECTED_CHAT_NAME;
+import static com.penseapp.acaocontabilidade.chat.messages.view.MessagesActivity.SELECTED_CHAT_KEY;
+import static com.penseapp.acaocontabilidade.chat.messages.view.MessagesActivity.SELECTED_CHAT_NAME;
 
 public class TabbedMainActivity extends AppCompatActivity implements
         ContactsView,

@@ -19,8 +19,8 @@ import com.penseapp.acaocontabilidade.login.model.User;
 
 import java.util.ArrayList;
 
-import static com.penseapp.acaocontabilidade.chat.chats.view.ChatsActivity.SELECTED_CHAT_KEY;
-import static com.penseapp.acaocontabilidade.chat.chats.view.ChatsActivity.SELECTED_CHAT_NAME;
+import static com.penseapp.acaocontabilidade.chat.messages.view.MessagesActivity.SELECTED_CHAT_KEY;
+import static com.penseapp.acaocontabilidade.chat.messages.view.MessagesActivity.SELECTED_CHAT_NAME;
 
 public class ContactsActivity extends AppCompatActivity implements ContactsView{
 

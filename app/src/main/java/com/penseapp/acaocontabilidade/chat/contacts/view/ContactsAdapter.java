@@ -23,8 +23,6 @@ import com.penseapp.acaocontabilidade.login.model.User;
 
 import java.util.List;
 
-import static com.penseapp.acaocontabilidade.chat.chats.view.ChatsActivity.mChats;
-
 
 /**
  * Created by unity on 27/10/15.
@@ -192,7 +190,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
         Log.i(LOG_TAG, "View onContactRemoved called");
         try {
             int index = getIndexForKey(contactId);
-            mChats.remove(index);
+            mContacts.remove(index);
             notifyDataSetChanged();
             notifyItemRemoved(index);
         } catch(IllegalArgumentException e) {
