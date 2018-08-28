@@ -28,7 +28,7 @@ import java.util.ArrayList;
  */
 public class ContactsFragment extends Fragment {//implements ContactsView {
 
-    private final static String LOG_TAG = ContactsActivity.class.getSimpleName();
+    private final static String LOG_TAG = ContactsFragment.class.getSimpleName();
 
     private static final ArrayList<User> mContacts = new ArrayList<>();
     private ContactsAdapter contactsAdapter;

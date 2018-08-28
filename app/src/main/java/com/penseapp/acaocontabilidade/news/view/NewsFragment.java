@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.penseapp.acaocontabilidade.R;
-import com.penseapp.acaocontabilidade.chat.contacts.view.ContactsActivity;
 import com.penseapp.acaocontabilidade.news.adapter.NewsAdapter;
 import com.penseapp.acaocontabilidade.news.model.News;
 import com.penseapp.acaocontabilidade.news.presenter.NewsNotificationsPresenter;
@@ -34,7 +33,7 @@ import java.util.ArrayList;
  */
 public class NewsFragment extends Fragment implements NewsView {
 
-    private final static String LOG_TAG = ContactsActivity.class.getSimpleName();
+    private final static String LOG_TAG = NewsFragment.class.getSimpleName();
 
     private NewsNotificationsPresenter newsNotificationsPresenter;
 
