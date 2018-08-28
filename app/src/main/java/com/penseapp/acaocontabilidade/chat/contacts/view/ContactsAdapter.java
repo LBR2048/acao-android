@@ -1,5 +1,6 @@
 package com.penseapp.acaocontabilidade.chat.contacts.view;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,13 +37,13 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
 
     private static final String LOG_TAG = ContactsAdapter.class.getSimpleName();
 
-    private FirebaseHelper mFirebaseHelperInstance = FirebaseHelper.getInstance();
+    private final FirebaseHelper mFirebaseHelperInstance = FirebaseHelper.getInstance();
 
     // Define onItemClickListener member variable
     private static OnItemClickListener onItemClickListener;
 
     private final List<User> mContacts;
-    private ContactsPresenter contactsPresenter;
+    private final ContactsPresenter contactsPresenter;
 
     public ContactsAdapter(List<User> contacts) {
         mContacts = contacts;
@@ -60,45 +61,10 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
         this.onItemClickListener = listener;
     }
 
-    // Provide a direct reference to each of the views within a data item
-    // Used to cache the views within the item layout for fast access
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        // Your holder should contain a member variable
-        // for any view that will be set as you render a row
-        ImageView icon;
-        TextView name;
-        TextView unreadMessageCount;
-        FrameLayout badge;
-        TextView availability;
-
-        // We also create a constructor that accepts the entire item row
-        // and does the view lookups to find each subview
-        public ViewHolder(final View itemView) {
-            // Stores the itemView in a public final member variable that can be used
-            // to access the context from any ViewHolder instance.
-            super(itemView);
-            icon = (ImageView) itemView.findViewById(R.id.list_item_chat_contact_icon);
-            name = (TextView) itemView.findViewById(R.id.list_item_chat_contact_name_textview);
-            availability = (TextView) itemView.findViewById(R.id.list_item_chat_contact_availability_textview);
-            unreadMessageCount = (TextView) itemView.findViewById(R.id.list_item_chat_contact_unread_messages_textview);
-            badge = (FrameLayout) itemView.findViewById(R.id.list_item_chat_contact_unread_messages_badge);
-
-            // Setup the click onItemClickListener
-            // itemView.setOnClickListener(this);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Triggers click upwards to the adapter on click
-                    if (onItemClickListener != null)
-                        onItemClickListener.onItemClick(itemView, getLayoutPosition());
-                }
-            });
-        }
-    }
-
     // Usually involves inflating a layout from XML and returning the holder
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Inflate the custom layout
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_chat_contact, parent, false);
 
@@ -108,13 +74,13 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
 
     // Involves populating data into the item through holder
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         // Get the data model based on position
         final User selectedContact = mContacts.get(position);
 
         // Set item views based on your views and data model
         holder.name.setText(selectedContact.getName());
-        
+
         String email = selectedContact.getEmail();
         String emailUser = email.substring(0, email.indexOf("@"));
         switch (emailUser) {
@@ -135,7 +101,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
                 break;
         }
 
-        holder.availability.setText("Disponível");
+        holder.availability.setText(R.string.status_available);
 
 //        int unreadMessageCount = selectedChat.getUnreadMessageCount();
 //        int unreadMessageCount = 5;
@@ -145,6 +111,44 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
 //        } else {
 //            holder.badge.setVisibility(View.GONE);
 //        }
+    }
+
+    public void setNotificationObservers() {
+        DatabaseReference notifRef = mFirebaseHelperInstance.getNotificationsReference();
+        Log.d(LOG_TAG, "notifRef " + notifRef.toString());
+        for (User user : mContacts) {
+            DatabaseReference userNotifRef = notifRef.child(user.getKey());
+            Log.d(LOG_TAG, "userNotifRef " + userNotifRef.toString());
+            userNotifRef.addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
+                    Integer value = dataSnapshot.getValue(int.class);
+                    Log.d(LOG_TAG, "Added " + value);
+                }
+
+                @Override
+                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, String s) {
+                    Integer value = dataSnapshot.getValue(int.class);
+                    Log.d(LOG_TAG, "Changed " + value);
+                }
+
+                @Override
+                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                }
+
+                @Override
+                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+        }
     }
 
     // Returns the total count of items in the list
@@ -210,50 +214,12 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
         throw new IllegalArgumentException("Key not found");
     }
 
-    public void setNotificationObservers() {
-        DatabaseReference notifRef = mFirebaseHelperInstance.getNotificationsReference();
-        Log.d(LOG_TAG, "notifRef " + notifRef.toString());
-        for (User user : mContacts) {
-            DatabaseReference userNotifRef = notifRef.child(user.getKey());
-            Log.d(LOG_TAG, "userNotifRef " + userNotifRef.toString());
-            userNotifRef.addChildEventListener(new ChildEventListener() {
-                @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    Integer value = dataSnapshot.getValue(int.class);
-                    Log.d(LOG_TAG, "Added " + value);
-                }
-
-                @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                    Integer value = dataSnapshot.getValue(int.class);
-                    Log.d(LOG_TAG, "Changed " + value);
-                }
-
-                @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                }
-
-                @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-
-        }
-    }
-
-    public void setNotificationObserver(User user) {
+    private void setNotificationObserver(User user) {
         DatabaseReference notifRef = mFirebaseHelperInstance.getNotificationsReference();
             DatabaseReference userNotifRef = notifRef.child(user.getKey());
             userNotifRef.addValueEventListener(new ValueEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     String key = dataSnapshot.getKey();
                     int position = getIndexForKey(key);
                     Integer value = dataSnapshot.getValue(int.class);
@@ -262,10 +228,46 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
                 }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError) {
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
                 }
             });
+    }
+
+    // Provide a direct reference to each of the views within a data item
+    // Used to cache the views within the item layout for fast access
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        // Your holder should contain a member variable
+        // for any view that will be set as you render a row
+        final ImageView icon;
+        final TextView name;
+        final TextView unreadMessageCount;
+        final FrameLayout badge;
+        final TextView availability;
+
+        // We also create a constructor that accepts the entire item row
+        // and does the view lookups to find each subview
+        ViewHolder(final View itemView) {
+            // Stores the itemView in a public final member variable that can be used
+            // to access the context from any ViewHolder instance.
+            super(itemView);
+            icon = itemView.findViewById(R.id.list_item_chat_contact_icon);
+            name = itemView.findViewById(R.id.list_item_chat_contact_name_textview);
+            availability = itemView.findViewById(R.id.list_item_chat_contact_availability_textview);
+            unreadMessageCount = itemView.findViewById(R.id.list_item_chat_contact_unread_messages_textview);
+            badge = itemView.findViewById(R.id.list_item_chat_contact_unread_messages_badge);
+
+            // Setup the click onItemClickListener
+            // itemView.setOnClickListener(this);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Triggers click upwards to the adapter on click
+                    if (onItemClickListener != null)
+                        onItemClickListener.onItemClick(itemView, getLayoutPosition());
+                }
+            });
+        }
     }
 //        for  user in users {
 //            let userNotifRef = notifRef.child(user.key)

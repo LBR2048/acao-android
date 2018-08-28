@@ -30,7 +30,7 @@ public class ChatsFragment extends Fragment {
 
     private final static String LOG_TAG = ChatsFragment.class.getSimpleName();
 
-    public static ArrayList<Chat> mChats = new ArrayList<>();
+    private static final ArrayList<Chat> mChats = new ArrayList<>();
     private OnChatsFragmentInteractionListener mListener;
     private RecyclerView mChatsRecyclerView;
     private ChatsAdapter chatsAdapter;
@@ -44,8 +44,9 @@ public class ChatsFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @return A new instance of fragment ChatsFragment.
+     * @param context
      */
-    public static ChatsFragment newInstance() {
+    public static ChatsFragment newInstance(Context context) {
         ChatsFragment fragment = new ChatsFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
@@ -63,7 +64,7 @@ public class ChatsFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mChatsRecyclerView = (RecyclerView) getActivity().findViewById(R.id.list_chats);
+        mChatsRecyclerView = view.findViewById(R.id.list_chats);
         setupRecyclerView();
         setupRecyclerViewDecorator();
         clearRecyclerView();
@@ -87,7 +88,7 @@ public class ChatsFragment extends Fragment {
         });
     }
 
-    public void onChatClicked(String name, String key) {
+    private void onChatClicked(String name, String key) {
         if (mListener != null) {
             mListener.onChatSelected(key, name);
         }
@@ -136,13 +137,15 @@ public class ChatsFragment extends Fragment {
 
     private void setupRecyclerViewDecorator() {
         // Display dividers between each item of the RecyclerView
-        RecyclerView.ItemDecoration itemDecoration = new
-                DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
-        mChatsRecyclerView.addItemDecoration(itemDecoration);
+        if (getContext() != null) {
+            RecyclerView.ItemDecoration itemDecoration = new
+                    DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+            mChatsRecyclerView.addItemDecoration(itemDecoration);
+        }
     }
 
     private void clearRecyclerView() {
         mChats.clear();
-        chatsAdapter.notifyDataSetChanged(); // TODO not efficient
+        chatsAdapter.notifyDataSetChanged();
     }
 }

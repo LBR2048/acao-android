@@ -13,5 +13,6 @@ public interface MessagesPresenter {
     void unsubscribeForMessagesUpdates();
     void resetUnreadMessageCount(String chatId);
     void onMessageAdded(Message message);
+    void onMessageChanged(Message message);
     void sendMessage(String messageText, String senderId, String senderEmail, Uri imageUri, Uri documentUri);
 }

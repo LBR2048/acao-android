@@ -1,5 +1,7 @@
 package com.penseapp.acaocontabilidade.chat.chats.interactor;
 
+import android.support.annotation.NonNull;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -19,10 +21,10 @@ public class ChatsWriterInteractorImpl implements ChatsWriterInteractor {
     private final ChatsWriterPresenter chatsWriterPresenter;
 
     // Firebase
-    private FirebaseHelper mFirebaseHelperInstance = FirebaseHelper.getInstance();
-    private DatabaseReference userChatContactsReference = mFirebaseHelperInstance.getUserChatContactsReference();
+    private final FirebaseHelper mFirebaseHelperInstance = FirebaseHelper.getInstance();
+    private final DatabaseReference userChatContactsReference = mFirebaseHelperInstance.getUserChatContactsReference();
 
-    private String currentUserId = mFirebaseHelperInstance.getAuthUserId();
+    private final String currentUserId = mFirebaseHelperInstance.getAuthUserId();
     private String newChatKey;
 
     public ChatsWriterInteractorImpl(ChatsWriterPresenter chatsWriterPresenter) {

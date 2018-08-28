@@ -42,6 +42,11 @@ public class MessagesPresenterImpl implements MessagesPresenter {
     }
 
     @Override
+    public void onMessageChanged(Message message) {
+        messagesView.onMessageChanged(message);
+    }
+
+    @Override
     public void sendMessage(String messageText, String senderId, String senderEmail, Uri imageUri, Uri documentUri) {
         messagesInteractor.sendMessage(messageText, senderId, senderEmail, imageUri, documentUri);
     }

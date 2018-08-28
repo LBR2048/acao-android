@@ -10,11 +10,11 @@ import android.util.Log;
 import android.view.View;
 
 import com.penseapp.acaocontabilidade.R;
-import com.penseapp.acaocontabilidade.chat.messages.view.MessagesActivity;
 import com.penseapp.acaocontabilidade.chat.chats.presenter.ChatsWriterPresenter;
 import com.penseapp.acaocontabilidade.chat.chats.presenter.ChatsWriterPresenterImpl;
 import com.penseapp.acaocontabilidade.chat.contacts.presenter.ContactsPresenter;
 import com.penseapp.acaocontabilidade.chat.contacts.presenter.ContactsPresenterImpl;
+import com.penseapp.acaocontabilidade.chat.messages.view.MessagesActivity;
 import com.penseapp.acaocontabilidade.login.model.User;
 
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ public class ContactsActivity extends AppCompatActivity implements ContactsView{
     private ContactsPresenter contactsPresenter;
     private ChatsWriterPresenter chatsWriterPresenter;
 
-    public static ArrayList<User> mContacts = new ArrayList<>();
+    private static final ArrayList<User> mContacts = new ArrayList<>();
     private ContactsAdapter contactsAdapter;
     private RecyclerView mContactsRecyclerView;
 
@@ -42,7 +42,7 @@ public class ContactsActivity extends AppCompatActivity implements ContactsView{
         setContentView(R.layout.activity_contacts);
         setupToolBar();
         setTitle("Abrir chamado");
-        mContactsRecyclerView = (RecyclerView) findViewById(R.id.list_contacts);
+        mContactsRecyclerView = findViewById(R.id.list_contacts);
 
         // Chats list RecyclerView
         setupRecyclerView();
@@ -69,7 +69,7 @@ public class ContactsActivity extends AppCompatActivity implements ContactsView{
 
     // Toolbar
     private void setupToolBar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         if (toolbar == null) return;
         setSupportActionBar(toolbar);
 //        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);

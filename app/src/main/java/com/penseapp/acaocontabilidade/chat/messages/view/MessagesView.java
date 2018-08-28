@@ -8,4 +8,5 @@ import com.penseapp.acaocontabilidade.chat.messages.model.Message;
 
 public interface MessagesView {
     void onMessageAdded(Message message);
+    void onMessageChanged(Message message);
 }

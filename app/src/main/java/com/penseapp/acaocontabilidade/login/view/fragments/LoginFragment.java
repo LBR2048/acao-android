@@ -2,6 +2,7 @@ package com.penseapp.acaocontabilidade.login.view.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
@@ -33,15 +34,8 @@ public class LoginFragment extends Fragment {
     private ProgressBar mProgressBar;
     private EditText mEmailEditText;
     private EditText mPasswordEditText;
-    private Button mLoginButton;
-    private TextView mResetPasswordText;
-    private TextView mSignUpText;
     private TextInputLayout mEmailWrapper;
     private TextInputLayout mPasswordWrapper;
-
-    // Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
@@ -51,8 +45,7 @@ public class LoginFragment extends Fragment {
     }
 
     public static LoginFragment newInstance() {
-        LoginFragment fragment = new LoginFragment();
-        return fragment;
+        return new LoginFragment();
     }
 
     /**
@@ -78,20 +71,20 @@ public class LoginFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            String mParam1 = getArguments().getString(ARG_PARAM1);
+            String mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_login, container, false);
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         createUI(view);
 
         // Clear error when email focus is true and validate email when focus is lost
@@ -144,21 +137,21 @@ public class LoginFragment extends Fragment {
         mPasswordWrapper = (TextInputLayout) view.findViewById(R.id.passwordWrapper);
         mEmailEditText = (EditText) view.findViewById(R.id.login_email_edit_text);
         mPasswordEditText = (EditText) view.findViewById(R.id.login_password_edit_text);
-        mLoginButton = (Button) view.findViewById(R.id.login_button);
+        Button mLoginButton = (Button) view.findViewById(R.id.login_button);
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onLoginClicked(mEmailEditText.getText().toString(), mPasswordEditText.getText().toString());
             }
         });
-        mResetPasswordText = (TextView) view.findViewById(R.id.forgot_password_text);
+        TextView mResetPasswordText = (TextView) view.findViewById(R.id.forgot_password_text);
         mResetPasswordText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onForgotPasswordClicked();
             }
         });
-        mSignUpText = (TextView) view.findViewById(R.id.signup_text);
+        TextView mSignUpText = (TextView) view.findViewById(R.id.signup_text);
         mSignUpText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -167,7 +160,7 @@ public class LoginFragment extends Fragment {
         });
     }
 
-    public void onLoginClicked(String email, String password) {
+    private void onLoginClicked(String email, String password) {
         mEmailWrapper.setErrorEnabled(false);
         mPasswordWrapper.setErrorEnabled(false);
 
@@ -178,14 +171,16 @@ public class LoginFragment extends Fragment {
         }
     }
 
-    public void onForgotPasswordClicked() {
+    private void onForgotPasswordClicked() {
         if (mListener != null) {
                 mListener.onLoginFragmentForgotPasswordClicked();
             }
     }
 
-    public void onSignUpClicked() {
-        Utilities.goToAcaoNewCustomerWebsite(getContext());
+    private void onSignUpClicked() {
+        if (getContext() != null){
+            Utilities.goToAcaoNewCustomerWebsite(getContext());
+        }
     }
     //endregion
 
@@ -225,7 +220,7 @@ public class LoginFragment extends Fragment {
     private boolean validateEmail() {
         String email = mEmailEditText.getText().toString();
         if (!Utilities.validateEmail(email)) {
-            mEmailWrapper.setError("Endereço de email inválido");
+            mEmailWrapper.setError(getString(R.string.login_invalid_email));
             return false;
         } else {
             return true;
@@ -239,7 +234,7 @@ public class LoginFragment extends Fragment {
     private boolean validatePassword() {
         String password = mPasswordEditText.getText().toString();
         if (!Utilities.validatePassword(password)) {
-            mPasswordWrapper.setError("Senha deve ter no mínimo 6 caracteres");
+            mPasswordWrapper.setError(getString(R.string.login_password_too_short_error));
             return false;
         } else {
             return true;

@@ -73,7 +73,9 @@ public class MessagesInteractorImpl implements MessagesInteractor {
 
                 @Override
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
+                    Message message = dataSnapshot.getValue(Message.class);
+                    message.setKey(dataSnapshot.getKey());
+                    messagesPresenter.onMessageChanged(message);
                 }
 
                 @Override
