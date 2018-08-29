@@ -40,8 +40,8 @@ public class MainActivity extends AppCompatActivity implements
         if (savedInstanceState == null){
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.main_activity_fragment_holder, ChatsFragment.newInstance(this))
-//                    .replace(R.id.main_activity_fragment_holder, ContactsFragment.newInstance())
+//                    .replace(R.id.main_activity_fragment_holder, ChatsFragment.newInstance(this))
+                    .replace(R.id.main_activity_fragment_holder, ContactsFragment.newInstance())
                     .commit();
         }
 
