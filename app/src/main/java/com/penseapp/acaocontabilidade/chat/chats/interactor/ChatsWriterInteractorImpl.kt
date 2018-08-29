@@ -33,7 +33,7 @@ class ChatsWriterInteractorImpl(private val chatsWriterPresenter: ChatsWriterPre
                             val dataSnapshotValue = dataSnapshot.value
                             if (dataSnapshotValue == null) {
                                 val chatKey = createChat(senderId, senderName, senderCompany, recipientId, recipientName, recipientCompany)
-                                chatsWriterPresenter.onChatCreated(chatKey, recipientName)
+                                if (chatKey != null) chatsWriterPresenter.onChatCreated(chatKey, recipientName)
                             } else {
                                 chatsWriterPresenter.onChatCreated(dataSnapshotValue.toString(), recipientName)
                             }
