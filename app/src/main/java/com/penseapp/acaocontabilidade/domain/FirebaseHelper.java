@@ -10,18 +10,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
-/**
- * Created by unity.
- */
 public class FirebaseHelper {
-    private static final String LOG_TAG = FirebaseHelper.class.getSimpleName();
-    public static final String NOTIFICATIONS = "notifications";
 
-    // Firebase database
-    private FirebaseDatabase database;
-    private DatabaseReference databaseRef;
+    //region Constants
+    private static final String NOTIFICATIONS = "notifications";
     private static final String USERS_PATH = "users";
     private static final String CHAT_MESSAGES_PATH = "chat-messages";
     private static final String USER_CHATS_PATH = "user-chats";
@@ -29,51 +22,23 @@ public class FirebaseHelper {
     private static final String USER_CHAT_CONTACTS_CHAT = "user-chatContacts:chat";
     private static final String FCM_TOKEN = "fcm_token";
     private static final String NEWS_PATH = "news";
-
-    // Storage
     public final static String GS_PREFIX = "gs://acao-f519d.appspot.com/";
-    private StorageReference mStorageRef;
+    //endregion
 
-    public interface GetHttpFromGsCallback {
-
-        void showHttp(Uri http);
-    }
-
-    // TODO handle wrong http to avoid crashing the app
-    public void getHttpFromGs(final GetHttpFromGsCallback getHttpFromGsCallback, String http) {
-        getStorage().getReferenceFromUrl(http).getDownloadUrl()
-                .addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        getHttpFromGsCallback.showHttp(uri);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // TODO Log error
-                    }
-                });
-    }
-
-    public void getPdfHttpFromGsWithoutPrefix(final GetHttpFromGsCallback getHttpFromGsCallback, String http) {
-        String gsPrefix = "gs://acao-f519d.appspot.com/";
-        getHttpFromGs(getHttpFromGsCallback, gsPrefix + http);
-    }
-
-    // TODO útil apenas para grupos retirar por enquanto
-//    private static final String CHAT_USERS_PATH = "chat-users";
-
-    private static class SingletonHolder {
-        private static final FirebaseHelper INSTANCE = new FirebaseHelper();
-
-    }
+    //region Member variables
+    private FirebaseDatabase database;
+    private DatabaseReference databaseRef;
+    //endregion
 
     public static FirebaseHelper getInstance() {
         return SingletonHolder.INSTANCE;
     }
 
-    private FirebaseHelper(){
+    private static class SingletonHolder {
+        private static final FirebaseHelper INSTANCE = new FirebaseHelper();
+    }
+
+    private FirebaseHelper() {
         if (database == null) {
             database = FirebaseDatabase.getInstance();
 //            database.setPersistenceEnabled(true);
@@ -81,9 +46,7 @@ public class FirebaseHelper {
         }
     }
 
-
-    // Authentication
-
+    //region Authentication
     public String getAuthUserEmail() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String email = null;
@@ -106,13 +69,9 @@ public class FirebaseHelper {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         auth.signOut();
     }
+    //endregion
 
-    public FirebaseStorage getStorage() {
-        return FirebaseStorage.getInstance();
-    }
-
-    // Realtime database
-
+    //region Database
     public DatabaseReference getUsersReference(){
         return databaseRef.child(USERS_PATH);
     }
@@ -121,7 +80,7 @@ public class FirebaseHelper {
         return databaseRef.child(CHAT_MESSAGES_PATH);
     }
 
-    public DatabaseReference getUserChatsReference(){
+    private DatabaseReference getUserChatsReference(){
         return databaseRef.child(USER_CHATS_PATH);
     }
 
@@ -147,7 +106,7 @@ public class FirebaseHelper {
 //        return getChatUsersReference().child(getAuthUserId());
 //    }
 
-    public DatabaseReference getCurrentUserFcmTokenReference() {
+    private DatabaseReference getCurrentUserFcmTokenReference() {
         DatabaseReference currentUserFcmTokenReference = null;
         String authUserId = getAuthUserId();
         if (authUserId != null) {
@@ -163,7 +122,42 @@ public class FirebaseHelper {
     public DatabaseReference getNewsReference(){
         return databaseRef.child(NEWS_PATH);
     }
+    //endregion
 
+    //region Storage
+    public FirebaseStorage getStorage() {
+        return FirebaseStorage.getInstance();
+    }
+
+    // TODO handle wrong http to avoid crashing the app
+    public void getHttpFromGs(final GetHttpFromGsCallback getHttpFromGsCallback, String http) {
+        getStorage().getReferenceFromUrl(http).getDownloadUrl()
+                .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        getHttpFromGsCallback.showHttp(uri);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // TODO Log error
+                    }
+                });
+    }
+
+    public void getPdfHttpFromGsWithoutPrefix(final GetHttpFromGsCallback getHttpFromGsCallback, String http) {
+        String gsPrefix = "gs://acao-f519d.appspot.com/";
+        getHttpFromGs(getHttpFromGsCallback, gsPrefix + http);
+    }
+
+    public interface GetHttpFromGsCallback {
+
+        void showHttp(Uri http);
+    }
+    //endregion
+
+    //region Push Notifications
     /**
      * Persist token to third-party servers.
      *
@@ -178,5 +172,5 @@ public class FirebaseHelper {
             currentUserFcmTokenReference.setValue(token);
         }
     }
-
+    //endregion
 }
