@@ -1,6 +1,5 @@
 package com.penseapp.acaocontabilidade
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -15,10 +14,14 @@ import com.penseapp.acaocontabilidade.chat.messages.view.MessagesActivity
 import com.penseapp.acaocontabilidade.chat.messages.view.MessagesActivity.SELECTED_CHAT_KEY
 import com.penseapp.acaocontabilidade.chat.messages.view.MessagesActivity.SELECTED_CHAT_NAME
 import com.penseapp.acaocontabilidade.domain.FirebaseHelper
+import com.penseapp.acaocontabilidade.domain.Preferences
 import com.penseapp.acaocontabilidade.domain.Utilities
 import com.penseapp.acaocontabilidade.login.view.activities.LoginActivity
 
-class MainActivity : AppCompatActivity(), ContactsView, ChatsFragment.OnChatsFragmentInteractionListener, ContactsFragment.OnContactsFragmentInteractionListener {
+class MainActivity : AppCompatActivity(),
+        ContactsView,
+        ChatsFragment.OnChatsFragmentInteractionListener,
+        ContactsFragment.OnContactsFragmentInteractionListener {
 
     private var chatsWriterPresenter: ChatsWriterPresenterImpl? = null
     private var toolbar: Toolbar? = null
@@ -120,11 +123,9 @@ class MainActivity : AppCompatActivity(), ContactsView, ChatsFragment.OnChatsFra
     }
 
     private fun createChatIfNeeded(contactId: String, contactName: String, company: String) {
-        val settings = applicationContext.getSharedPreferences("Settings", Context.MODE_PRIVATE)
-        val senderId = settings.getString("userId", "")
-        val senderName = settings.getString("userName", "")
-        val senderCompany = settings.getString("userCompany", "")
-        chatsWriterPresenter!!.createChatIfNeeded(senderId!!, senderName!!, senderCompany!!, contactId, contactName, company)
+        val user = Preferences.getUserFromPreferences(applicationContext)
+        chatsWriterPresenter!!.createChatIfNeeded(user.key, user.name, user.company,
+                contactId, contactName, company)
     }
 
 }

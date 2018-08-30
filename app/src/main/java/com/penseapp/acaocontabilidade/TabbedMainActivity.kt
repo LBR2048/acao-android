@@ -1,6 +1,5 @@
 package com.penseapp.acaocontabilidade
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.TabLayout
@@ -231,11 +230,9 @@ class TabbedMainActivity : AppCompatActivity(),
     }
 
     private fun createChatIfNeeded(contactId: String, contactName: String, company: String) {
-        val settings = applicationContext.getSharedPreferences("Settings", Context.MODE_PRIVATE)
-        val senderId = settings.getString("userId", "")
-        val senderName = settings.getString("userName", "")
-        val senderCompany = settings.getString("userCompany", "")
-        chatsWriterPresenter!!.createChatIfNeeded(senderId!!, senderName!!, senderCompany!!, contactId, contactName, company)
+        val user = Preferences.getUserFromPreferences(applicationContext)
+        chatsWriterPresenter!!.createChatIfNeeded(user.key, user.name, user.company,
+                contactId, contactName, company)
     }
 
     companion object {
