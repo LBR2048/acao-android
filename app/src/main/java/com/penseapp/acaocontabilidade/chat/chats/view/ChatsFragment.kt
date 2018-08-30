@@ -2,22 +2,20 @@ package com.penseapp.acaocontabilidade.chat.chats.view
 
 import android.content.Context
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.penseapp.acaocontabilidade.R
 import com.penseapp.acaocontabilidade.chat.chats.model.Chat
+import kotlinx.android.synthetic.main.fragment_chats.*
 import java.util.*
 
 class ChatsFragment : Fragment() {
     private var mListener: OnChatsFragmentInteractionListener? = null
-    private var mChatsRecyclerView: RecyclerView? = null
     private var chatsAdapter: ChatsAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -28,7 +26,6 @@ class ChatsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mChatsRecyclerView = view.findViewById(R.id.list_chats)
         setupRecyclerView()
         setupRecyclerViewDecorator()
         clearRecyclerView()
@@ -42,7 +39,6 @@ class ChatsFragment : Fragment() {
             }
         })
 
-        val fab = view.findViewById<FloatingActionButton>(R.id.fragment_chats_show_contacts)
         fab.setOnClickListener { mListener!!.onShowContactsClicked() }
     }
 
@@ -85,15 +81,15 @@ class ChatsFragment : Fragment() {
     private fun setupRecyclerView() {
         chatsAdapter = ChatsAdapter(mChats, context!!)
         chatsAdapter!!.subscribeForChatsUpdates()
-        mChatsRecyclerView!!.adapter = chatsAdapter
-        mChatsRecyclerView!!.layoutManager = LinearLayoutManager(activity)
+        chatsRecyclerView!!.adapter = chatsAdapter
+        chatsRecyclerView!!.layoutManager = LinearLayoutManager(activity)
     }
 
     private fun setupRecyclerViewDecorator() {
         // Display dividers between each item of the RecyclerView
         if (context != null) {
             val itemDecoration = DividerItemDecoration(context!!, DividerItemDecoration.VERTICAL)
-            mChatsRecyclerView!!.addItemDecoration(itemDecoration)
+            chatsRecyclerView!!.addItemDecoration(itemDecoration)
         }
     }
 
