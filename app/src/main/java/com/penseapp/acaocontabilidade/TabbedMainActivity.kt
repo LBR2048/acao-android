@@ -24,6 +24,7 @@ import com.penseapp.acaocontabilidade.chat.users.presenter.UsersPresenter
 import com.penseapp.acaocontabilidade.chat.users.presenter.UsersPresenterImpl
 import com.penseapp.acaocontabilidade.chat.users.view.UsersView
 import com.penseapp.acaocontabilidade.domain.FirebaseHelper
+import com.penseapp.acaocontabilidade.domain.Preferences
 import com.penseapp.acaocontabilidade.domain.Utilities
 import com.penseapp.acaocontabilidade.login.model.User
 import com.penseapp.acaocontabilidade.login.view.activities.LoginActivity
@@ -187,14 +188,7 @@ class TabbedMainActivity : AppCompatActivity(),
     }
 
     override fun onReceiveCurrentUserDetails(user: User) {
-        val settings = applicationContext.getSharedPreferences("Settings", Context.MODE_PRIVATE)
-        val editor = settings.edit()
-        editor.putString("userId", user.key)
-        editor.putString("userName", user.name)
-        editor.putString("userEmail", user.email)
-        editor.putString("userType", user.type)
-        editor.putString("userCompany", user.company)
-        editor.apply()
+        Preferences.saveUserPreferences(applicationContext, user)
     }
 
     override fun onContactSelected(contactId: String, contactName: String, company: String) {
