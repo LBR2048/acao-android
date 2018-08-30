@@ -2,15 +2,12 @@ package com.penseapp.acaocontabilidade
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import android.view.*
-import android.widget.TextView
 import com.penseapp.acaocontabilidade.chat.chats.presenter.ChatsWriterPresenter
 import com.penseapp.acaocontabilidade.chat.chats.presenter.ChatsWriterPresenterImpl
 import com.penseapp.acaocontabilidade.chat.chats.view.ChatsFragment
@@ -30,6 +27,8 @@ import com.penseapp.acaocontabilidade.login.view.activities.LoginActivity
 import com.penseapp.acaocontabilidade.news.view.NewsFragment
 import com.penseapp.acaocontabilidade.news.view.NewsItemActivity
 import com.penseapp.acaocontabilidade.web.WebFragment
+import kotlinx.android.synthetic.main.activity_tabbed_main.*
+import kotlinx.android.synthetic.main.fragment_tabbed_main.*
 
 class TabbedMainActivity : AppCompatActivity(),
         ContactsView,
@@ -51,7 +50,6 @@ class TabbedMainActivity : AppCompatActivity(),
     /**
      * The [ViewPager] that will host the section contents.
      */
-    private var mViewPager: ViewPager? = null
     private var chatsWriterPresenter: ChatsWriterPresenter? = null
     private var usersPresenter: UsersPresenter? = null
 
@@ -59,7 +57,6 @@ class TabbedMainActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tabbed_main)
 
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
         // Create the adapter that will return a fragment for each of the three
@@ -67,11 +64,9 @@ class TabbedMainActivity : AppCompatActivity(),
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = findViewById(R.id.container)
-        mViewPager!!.adapter = mSectionsPagerAdapter
+        viewPager.adapter = mSectionsPagerAdapter
 
-        val tabLayout = findViewById<TabLayout>(R.id.tabs)
-        tabLayout.setupWithViewPager(mViewPager)
+        tabLayout.setupWithViewPager(viewPager)
 
         // Set screen title
         val currentUserEmail = FirebaseHelper.getInstance().authUserEmail
@@ -126,8 +121,7 @@ class TabbedMainActivity : AppCompatActivity(),
         override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                                   savedInstanceState: Bundle?): View? {
             val rootView = inflater.inflate(R.layout.fragment_tabbed_main, container, false)
-            val textView = rootView.findViewById<TextView>(R.id.section_label)
-            textView.text = getString(R.string.section_format, arguments!!.getInt(ARG_SECTION_NUMBER))
+            sectionLabel.text = getString(R.string.section_format, arguments!!.getInt(ARG_SECTION_NUMBER))
             return rootView
         }
 

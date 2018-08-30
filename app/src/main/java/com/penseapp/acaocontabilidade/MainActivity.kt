@@ -3,7 +3,6 @@ package com.penseapp.acaocontabilidade
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import com.penseapp.acaocontabilidade.chat.chats.presenter.ChatsWriterPresenterImpl
@@ -17,6 +16,7 @@ import com.penseapp.acaocontabilidade.domain.FirebaseHelper
 import com.penseapp.acaocontabilidade.domain.Preferences
 import com.penseapp.acaocontabilidade.domain.Utilities
 import com.penseapp.acaocontabilidade.login.view.activities.LoginActivity
+import kotlinx.android.synthetic.main.toolbar.*
 
 class MainActivity : AppCompatActivity(),
         ContactsView,
@@ -24,7 +24,6 @@ class MainActivity : AppCompatActivity(),
         ContactsFragment.OnContactsFragmentInteractionListener {
 
     private var chatsWriterPresenter: ChatsWriterPresenterImpl? = null
-    private var toolbar: Toolbar? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,13 +34,13 @@ class MainActivity : AppCompatActivity(),
             supportFragmentManager
                     .beginTransaction()
 //                    .replace(R.id.main_activity_fragment_holder, ChatsFragment.newInstance(this))
-                    .replace(R.id.main_activity_fragment_holder, ContactsFragment.newInstance())
+                    .replace(R.id.fragmentHolder, ContactsFragment.newInstance())
                     .commit()
         }
 
         supportFragmentManager.addOnBackStackChangedListener {
-            val fragment = supportFragmentManager.findFragmentById(R.id.main_activity_fragment_holder)
-            when (fragment) {
+            val fragmentHolder = supportFragmentManager.findFragmentById(R.id.fragmentHolder)
+            when (fragmentHolder) {
                 is ContactsFragment -> toolbar?.title = "Contatos"
                 is ChatsFragment -> toolbar?.title = "Conversas"
                 else -> toolbar?.title = "Ação"
@@ -96,10 +95,8 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun setupToolBar() {
-        toolbar = findViewById(R.id.toolbar)
-        if (toolbar == null) return
         setSupportActionBar(toolbar)
-        toolbar!!.title = "Conversas"
+        toolbar.title = "Conversas"
     }
 
     private fun navigateToMessagesActivity(chatId: String?, chatName: String) {
@@ -117,7 +114,7 @@ class MainActivity : AppCompatActivity(),
     private fun showContactsFragment() {
         supportFragmentManager
                 .beginTransaction()
-                .add(R.id.main_activity_fragment_holder, ContactsFragment.newInstance())
+                .add(R.id.fragmentHolder, ContactsFragment.newInstance())
                 .addToBackStack(null)
                 .commit()
     }
