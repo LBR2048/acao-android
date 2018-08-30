@@ -14,7 +14,7 @@ class LoginPresenterImpl(private val loginView: LoginView) : LoginPresenter {
         interactor.signUp(name, company, email, type, password)
     }
 
-    override fun onSignUpSuccess(email: String, uid: String) {
+    override fun onSignUpSuccess(email: String?, uid: String) {
         Log.i(LOG_TAG, "Sign Up Success")
         loginView.onSignUpSuccess()
     }
@@ -34,7 +34,7 @@ class LoginPresenterImpl(private val loginView: LoginView) : LoginPresenter {
         loginView.onLoginFailure()
     }
 
-    override fun onLoginSuccess(user: String, uid: String) {
+    override fun onLoginSuccess(user: String?, uid: String) {
         Log.i(LOG_TAG, "Login Success")
         loginView.onLoginSuccess()
     }
