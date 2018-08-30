@@ -4,9 +4,9 @@ package com.penseapp.acaocontabilidade.login.model;
  * Created by unity on 08/08/16.
  */
 public class User {
+    private String key;
     private String name = "name";
     private String email = "email@email.com";
-    private String key;
     private String company = "company";
     private String type = "type";
 
@@ -15,6 +15,22 @@ public class User {
     public User(String name, String email) {
         this.name = name;
         this.email = email;
+    }
+
+    public User(String key, String name, String email, String company, String type) {
+        this.key = key;
+        this.name = name;
+        this.email = email;
+        this.company = company;
+        this.type = type;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public String getName() {
@@ -31,14 +47,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
     }
 
     public String getCompany() {
