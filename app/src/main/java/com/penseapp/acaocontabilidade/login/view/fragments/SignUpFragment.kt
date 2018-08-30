@@ -2,13 +2,14 @@ package com.penseapp.acaocontabilidade.login.view.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.support.design.widget.TextInputLayout
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.Button
 import com.penseapp.acaocontabilidade.R
+import kotlinx.android.synthetic.main.fragment_sign_up.*
 import java.util.*
 
 //endregion
@@ -16,22 +17,7 @@ import java.util.*
 //region Constructors
 class SignUpFragment : Fragment() {
 
-    //region GUI
-    private lateinit var mProgressBar: ProgressBar
-    private lateinit var mNameEditText: EditText
-    private lateinit var mEmailEditText: EditText
-    private lateinit var mCompanyEditText: EditText
-    private lateinit var mPasswordEditText: EditText
-    private lateinit var mPasswordRepeatEditText: EditText
-    private lateinit var mNameWrapper: TextInputLayout
-    private lateinit var mCompanyWrapper: TextInputLayout
-    private lateinit var mEmailWrapper: TextInputLayout
-    private lateinit var mPasswordWrapper: TextInputLayout
-    private lateinit var mPasswordRepeatWrapper: TextInputLayout
-    private lateinit var mSpinner: Spinner
-
     private var mListener: OnFragmentInteractionListener? = null
-    //endregion
 
     //region Lifecycle
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -43,36 +29,36 @@ class SignUpFragment : Fragment() {
         createUI(view)
 
         // Clear error when name focus is true and validate name when focus is lost
-        mNameEditText.onFocusChangeListener = View.OnFocusChangeListener { view, b ->
+        nameEditText.onFocusChangeListener = View.OnFocusChangeListener { view, b ->
             if (b) {
-                mNameWrapper.isErrorEnabled = false
+                nameWrapper.isErrorEnabled = false
             } else {
                 validateName()
             }
         }
 
         // Clear error when company focus is true and validate name when focus is lost
-        mCompanyEditText.onFocusChangeListener = View.OnFocusChangeListener { view, b ->
+        companyEditText.onFocusChangeListener = View.OnFocusChangeListener { view, b ->
             if (b) {
-                mCompanyWrapper.isErrorEnabled = false
+                companyWrapper.isErrorEnabled = false
             } else {
                 validateCompany()
             }
         }
 
         // Clear error when email focus is true and validate email when focus is lost
-        mEmailEditText.onFocusChangeListener = View.OnFocusChangeListener { view, b ->
+        emailEditText.onFocusChangeListener = View.OnFocusChangeListener { view, b ->
             if (b) {
-                mEmailWrapper.isErrorEnabled = false
+                emailWrapper.isErrorEnabled = false
             } else {
                 validateEmail()
             }
         }
 
         // Clear error when password focus is true and validate password when focus is lost
-        mPasswordEditText.onFocusChangeListener = View.OnFocusChangeListener { view, b ->
+        passwordEditText.onFocusChangeListener = View.OnFocusChangeListener { view, b ->
             if (b) {
-                mPasswordWrapper.isErrorEnabled = false
+                passwordWrapper.isErrorEnabled = false
             } else {
                 validatePassword()
             }
@@ -80,9 +66,9 @@ class SignUpFragment : Fragment() {
 
 
         // Clear error when password repeat focus is true and validate password repeat when focus is lost
-        mPasswordRepeatEditText.onFocusChangeListener = View.OnFocusChangeListener { view, b ->
+        passwordRepeatEditText.onFocusChangeListener = View.OnFocusChangeListener { view, b ->
             if (b) {
-                mPasswordRepeatWrapper.isErrorEnabled = false
+                passwordRepeatWrapper.isErrorEnabled = false
             } else {
                 validatePasswordRepeat()
             }
@@ -107,19 +93,7 @@ class SignUpFragment : Fragment() {
     //region GUI creation and interaction
 
     private fun createUI(view: View) {
-        mProgressBar = view.findViewById(R.id.progress_bar)
-        mNameWrapper = view.findViewById(R.id.signup_nameWrapper)
-        mCompanyWrapper = view.findViewById(R.id.signup_companyWrapper)
-        mEmailWrapper = view.findViewById(R.id.signup_usernameWrapper)
-        mPasswordWrapper = view.findViewById(R.id.signup_passwordWrapper)
-        mPasswordRepeatWrapper = view.findViewById(R.id.signup_password2Wrapper)
-        mNameEditText = view.findViewById(R.id.signup_name_edit_text)
-        mEmailEditText = view.findViewById(R.id.signup_email_edit_text)
-        mCompanyEditText = view.findViewById(R.id.signup_company_edit_text)
-        mSpinner = view.findViewById(R.id.user_type_spinner)
-        mPasswordEditText = view.findViewById(R.id.signup_password_edit_text)
-        mPasswordRepeatEditText = view.findViewById(R.id.signup_password2_edit_text)
-        val mSignUpButton = view.findViewById<Button>(R.id.signup_button)
+        val signUpButton = view.findViewById<Button>(R.id.signUpButton)
 
         // Setup user type spinner
         val spinnerArray = ArrayList<String>()
@@ -129,27 +103,27 @@ class SignUpFragment : Fragment() {
         if (context != null) {
             val adapter = ArrayAdapter(
                     context!!, android.R.layout.simple_spinner_item, spinnerArray)
-            mSpinner.adapter = adapter
+            spinner.adapter = adapter
         }
 
-        mSignUpButton.setOnClickListener {
+        signUpButton.setOnClickListener {
             onSignUpClicked(
-                    mNameEditText.text.toString(),
-                    mCompanyEditText.text.toString(),
-                    mEmailEditText.text.toString(),
-                    mSpinner.selectedItem.toString(),
-                    mPasswordEditText.text.toString()
+                    nameEditText.text.toString(),
+                    companyEditText.text.toString(),
+                    emailEditText.text.toString(),
+                    spinner.selectedItem.toString(),
+                    passwordEditText.text.toString()
             )
         }
     }
 
     private fun onSignUpClicked(name: String, company: String, email: String, type: String, password: String) {
 
-        mNameWrapper.isErrorEnabled = false
-        mCompanyWrapper.isErrorEnabled = false
-        mEmailWrapper.isErrorEnabled = false
-        mPasswordWrapper.isErrorEnabled = false
-        mPasswordRepeatWrapper.isErrorEnabled = false
+        nameWrapper.isErrorEnabled = false
+        companyWrapper.isErrorEnabled = false
+        emailWrapper.isErrorEnabled = false
+        passwordWrapper.isErrorEnabled = false
+        passwordRepeatWrapper.isErrorEnabled = false
 
         // TODO too many nested ifs?
         if (validateName() && validateCompany() && validateEmail() && validatePassword() && checkPasswordsMatch()) {
@@ -161,11 +135,11 @@ class SignUpFragment : Fragment() {
     //endregion
 
     fun spinProgressBar() {
-        mProgressBar.visibility = View.VISIBLE
+//        progressBar.visibility = View.VISIBLE
     }
 
     fun stopProgressBar() {
-        mProgressBar.visibility = View.GONE
+//        progressBar.visibility = View.GONE
     }
 
 
@@ -181,9 +155,9 @@ class SignUpFragment : Fragment() {
      * @return email validity
      */
     private fun validateName(): Boolean {
-        val name = mNameEditText.text.toString()
+        val name = nameEditText.text.toString()
         return if (name.trim { it <= ' ' }.isEmpty()) {
-            mNameWrapper.error = getString(R.string.login_register_blank_name_error)
+            nameWrapper.error = getString(R.string.login_register_blank_name_error)
             false
         } else {
             true
@@ -195,9 +169,9 @@ class SignUpFragment : Fragment() {
      * @return email validity
      */
     private fun validateCompany(): Boolean {
-        val company = mCompanyEditText.text.toString()
+        val company = companyEditText.text.toString()
         return if (company.trim { it <= ' ' }.isEmpty()) {
-            mCompanyWrapper.error = getString(R.string.login_register_blank_company_name_error)
+            companyWrapper.error = getString(R.string.login_register_blank_company_name_error)
             false
         } else {
             true
@@ -209,9 +183,9 @@ class SignUpFragment : Fragment() {
      * @return email validity
      */
     private fun validateEmail(): Boolean {
-        val email = mEmailEditText.text.toString()
+        val email = emailEditText.text.toString()
         return if (!com.penseapp.acaocontabilidade.domain.Utilities.validateEmail(email)) {
-            mEmailWrapper.error = getString(R.string.login_invalid_email)
+            emailWrapper.error = getString(R.string.login_invalid_email)
             false
         } else {
             true
@@ -223,9 +197,9 @@ class SignUpFragment : Fragment() {
      * @return password validity
      */
     private fun validatePassword(): Boolean {
-        val password = mPasswordEditText.text.toString()
+        val password = passwordEditText.text.toString()
         return if (!com.penseapp.acaocontabilidade.domain.Utilities.validatePassword(password)) {
-            mPasswordWrapper.error = getString(R.string.login_password_too_short_error)
+            passwordWrapper.error = getString(R.string.login_password_too_short_error)
             false
         } else {
             true
@@ -237,9 +211,9 @@ class SignUpFragment : Fragment() {
      * @return password validity
      */
     private fun validatePasswordRepeat(): Boolean {
-        val password = mPasswordRepeatEditText.text.toString()
+        val password = passwordRepeatEditText.text.toString()
         return if (!com.penseapp.acaocontabilidade.domain.Utilities.validatePassword(password)) {
-            mPasswordRepeatWrapper.error = getString(R.string.login_password_too_short_error)
+            passwordRepeatWrapper.error = getString(R.string.login_password_too_short_error)
             false
         } else {
             true
@@ -251,11 +225,11 @@ class SignUpFragment : Fragment() {
      * @return password validity
      */
     private fun checkPasswordsMatch(): Boolean {
-        val password = mPasswordEditText.text.toString()
-        val passwordRepeat = mPasswordRepeatEditText.text.toString()
+        val password = passwordEditText.text.toString()
+        val passwordRepeat = passwordRepeatEditText.text.toString()
         return if (password != passwordRepeat) {
-            mPasswordWrapper.error = getString(R.string.login_register_passwords_must_match)
-            mPasswordRepeatWrapper.error = getString(R.string.login_register_passwords_must_match)
+            passwordWrapper.error = getString(R.string.login_register_passwords_must_match)
+            passwordRepeatWrapper.error = getString(R.string.login_register_passwords_must_match)
             false
         } else {
             true

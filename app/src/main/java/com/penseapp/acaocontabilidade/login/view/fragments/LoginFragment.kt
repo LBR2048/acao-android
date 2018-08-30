@@ -2,30 +2,18 @@ package com.penseapp.acaocontabilidade.login.view.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.support.design.widget.TextInputLayout
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ProgressBar
-import android.widget.TextView
 import com.penseapp.acaocontabilidade.R
 import com.penseapp.acaocontabilidade.domain.Utilities
+import kotlinx.android.synthetic.main.fragment_login.*
 
 //region Constructors
 class LoginFragment : Fragment() {
 
-    // GUI
-    private lateinit var mProgressBar: ProgressBar
-    private lateinit var mEmailEditText: EditText
-    private lateinit var mPasswordEditText: EditText
-    private lateinit var mEmailWrapper: TextInputLayout
-    private lateinit var mPasswordWrapper: TextInputLayout
-
     private var mListener: OnFragmentInteractionListener? = null
-    //endregion
 
     //region Lifecycle
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -37,18 +25,18 @@ class LoginFragment : Fragment() {
         createUI(view)
 
         // Clear error when email focus is true and validate email when focus is lost
-        mEmailEditText.onFocusChangeListener = View.OnFocusChangeListener { view, b ->
+        emailEditText.onFocusChangeListener = View.OnFocusChangeListener { view, b ->
             if (b) {
-                mEmailWrapper.isErrorEnabled = false
+                emailWrapper.isErrorEnabled = false
             } else {
                 validateEmail()
             }
         }
 
         // Clear error when password focus is true and validate password when focus is lost
-        mPasswordEditText.onFocusChangeListener = View.OnFocusChangeListener { view, b ->
+        passwordEditText.onFocusChangeListener = View.OnFocusChangeListener { view, b ->
             if (b) {
-                mPasswordWrapper.isErrorEnabled = false
+                passwordWrapper.isErrorEnabled = false
             } else {
                 validatePassword()
             }
@@ -72,27 +60,19 @@ class LoginFragment : Fragment() {
 
     //region GUI creation and interaction
     private fun createUI(view: View) {
-        mProgressBar = view.findViewById(R.id.progress_bar)
-        mEmailWrapper = view.findViewById(R.id.usernameWrapper)
-        mPasswordWrapper = view.findViewById(R.id.passwordWrapper)
-        mEmailEditText = view.findViewById(R.id.login_email_edit_text)
-        mPasswordEditText = view.findViewById(R.id.login_password_edit_text)
 
-        val mLoginButton = view.findViewById<Button>(R.id.login_button)
-        mLoginButton.setOnClickListener {
-            onLoginClicked(mEmailEditText.text.toString(), mPasswordEditText.text.toString())
+        loginButton.setOnClickListener {
+            onLoginClicked(emailEditText.text.toString(), passwordEditText.text.toString())
         }
 
-        val mResetPasswordText = view.findViewById<TextView>(R.id.forgot_password_text)
-        mResetPasswordText.setOnClickListener { onForgotPasswordClicked() }
+        resetPasswordText.setOnClickListener { onForgotPasswordClicked() }
 
-        val mSignUpText = view.findViewById<TextView>(R.id.signup_text)
-        mSignUpText.setOnClickListener { onSignUpClicked() }
+        signUpText.setOnClickListener { onSignUpClicked() }
     }
 
     private fun onLoginClicked(email: String, password: String) {
-        mEmailWrapper.isErrorEnabled = false
-        mPasswordWrapper.isErrorEnabled = false
+        emailWrapper.isErrorEnabled = false
+        passwordWrapper.isErrorEnabled = false
 
         if (validateEmail() && validatePassword()) {
             if (mListener != null) {
@@ -115,11 +95,11 @@ class LoginFragment : Fragment() {
     //endregion
 
     fun spinProgressBar() {
-        mProgressBar.visibility = View.VISIBLE
+        progressBar.visibility = View.VISIBLE
     }
 
     fun stopProgressBar() {
-        mProgressBar.visibility = View.GONE
+        progressBar.visibility = View.GONE
     }
 
     //region Communication between fragment and parent activity
@@ -138,9 +118,9 @@ class LoginFragment : Fragment() {
      * @return email validity
      */
     private fun validateEmail(): Boolean {
-        val email = mEmailEditText.text.toString()
+        val email = emailEditText.text.toString()
         return if (!Utilities.validateEmail(email)) {
-            mEmailWrapper.error = getString(R.string.login_invalid_email)
+            emailWrapper.error = getString(R.string.login_invalid_email)
             false
         } else {
             true
@@ -152,9 +132,9 @@ class LoginFragment : Fragment() {
      * @return password validity
      */
     private fun validatePassword(): Boolean {
-        val password = mPasswordEditText.text.toString()
+        val password = passwordEditText.text.toString()
         return if (!Utilities.validatePassword(password)) {
-            mPasswordWrapper.error = getString(R.string.login_password_too_short_error)
+            passwordWrapper.error = getString(R.string.login_password_too_short_error)
             false
         } else {
             true
