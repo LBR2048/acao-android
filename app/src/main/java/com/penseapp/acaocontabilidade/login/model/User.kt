@@ -1,7 +1,7 @@
 package com.penseapp.acaocontabilidade.login.model
 
 class User (
-        var key: String,
+        var key: String = "key",
         var name: String = "name",
         var email: String = "email@email.com",
         var company: String = "company",
