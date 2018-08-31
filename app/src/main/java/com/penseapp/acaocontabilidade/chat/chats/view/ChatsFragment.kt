@@ -33,9 +33,9 @@ class ChatsFragment : Fragment() {
         // What happens when a chat from the list is clicked
         chatsAdapter!!.setOnItemClickListener(object : ChatsAdapter.OnItemClickListener {
             override fun onItemClick(itemView: View, position: Int) {
-                val (key, name) = mChats[position]
-                Log.i(LOG_TAG, "$name clicked")
-                onChatClicked(name, key)
+                val item = mChats[position]
+                Log.i(LOG_TAG, "$item.name clicked")
+                onChatClicked(item.name, item.key)
             }
         })
 

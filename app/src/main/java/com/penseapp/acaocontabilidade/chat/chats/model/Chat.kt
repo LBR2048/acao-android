@@ -1,6 +1,6 @@
 package com.penseapp.acaocontabilidade.chat.chats.model
 
-data class Chat (
+class Chat (
         var key: String? = null,
         var name: String = "",
         var contactId: String? = null,

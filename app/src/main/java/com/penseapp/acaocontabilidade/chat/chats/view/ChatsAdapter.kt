@@ -48,11 +48,11 @@ class ChatsAdapter(
 
     // Involves populating data into the item through holder
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val (_, recipientName, _, _, unreadMessageCount) = mChats[position]
+        val item = mChats[position]
 
-        holder.name.text = recipientName
+        holder.name.text = item.name
 
-        when (recipientName) {
+        when (item.name) {
             CONTABIL -> holder.icon.setImageResource(R.drawable.ic_contabil)
             FISCAL -> holder.icon.setImageResource(R.drawable.ic_fiscal)
             PESSOAL -> holder.icon.setImageResource(R.drawable.ic_pessoal)
@@ -62,8 +62,8 @@ class ChatsAdapter(
 
         holder.availability.setText(R.string.status_available)
 
-        if (unreadMessageCount != 0) {
-            holder.unreadMessageCount.text = Integer.toString(unreadMessageCount)
+        if (item.unreadMessageCount != 0) {
+            holder.unreadMessageCount.text = Integer.toString(item.unreadMessageCount)
             holder.badge.visibility = View.VISIBLE
         } else {
             holder.badge.visibility = View.GONE
@@ -130,8 +130,8 @@ class ChatsAdapter(
     // TODO duplicado em ExerciseChooserActivity
     private fun getIndexForKey(key: String?): Int {
         var index = 0
-        for ((key1) in mChats) {
-            if (key1 == key) {
+        for (chat in mChats) {
+            if (chat.key == key) {
                 return index
             } else {
                 index++
