@@ -29,13 +29,15 @@ public class Preferences {
                 .apply();
     }
 
+    // TODO if preferences are not available, the auth user info should be
+    // downloaded, instead of using default values
     public static User getUserFromPreferences(Context context) {
         SharedPreferences settings = context.getSharedPreferences(SETTINGS, Context.MODE_PRIVATE);
-        String userId = settings.getString(USER_ID, "");
-        String userName = settings.getString(USER_NAME, "");
-        String userEmail = settings.getString(USER_EMAIL, "");
-        String userType = settings.getString(USER_TYPE, "");
-        String userCompany = settings.getString(USER_COMPANY, "");
+        String userId = settings.getString(USER_ID, "default_id");
+        String userName = settings.getString(USER_NAME, "default_name");
+        String userEmail = settings.getString(USER_EMAIL, "default_email");
+        String userType = settings.getString(USER_TYPE, "default_type");
+        String userCompany = settings.getString(USER_COMPANY, "default_company");
 
        return new User(userId, userName, userEmail, userType, userCompany);
     }
