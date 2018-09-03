@@ -25,17 +25,19 @@ class ChatsWriterInteractorImpl(private val chatsWriterPresenter: ChatsWriterPre
                                     recipientName: String,
                                     recipientCompany: String) {
 
-        // TODO melhorar isso
         if (authUserId != null) {
-            userChatContactsRef.child(authUserId).child(recipientId).addListenerForSingleValueEvent(
-                    object : ValueEventListener {
+            userChatContactsRef.child(authUserId).child(recipientId)
+                    .addListenerForSingleValueEvent(object : ValueEventListener {
                         override fun onDataChange(dataSnapshot: DataSnapshot) {
-                            val dataSnapshotValue = dataSnapshot.value
-                            if (dataSnapshotValue == null) {
-                                val chatKey = createChat(senderId, senderName, senderCompany, recipientId, recipientName, recipientCompany)
-                                if (chatKey != null) chatsWriterPresenter.onChatCreated(chatKey, recipientName)
+                            if (!dataSnapshot.exists()) {
+                                val chatKey = createChat(senderId, senderName, senderCompany,
+                                        recipientId, recipientName, recipientCompany)
+                                if (chatKey != null) {
+                                    chatsWriterPresenter.onChatCreated(chatKey, recipientName)
+                                }
                             } else {
-                                chatsWriterPresenter.onChatCreated(dataSnapshotValue.toString(), recipientName)
+                                chatsWriterPresenter.onChatCreated(dataSnapshot.value.toString(),
+                                        recipientName)
                             }
                         }
 
