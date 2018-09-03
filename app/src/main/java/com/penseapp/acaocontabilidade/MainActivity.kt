@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity(),
 
     private var chatsWriterPresenter: ChatsWriterPresenterImpl? = null
 
+    //region Lifecycle and menu
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -33,7 +34,7 @@ class MainActivity : AppCompatActivity(),
         if (savedInstanceState == null) {
             supportFragmentManager
                     .beginTransaction()
-//                    .replace(R.id.main_activity_fragment_holder, ChatsFragment.newInstance(this))
+//                    .replace(R.id.fragmentHolder, ChatsFragment.newInstance(this))
                     .replace(R.id.fragmentHolder, ContactsFragment.newInstance())
                     .commit()
         }
@@ -77,7 +78,9 @@ class MainActivity : AppCompatActivity(),
 
         return super.onOptionsItemSelected(item)
     }
+    //endregion
 
+    //region Fragments callbacks
     override fun onChatSelected(key: String?, name: String) {
         navigateToMessagesActivity(key, name)
     }
@@ -89,11 +92,15 @@ class MainActivity : AppCompatActivity(),
     override fun onContactSelected(key: String, name: String, company: String) {
         createChatIfNeeded(key, name, company)
     }
+    //endregion
 
+    //region ContactsView callbacks
     override fun onChatCreated(chatId: String, chatName: String) {
         navigateToMessagesActivity(chatId, chatName)
     }
+    //endregion
 
+    //region Helper methods
     private fun setupToolBar() {
         setSupportActionBar(toolbar)
         toolbar.title = "Conversas"
@@ -120,9 +127,11 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun createChatIfNeeded(contactId: String, contactName: String, company: String) {
+        // TODO user has all properties empty
         val user = Preferences.getUserFromPreferences(applicationContext)
         chatsWriterPresenter!!.createChatIfNeeded(user.key, user.name, user.company,
                 contactId, contactName, company)
     }
+    //endregion
 
 }

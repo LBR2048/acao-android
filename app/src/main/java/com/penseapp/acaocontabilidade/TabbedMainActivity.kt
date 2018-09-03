@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.view.*
 import com.penseapp.acaocontabilidade.chat.chats.presenter.ChatsWriterPresenter
@@ -46,13 +45,10 @@ class TabbedMainActivity : AppCompatActivity(),
      * [android.support.v4.app.FragmentStatePagerAdapter].
      */
     private var mSectionsPagerAdapter: SectionsPagerAdapter? = null
-
-    /**
-     * The [ViewPager] that will host the section contents.
-     */
     private var chatsWriterPresenter: ChatsWriterPresenter? = null
     private var usersPresenter: UsersPresenter? = null
 
+    //region Lifecycle and menu
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tabbed_main)
@@ -91,11 +87,7 @@ class TabbedMainActivity : AppCompatActivity(),
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         val id = item.itemId
-
 
         if (id == R.id.action_acao_web) {
             Utilities.goToAcaoWebsite(this)
@@ -112,7 +104,9 @@ class TabbedMainActivity : AppCompatActivity(),
 
         return super.onOptionsItemSelected(item)
     }
+    //endregion
 
+    //region Tabs
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -179,11 +173,21 @@ class TabbedMainActivity : AppCompatActivity(),
         }
 
     }
+    //endregion
 
+    //region UserView callbacks
     override fun onReceiveCurrentUserDetails(user: User) {
         Preferences.saveUserPreferences(applicationContext, user)
     }
+    //endregion
 
+    //region ContactsView callbacks
+    override fun onChatCreated(chatId: String, chatName: String) {
+        navigateToMessagesActivity(chatId, chatName)
+    }
+    //endregion
+
+    //region Fragments callbacks
     override fun onContactSelected(contactId: String, contactName: String, company: String) {
         createChatIfNeeded(contactId, contactName, company)
     }
@@ -199,11 +203,9 @@ class TabbedMainActivity : AppCompatActivity(),
     override fun onNewsSelected(newsId: String, newsTitle: String) {
         navigateToNewsActivity(newsId, newsTitle)
     }
+    //endregion
 
-    override fun onChatCreated(chatId: String, chatName: String) {
-        navigateToMessagesActivity(chatId, chatName)
-    }
-
+    //region Helper methods
     private fun navigateToMessagesActivity(chatId: String?, chatName: String) {
         val intent = Intent(this@TabbedMainActivity, MessagesActivity::class.java)
         intent.putExtra(SELECTED_CHAT_KEY, chatId)
@@ -228,6 +230,7 @@ class TabbedMainActivity : AppCompatActivity(),
         chatsWriterPresenter!!.createChatIfNeeded(user.key, user.name, user.company,
                 contactId, contactName, company)
     }
+    //endregion
 
     companion object {
 
