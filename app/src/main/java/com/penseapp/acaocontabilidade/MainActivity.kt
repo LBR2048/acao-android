@@ -12,18 +12,24 @@ import com.penseapp.acaocontabilidade.chat.contacts.view.ContactsView
 import com.penseapp.acaocontabilidade.chat.messages.view.MessagesActivity
 import com.penseapp.acaocontabilidade.chat.messages.view.MessagesActivity.SELECTED_CHAT_KEY
 import com.penseapp.acaocontabilidade.chat.messages.view.MessagesActivity.SELECTED_CHAT_NAME
+import com.penseapp.acaocontabilidade.chat.users.presenter.UsersPresenter
+import com.penseapp.acaocontabilidade.chat.users.presenter.UsersPresenterImpl
+import com.penseapp.acaocontabilidade.chat.users.view.UsersView
 import com.penseapp.acaocontabilidade.domain.FirebaseHelper
 import com.penseapp.acaocontabilidade.domain.Preferences
 import com.penseapp.acaocontabilidade.domain.Utilities
+import com.penseapp.acaocontabilidade.login.model.User
 import com.penseapp.acaocontabilidade.login.view.activities.LoginActivity
 import kotlinx.android.synthetic.main.toolbar.*
 
 class MainActivity : AppCompatActivity(),
         ContactsView,
+        UsersView,
         ChatsFragment.OnChatsFragmentInteractionListener,
         ContactsFragment.OnContactsFragmentInteractionListener {
 
-    private var chatsWriterPresenter: ChatsWriterPresenterImpl? = null
+    private lateinit var chatsWriterPresenter: ChatsWriterPresenterImpl
+    private lateinit var usersPresenter: UsersPresenter
 
     //region Lifecycle and menu
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,7 +54,12 @@ class MainActivity : AppCompatActivity(),
             }
         }
 
+        // Connect to Presenters
         chatsWriterPresenter = ChatsWriterPresenterImpl(this)
+        usersPresenter = UsersPresenterImpl(this)
+
+        // Get current user details
+        usersPresenter.getCurrentUserDetails()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -80,6 +91,18 @@ class MainActivity : AppCompatActivity(),
     }
     //endregion
 
+    //region UserView callbacks
+    override fun onReceiveCurrentUserDetails(user: User) {
+        Preferences.saveUserPreferences(applicationContext, user)
+    }
+    //endregion
+
+    //region ContactsView callbacks
+    override fun onChatCreated(chatId: String, chatName: String) {
+        navigateToMessagesActivity(chatId, chatName)
+    }
+    //endregion
+
     //region Fragments callbacks
     override fun onChatSelected(key: String?, name: String) {
         navigateToMessagesActivity(key, name)
@@ -91,12 +114,6 @@ class MainActivity : AppCompatActivity(),
 
     override fun onContactSelected(key: String, name: String, company: String) {
         createChatIfNeeded(key, name, company)
-    }
-    //endregion
-
-    //region ContactsView callbacks
-    override fun onChatCreated(chatId: String, chatName: String) {
-        navigateToMessagesActivity(chatId, chatName)
     }
     //endregion
 
