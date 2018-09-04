@@ -221,8 +221,10 @@ class TabbedMainActivity : AppCompatActivity(),
     }
 
     private fun navigateToLoginActivity() {
-        val intent = Intent(this@TabbedMainActivity, LoginActivity::class.java)
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
+        finish()
     }
 
     private fun createChatIfNeeded(contactId: String, contactName: String, company: String) {

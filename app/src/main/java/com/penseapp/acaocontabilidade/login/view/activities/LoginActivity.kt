@@ -62,21 +62,13 @@ class LoginActivity : AppCompatActivity(),
     override fun onSignUpFragmentSignUpClicked(name: String, company: String, email: String, type: String, password: String) {
         presenter.signUp(name, company, email, type, password)
     }
-
-    override fun onBackPressed() {
-        val fragmentManager = supportFragmentManager
-        if (fragmentManager.backStackEntryCount > 0) {
-            fragmentManager.popBackStack()
-        }
-    }
     //endregion
 
     //region Navigation
     private fun showMainActivity() {
-        //        Intent intent = new Intent(LoginActivity.this, TabbedMainActivity.class);
-        val intent = Intent(this@LoginActivity, MainActivity::class.java)
-        // Ao pressionar Logout, a WorkoutsActivity não pode mais ser acessada através do back button
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+//        Intent intent = new Intent(LoginActivity.this, TabbedMainActivity.class);
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         finish()
     }

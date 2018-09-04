@@ -40,8 +40,8 @@ class MainActivity : AppCompatActivity(),
         if (savedInstanceState == null) {
             supportFragmentManager
                     .beginTransaction()
-//                    .replace(R.id.fragmentHolder, ChatsFragment.newInstance(this))
-                    .replace(R.id.fragmentHolder, ContactsFragment.newInstance())
+                    .replace(R.id.fragmentHolder, ChatsFragment.newInstance(this))
+//                    .replace(R.id.fragmentHolder, ContactsFragment.newInstance())
                     .commit()
         }
 
@@ -132,7 +132,9 @@ class MainActivity : AppCompatActivity(),
 
     private fun navigateToLoginActivity() {
         val intent = Intent(this, LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
+        finish()
     }
 
     private fun showContactsFragment() {
