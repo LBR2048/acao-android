@@ -40,8 +40,8 @@ class MainActivity : AppCompatActivity(),
         if (savedInstanceState == null) {
             supportFragmentManager
                     .beginTransaction()
-                    .replace(R.id.fragmentHolder, ChatsFragment.newInstance(this))
-//                    .replace(R.id.fragmentHolder, ContactsFragment.newInstance())
+//                    .replace(R.id.fragmentHolder, ChatsFragment.newInstance(this))
+                    .replace(R.id.fragmentHolder, ContactsFragment.newInstance())
                     .commit()
         }
 
