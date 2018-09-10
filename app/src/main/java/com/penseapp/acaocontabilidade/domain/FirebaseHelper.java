@@ -41,7 +41,7 @@ public class FirebaseHelper {
     private FirebaseHelper() {
         if (database == null) {
             database = FirebaseDatabase.getInstance();
-//            database.setPersistenceEnabled(true);
+            database.setPersistenceEnabled(true);
             databaseRef = database.getReference();
         }
     }
