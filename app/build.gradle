@@ -16,12 +16,12 @@ android {
     }
     buildTypes {
         debug {
-            manifestPlaceholders = [crashlyticsEnabled: false]
+//            manifestPlaceholders = [crashlyticsEnabled: false]
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            manifestPlaceholders = [crashlyticsEnabled: true]
+//            manifestPlaceholders = [crashlyticsEnabled: true]
         }
     }
     flavorDimensions "dimension"
@@ -62,7 +62,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:16.0.1'
     implementation 'com.google.firebase:firebase-messaging:17.0.0'
     implementation 'com.google.firebase:firebase-storage:16.0.1'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.5'
+//    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.5'
     implementation 'com.firebaseui:firebase-ui-storage:4.0.1'
 
     // Testing dependencies
