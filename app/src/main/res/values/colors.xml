@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="primary">#295F97</color>
+    <color name="primary_dark">#1e4873</color>
+    <color name="primary_light">#C5CAE9</color>
+    <color name="accent">#004E9D</color>
+    <!--<color name="accent">#6F7072</color>-->
+    <!--<color name="accent">#FF5722</color>-->
+
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#757575</color>
+    <color name="icons">#FFFFFF</color>
+    <color name="divider">#BDBDBD</color>
+
+    <!--Messages-->
+    <color name="sentMessage">@android:color/white</color>
+    <color name="receivedMessage">@color/primary_light</color>
+    <color name="messageList">@color/material_grey_300</color>
+
 </resources>

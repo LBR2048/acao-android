@@ -1,3 +1,24 @@
 <resources>
-    <string name="app_name">AcaoContabilidade</string>
+    <string name="app_name">Ação</string>
+    <string name="title_activity_tabbed_main">Ação</string>
+    <string name="action_acao_facebook">Ação no Facebook</string>
+    <string name="action_documents">Documentos</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_news_item">NewsItemActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="messages_toast_opening_image">Abrindo imagem</string>
+    <string name="messages_toast_opening_document">Abrindo documento</string>
+    <string name="status_available">Disponível</string>
+    <string name="login_register_error">Falha ao registrar</string>
+    <string name="login_error">Falha ao fazer login</string>
+    <string name="login_reset_password_success">Verifique seu email para criar uma nova senha</string>
+    <string name="login_reset_password_failure">Não há nenhuma conta registrada com o email informado</string>
+    <string name="login_invalid_email">Endereço de email inválido</string>
+    <string name="login_password_too_short_error">Senha deve ter no mínimo 6 caracteres</string>
+    <string name="login_register_passwords_must_match">Senhas devem ser iguais</string>
+    <string name="login_register_blank_name_error">Nome em branco</string>
+    <string name="login_register_blank_company_name_error">Nome da empresa em branco</string>
 </resources>

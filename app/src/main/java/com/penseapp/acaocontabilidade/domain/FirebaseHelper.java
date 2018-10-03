@@ -1,62 +1,52 @@
 package com.penseapp.acaocontabilidade.domain;
 
+import android.net.Uri;
+import android.support.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
 
-/**
- * Created by unity.
- */
 public class FirebaseHelper {
-    public static final String DEFAULT_EXERCISE_IMAGE_PNG = "exercise_image.png";
 
-    // Realtime database
+    //region Constants
+    private static final String NOTIFICATIONS = "notifications";
+    private static final String USERS_PATH = "users";
+    private static final String CHAT_MESSAGES_PATH = "chat-messages";
+    private static final String USER_CHATS_PATH = "user-chats";
+    private static final String USER_CHATS_PROPERTIES_PATH = "user-chats-properties";
+    private static final String USER_CHAT_CONTACTS_CHAT = "user-chatContacts:chat";
+    private static final String FCM_TOKEN = "fcm_token";
+    private static final String NEWS_PATH = "news";
+    public final static String GS_PREFIX = "gs://acao-f519d.appspot.com/";
+    //endregion
+
+    //region Member variables
     private FirebaseDatabase database;
     private DatabaseReference databaseRef;
-    private static final String USERS_PATH = "users";
-    private static final String CHATS_PATH = "chats";
-    private static final String USER_CHATS_PATH = "user-chats";
-    private static final String CHAT_USERS_PATH = "chat-users";
-
-
-    // Storage
-//    private FirebaseStorage storage;
-//    private StorageReference storageRef;
-//    private StorageReference defaultExercisesImagesRef;
-//    private static final String STORAGE_REFERENCE_URL = "gs://gogym-c807f.appspot.com";
-//    private static final String DEFAULT_EXERCISES_IMAGES = "default_exercises_images";
-
-    private static class SingletonHolder {
-        private static final FirebaseHelper INSTANCE = new FirebaseHelper();
-
-    }
+    //endregion
 
     public static FirebaseHelper getInstance() {
         return SingletonHolder.INSTANCE;
     }
 
-    private FirebaseHelper(){
+    private static class SingletonHolder {
+        private static final FirebaseHelper INSTANCE = new FirebaseHelper();
+    }
+
+    private FirebaseHelper() {
         if (database == null) {
             database = FirebaseDatabase.getInstance();
-            // TODO ativar data persistence sem rede (não sei se deve ser colocado aqui)
-//            database.setPersistenceEnabled(true);
+            database.setPersistenceEnabled(true);
             databaseRef = database.getReference();
         }
-//        if (storage == null) {
-//            storage = FirebaseStorage.getInstance();
-//            storageRef = storage.getReferenceFromUrl(STORAGE_REFERENCE_URL);
-//            defaultExercisesImagesRef = storageRef.child(DEFAULT_EXERCISES_IMAGES);
-//        }
     }
 
-    public DatabaseReference getDatabaseRef() {
-        return databaseRef;
-    }
-
-
-    // Authentication
-
+    //region Authentication
     public String getAuthUserEmail() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String email = null;
@@ -75,31 +65,22 @@ public class FirebaseHelper {
         return userId;
     }
 
-    public DatabaseReference getUserReference(String email){
-        DatabaseReference userReference = null;
-        if (email != null) {
-            String emailKey = email.replace(".", "_");
-            userReference = databaseRef.getRoot().child(USERS_PATH).child(emailKey);
-        }
-        return userReference;
+    public void logout() {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        auth.signOut();
     }
+    //endregion
 
-
-    // Realtime database
-
+    //region Database
     public DatabaseReference getUsersReference(){
         return databaseRef.child(USERS_PATH);
     }
 
-    public DatabaseReference getChatsReference(){
-        return databaseRef.child(CHATS_PATH);
+    public DatabaseReference getChatMessagesReference(){
+        return databaseRef.child(CHAT_MESSAGES_PATH);
     }
 
-    public DatabaseReference getCurrentChatReference(String chatId){
-        return getChatsReference().child(chatId).child("messages");
-    }
-
-    public DatabaseReference getUserChatsReference(){
+    private DatabaseReference getUserChatsReference(){
         return databaseRef.child(USER_CHATS_PATH);
     }
 
@@ -107,66 +88,89 @@ public class FirebaseHelper {
         return getUserChatsReference().child(getAuthUserId());
     }
 
-    public DatabaseReference getChatUsersReference(){
-        return databaseRef.child(CHAT_USERS_PATH);
+    public DatabaseReference getUserChatContactsReference(){
+        return databaseRef.child(USER_CHAT_CONTACTS_CHAT);
     }
 
-    public DatabaseReference getCurrentChatUsersReference(){
-        return getChatUsersReference().child(getAuthUserId());
+    public DatabaseReference getUserChatPropertiesReference(){
+        return databaseRef.child(USER_CHATS_PROPERTIES_PATH);
     }
 
-    public DatabaseReference getCurrentUserReference() {
-        return getUserReference(getAuthUserId());
+    // TODO útil apenas para grupos retirar por enquanto
+//    public DatabaseReference getChatUsersReference(){
+//        return databaseRef.child(CHAT_USERS_PATH);
+//    }
+
+    // TODO útil apenas para grupos retirar por enquanto
+//    public DatabaseReference getCurrentChatUsersReference(){
+//        return getChatUsersReference().child(getAuthUserId());
+//    }
+
+    private DatabaseReference getCurrentUserFcmTokenReference() {
+        DatabaseReference currentUserFcmTokenReference = null;
+        String authUserId = getAuthUserId();
+        if (authUserId != null) {
+            currentUserFcmTokenReference = getUsersReference().child(authUserId).child(FCM_TOKEN);
+        }
+        return currentUserFcmTokenReference;
     }
 
+    public DatabaseReference getNotificationsReference() {
+        return getUsersReference().child(getAuthUserId()).child(NOTIFICATIONS);
+    }
 
-    // Storage
+    public DatabaseReference getNewsReference(){
+        return databaseRef.child(NEWS_PATH);
+    }
+    //endregion
 
-//    public StorageReference getDefaultExercisesImagesRef() {
-//        return defaultExercisesImagesRef;
-//    }
+    //region Storage
+    public FirebaseStorage getStorage() {
+        return FirebaseStorage.getInstance();
+    }
 
-//    public StorageReference getImageRef() {
-//        return defaultExercisesImagesRef.child(DEFAULT_EXERCISE_IMAGE_PNG);
-//    }
+    // TODO handle wrong http to avoid crashing the app
+    public void getHttpFromGs(final GetHttpFromGsCallback getHttpFromGsCallback, String http) {
+        getStorage().getReferenceFromUrl(http).getDownloadUrl()
+                .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        getHttpFromGsCallback.showHttp(uri);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // TODO Log error
+                    }
+                });
+    }
 
-//
-//    public void changeUserConnectionStatus(boolean online) {
-//        if (getMyUserReference() != null) {
-//            Map<String, Object> updates = new HashMap<String, Object>();
-//            updates.put("online", online);
-//            getMyUserReference().updateChildren(updates);
-//
-//            notifyContactsOfConnectionChange(online);
-//        }
-//    }
-//
-//    public void notifyContactsOfConnectionChange(final boolean online, final boolean signoff) {
-//        final String myEmail = getAuthUserEmail();
-//        getMyContactsReference().addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot snapshot) {
-//                for (DataSnapshot child : snapshot.getChildren()) {
-//                    String email = child.getKey();
-//                    DatabaseReference reference = getOneContactReference(email, myEmail);
-//                    reference.setValue(online);
-//                }
-//                if (signoff){
-//                    FirebaseAuth.getInstance().signOut();
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError firebaseError) {
-//            }
-//        });
-//    }
-//
-//    public void notifyContactsOfConnectionChange(boolean online) {
-//        notifyContactsOfConnectionChange(online, false);
-//    }
+    public void getPdfHttpFromGsWithoutPrefix(final GetHttpFromGsCallback getHttpFromGsCallback, String http) {
+        String gsPrefix = "gs://acao-f519d.appspot.com/";
+        getHttpFromGs(getHttpFromGsCallback, gsPrefix + http);
+    }
 
-//    public void signOff(){
-//        notifyContactsOfConnectionChange(User.OFFLINE, true);
-//    }
+    public interface GetHttpFromGsCallback {
+
+        void showHttp(Uri http);
+    }
+    //endregion
+
+    //region Push Notifications
+    /**
+     * Persist token to third-party servers.
+     *
+     * Modify this method to associate the user's FCM InstanceID token with any server-side account
+     * maintained by your application.
+     *
+     * @param token The new token.
+     */
+    public void sendFcmTokenToServer(String token) {
+        DatabaseReference currentUserFcmTokenReference = FirebaseHelper.getInstance().getCurrentUserFcmTokenReference();
+        if (currentUserFcmTokenReference != null) {
+            currentUserFcmTokenReference.setValue(token);
+        }
+    }
+    //endregion
 }

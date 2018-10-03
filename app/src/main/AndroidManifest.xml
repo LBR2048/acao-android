@@ -2,22 +2,120 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.penseapp.acaocontabilidade">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <!-- <uses-permission android:name="android.permission.CAMERA" /> -->
     <application
         android:allowBackup="true"
+        android:name=".MyApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".login.view.activities.LoginActivity">
+
+        <!-- Enable or disable Crashlytics -->
+        <!--<meta-data-->
+            <!--android:name="firebase_crashlytics_collection_enabled"-->
+            <!--android:value="${crashlyticsEnabled}" />-->
+
+        <activity
+            android:name=".login.view.activities.LoginActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".chat.view.ChatsActivity" />
-        <activity android:name=".chat.view.ContactsActivity" />
-        <activity android:name=".chat.view.MessagesActivity"></activity>
+
+        <activity android:name=".chat.messages.view.MessagesActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.penseapp.acaocontabilidade.TabbedMainActivity" />
+        </activity>
+
+        <activity android:name=".MainActivity"
+            android:label="Conversas"
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme" />
+
+        <activity
+            android:name=".TabbedMainActivity"
+            android:label="@string/title_activity_tabbed_main"
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme" />
+
+        <activity
+            android:name=".news.view.NewsItemActivity"
+            android:parentActivityName=".TabbedMainActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.penseapp.acaocontabilidade.TabbedMainActivity" />
+        </activity>
+
+        <!-- [START FirebaseMessagingService] -->
+        <!--
+        A service that extends FirebaseMessagingService.
+        This is required if you want to do any message handling beyond receiving notifications on apps in the background.
+        To receive notifications in foregrounded apps, to receive data payload, to send upstream messages, and so on, you must extend this service
+        -->
+        <service
+            android:name=".domain.MyFirebaseMessagingService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <!-- [END FirebaseMessagingService] -->
+
+
+        <!-- [START FirebaseInstanceIdService] -->
+        <!--
+        A service that extends FirebaseInstanceIdService to handle the creation, rotation, and updating of registration tokens.
+        This is required for sending to specific devices or for creating device groups.
+        -->
+        <service android:name=".domain.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <!-- [END FirebaseInstanceIdService] -->
+
+
+        <!--
+        Within the application component, metadata elements to set a default icon and color for notifications.
+        Android uses these values whenever incoming messages do not explicitly set icon and icon color.
+        -->
+        <!--
+             Set custom default icon. This is used when no icon is set for incoming notification messages.
+             See README(https://goo.gl/l4GJaQ) for more.
+        -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_default" />
+        <!--
+             Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more.
+        -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/accent" />
+
+        <!-- Content provider to store photos taken by camera -->
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/fileprovider" />
+        </provider>
     </application>
 
 </manifest>
