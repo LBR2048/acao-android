@@ -10,8 +10,8 @@ android {
         applicationId "com.penseapp.acaocontabilidade"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 12
-        versionName "1.9"
+        versionCode 13
+        versionName "1.10"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
